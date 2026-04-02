@@ -4,6 +4,7 @@ namespace NTVV.World
     using UnityEngine.InputSystem;
     using NTVV.UI.Common;
     using NTVV.World.Views;
+    using NTVV.World.Interactions;
 
     /// <summary>
     /// Handles Raycasting from screen-space (taps/clicks) to world objects.
@@ -55,7 +56,21 @@ namespace NTVV.World
                     OnAnimalSelected(animal);
                     return;
                 }
+
+                // Try to find a ShopTrigger component
+                ShopTrigger shop = hit.collider.GetComponentInParent<ShopTrigger>();
+                if (shop != null)
+                {
+                    OnShopSelected(shop);
+                    return;
+                }
             }
+        }
+
+        private void OnShopSelected(ShopTrigger shop)
+        {
+            Debug.Log($"<color=cyan>Shop Selected: </color> {shop.name}");
+            shop.OpenShop();
         }
 
         private void OnTileSelected(CropTileView tile)

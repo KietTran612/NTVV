@@ -13,6 +13,9 @@ namespace NTVV.Data.ScriptableObjects
         [Header("Animals")]
         public List<AnimalDataSO> animals = new List<AnimalDataSO>();
 
+        [Header("Upgrades")]
+        public AnimalPenUpgradeDataSO animalPenUpgradeConfig;
+
         private Dictionary<string, CropDataSO> _cropLookup;
         private Dictionary<string, AnimalDataSO> _animalLookup;
 

@@ -12,4 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ec0fd93fb81e914b8c34114c8fb2a51, type: 3}
   m_Name: StorageUpgradeConfig
   m_EditorClassIdentifier: Assembly-CSharp::NTVV.Data.ScriptableObjects.StorageUpgradeDataSO
-  tiers: []
+  tiers:
+  - tierLevel: 1
+    upgradeCostGold: 500
+    bonusCapacity: 20
+    minLevelToAccess: 1
+  - tierLevel: 2
+    upgradeCostGold: 1200
+    bonusCapacity: 30
+    minLevelToAccess: 3
+  - tierLevel: 3
+    upgradeCostGold: 2500
+    bonusCapacity: 50
+    minLevelToAccess: 5
+  - tierLevel: 4
+    upgradeCostGold: 6000
+    bonusCapacity: 100
+    minLevelToAccess: 10
+  - tierLevel: 5
+    upgradeCostGold: 15000
+    bonusCapacity: 200
+    minLevelToAccess: 15

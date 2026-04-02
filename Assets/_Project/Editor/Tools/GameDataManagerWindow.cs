@@ -193,6 +193,20 @@ namespace NTVV.Editor.Tools
             EditorGUILayout.HelpBox("Use this to define Gold costs and Level requirements for expanding the warehouse.", MessageType.Info);
             EditorGUILayout.EndVertical();
 
+            EditorGUILayout.Space(15);
+
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUILayout.LabelField("Animal Pen System", EditorStyles.miniBoldLabel);
+            EditorGUILayout.Space(5);
+
+            if (GUILayout.Button("Create Animal Pen Upgrade Config Asset", GUILayout.Height(30)))
+            {
+                CreateAnimalPenConfig();
+            }
+            
+            EditorGUILayout.HelpBox("Use this to define capacity tiers and upgrade costs for animal coops and barns.", MessageType.Info);
+            EditorGUILayout.EndVertical();
+
             EditorGUILayout.EndVertical();
         }
 
@@ -207,6 +221,10 @@ namespace NTVV.Editor.Tools
             }
 
             StorageUpgradeDataSO asset = ScriptableObject.CreateInstance<StorageUpgradeDataSO>();
+            
+            // TẠO ĐƯỜNG DẪN DUY NHẤT (tránh ghi đè file cũ)
+            path = AssetDatabase.GenerateUniqueAssetPath(path);
+            
             AssetDatabase.CreateAsset(asset, path);
             AssetDatabase.SaveAssets();
 
@@ -214,6 +232,29 @@ namespace NTVV.Editor.Tools
             Selection.activeObject = asset;
             
             Debug.Log($"<color=green>[NTVV]</color> Storage Upgrade Config created at: {path}");
+        }
+
+        private void CreateAnimalPenConfig()
+        {
+            string path = "Assets/_Project/Data/AnimalPenUpgradeConfig.asset";
+            
+            if (!AssetDatabase.IsValidFolder("Assets/_Project/Data"))
+            {
+                AssetDatabase.CreateFolder("Assets/_Project", "Data");
+            }
+
+            AnimalPenUpgradeDataSO asset = ScriptableObject.CreateInstance<AnimalPenUpgradeDataSO>();
+            
+            // TẠO ĐƯỜNG DẪN DUY NHẤT (tránh ghi đè file cũ)
+            path = AssetDatabase.GenerateUniqueAssetPath(path);
+
+            AssetDatabase.CreateAsset(asset, path);
+            AssetDatabase.SaveAssets();
+
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = asset;
+            
+            Debug.Log($"<color=green>[NTVV]</color> Animal Pen Upgrade Config created at: {path}");
         }
     }
 }
