@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3aa1b5e28733ef41ad80cc50c6fa516, type: 3}
   m_Name: crop_02
   m_EditorClassIdentifier: Assembly-CSharp::NTVV.Data.ScriptableObjects.CropDataSO
-  itemId: 
+  itemId: crop_02
   itemName: "Khoai t\xE2y"
   unlockLevel: 1
   Icon: {fileID: 0}

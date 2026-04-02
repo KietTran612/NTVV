@@ -13,6 +13,7 @@ namespace NTVV.Core
         public int currentXP;
         public int currentLevel;
         public int storageCapacity;
+        public int storageTier;
         public long lastSaveTimestamp; // Ticks of the last save time for offline calculations
         public List<InventoryItemData> inventory = new List<InventoryItemData>();
         public List<TileSaveData> tiles = new List<TileSaveData>();

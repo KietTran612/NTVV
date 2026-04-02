@@ -26,6 +26,25 @@ namespace NTVV.Gameplay.Progression
         public int CurrentLevel => _currentLevel;
         public int CurrentXP => _currentXP;
 
+        public float GetXPProgress()
+        {
+            if (_levelData == null || _levelData.Milestones == null || _levelData.Milestones.Count == 0) return 0f;
+
+            int prevXp = 0;
+            int nextXp = 0;
+
+            foreach (var milestone in _levelData.Milestones)
+            {
+                if (milestone.Level == _currentLevel) prevXp = milestone.XPRequired;
+                if (milestone.Level == _currentLevel + 1) nextXp = milestone.XPRequired;
+            }
+
+            if (nextXp == 0) return 1f; // Max Level reached
+
+            float progress = (float)(_currentXP - prevXp) / (nextXp - prevXp);
+            return Mathf.Clamp01(progress);
+        }
+
         protected override void OnInitialize()
         {
             _isPersistent = true;

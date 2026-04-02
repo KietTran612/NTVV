@@ -23,6 +23,11 @@ namespace NTVV.Data
         public int feedQtyGrass;
         public int feedQtyWorm;
 
+        [Header("Production")]
+        public string produceItemId; 
+        public float produceTimeMin;
+        public int produceXp;
+
         [Header("Timing Rules")]
         public float lifetimeAfterMatureDays;
 

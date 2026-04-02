@@ -23,6 +23,12 @@ namespace NTVV.UI.Panels
         [SerializeField] private Button _feedButton;
         [SerializeField] private Button _sellButton;
         [SerializeField] private Button _closeButton;
+        [SerializeField] private Button _collectButton;
+
+        [Header("Caring Actions")]
+        [SerializeField] private Button _waterButton;
+        [SerializeField] private Button _cureButton;
+        [SerializeField] private Button _weedButton;
 
         private CropTileView _targetTile;
         private AnimalPenView _targetPen;
@@ -39,6 +45,11 @@ namespace NTVV.UI.Panels
             _buyButton?.onClick.AddListener(() => { _targetPen?.PurchaseAnimal(); RefreshUI(); });
             _feedButton?.onClick.AddListener(() => { _targetAnimal?.Feed(); RefreshUI(); });
             _sellButton?.onClick.AddListener(() => { _targetAnimal?.Sell(); gameObject.SetActive(false); });
+            _collectButton?.onClick.AddListener(() => { _targetAnimal?.CollectProduct(); RefreshUI(); });
+
+            _waterButton?.onClick.AddListener(() => { _targetTile?.WaterPlant(); RefreshUI(); });
+            _cureButton?.onClick.AddListener(() => { _targetTile?.ClearPests(); RefreshUI(); });
+            _weedButton?.onClick.AddListener(() => { _targetTile?.ClearWeeds(); RefreshUI(); });
         }
 
         public void Setup(CropTileView target) { ClearTargets(); _targetTile = target; Open(); }
@@ -63,6 +74,10 @@ namespace NTVV.UI.Panels
                 _plantButton.gameObject.SetActive(_targetTile.CurrentState == CropTileView.TileState.Empty);
                 _harvestButton.gameObject.SetActive(_targetTile.CurrentState == CropTileView.TileState.Ripe);
                 _resetButton.gameObject.SetActive(_targetTile.CurrentState == CropTileView.TileState.Dead);
+
+                _waterButton.gameObject.SetActive(_targetTile.NeedsWater);
+                _cureButton.gameObject.SetActive(_targetTile.HasPests);
+                _weedButton.gameObject.SetActive(_targetTile.HasWeeds);
             }
             else if (_targetPen != null)
             {
@@ -73,6 +88,7 @@ namespace NTVV.UI.Panels
             {
                 _headerText.text = _targetAnimal.CurrentData.animalName;
                 _feedButton.gameObject.SetActive(_targetAnimal.IsHungry);
+                _collectButton.gameObject.SetActive(_targetAnimal.IsReadyToProduce);
                 _sellButton.gameObject.SetActive(true);
             }
         }
@@ -85,6 +101,10 @@ namespace NTVV.UI.Panels
             _buyButton.gameObject.SetActive(val);
             _feedButton.gameObject.SetActive(val);
             _sellButton.gameObject.SetActive(val);
+            _waterButton.gameObject.SetActive(val);
+            _cureButton.gameObject.SetActive(val);
+            _weedButton.gameObject.SetActive(val);
+            _collectButton.gameObject.SetActive(val);
         }
     }
 }

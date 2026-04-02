@@ -8,6 +8,7 @@ namespace NTVV.UI.Panels
     using NTVV.Data.ScriptableObjects;
     using NTVV.Gameplay.Economy;
     using NTVV.Gameplay.Storage;
+    using NTVV.Gameplay.Progression;
     using NTVV.UI.Common;
 
     /// <summary>
@@ -17,8 +18,11 @@ namespace NTVV.UI.Panels
     public class StoragePanelController : MonoBehaviour
     {
         [Header("UI References")]
+        [SerializeField] private TMP_Text _capacityText;
         [SerializeField] private Transform _storageContentContainer;
         [SerializeField] private Button _btnClose;
+        [SerializeField] private Button _btnUpgrade;
+        [SerializeField] private TMP_Text _upgradeCostText;
         
         [Header("Sell Panel References")]
         [SerializeField] private TMP_Text _selectedItemNameText;
@@ -42,7 +46,10 @@ namespace NTVV.UI.Panels
             if (_btnPlus != null) _btnPlus.onClick.AddListener(() => AdjustQuantity(1));
             if (_btnMinus != null) _btnMinus.onClick.AddListener(() => AdjustQuantity(-1));
             if (_btnSellNow != null) _btnSellNow.onClick.AddListener(OnSellClick);
+            if (_btnUpgrade != null) _btnUpgrade.onClick.AddListener(OnUpgradeClick);
 
+            StorageSystem.OnStorageChanged += HandleStorageChanged;
+            
             RefreshStorage();
         }
 
@@ -52,6 +59,20 @@ namespace NTVV.UI.Panels
             _btnPlus?.onClick.RemoveAllListeners();
             _btnMinus?.onClick.RemoveAllListeners();
             _btnSellNow?.onClick.RemoveAllListeners();
+            _btnUpgrade?.onClick.RemoveAllListeners();
+
+            StorageSystem.OnStorageChanged -= HandleStorageChanged;
+        }
+
+        private void HandleStorageChanged(int used, int max)
+        {
+            UpdateCapacityText(used, max);
+            UpdateUpgradeInfo();
+        }
+
+        private void UpdateCapacityText(int used, int max)
+        {
+            if (_capacityText != null) _capacityText.text = $"Storage: {used} / {max}";
         }
 
         public void RefreshStorage()
@@ -76,6 +97,64 @@ namespace NTVV.UI.Panels
                 {
                     string capturedKey = item.Key;
                     cardBtn.onClick.AddListener(() => SelectItem(capturedKey, data));
+                }
+            }
+
+            if (StorageSystem.Instance != null)
+            {
+                UpdateCapacityText(StorageSystem.Instance.CurrentSlotsUsed, StorageSystem.Instance.MaxCapacity);
+                UpdateUpgradeInfo();
+            }
+        }
+
+        private void UpdateUpgradeInfo()
+        {
+            if (StorageSystem.Instance == null || _btnUpgrade == null) return;
+
+            var config = StorageSystem.Instance.UpgradeConfig;
+            if (config == null)
+            {
+                _btnUpgrade.gameObject.SetActive(false);
+                return;
+            }
+
+            int currentTier = StorageSystem.Instance.CurrentTier;
+            _btnUpgrade.interactable = true;
+
+            if (config.HasNextTier(currentTier))
+            {
+                var nextTier = config.GetTier(currentTier);
+                _btnUpgrade.gameObject.SetActive(true);
+                
+                string costText = $"{nextTier.upgradeCostGold}g";
+                string levelText = nextTier.minLevelToAccess != -1 ? $" (Req. Lvl {nextTier.minLevelToAccess})" : "";
+                
+                if (_upgradeCostText != null) 
+                    _upgradeCostText.text = $"Upgrade: {costText}{levelText}";
+
+                // Visual feedback if can't afford or level locked
+                bool levelLocked = nextTier.minLevelToAccess != -1 && LevelSystem.Instance != null && LevelSystem.Instance.CurrentLevel < nextTier.minLevelToAccess;
+                if (levelLocked)
+                {
+                    _btnUpgrade.interactable = false;
+                    if (_upgradeCostText != null) _upgradeCostText.text = $"LOCKED (Req. Lvl {nextTier.minLevelToAccess})";
+                }
+            }
+            else
+            {
+                _btnUpgrade.gameObject.SetActive(false);
+                if (_upgradeCostText != null) _upgradeCostText.text = "Max Level Reached";
+            }
+        }
+
+        private void OnUpgradeClick()
+        {
+            if (StorageSystem.Instance != null)
+            {
+                if (StorageSystem.Instance.TryUpgradeStorage())
+                {
+                    // Success! Refresh will happen via event
+                    Debug.Log("<color=green>[UI]</color> Storage Upgrade Requested Successfully.");
                 }
             }
         }

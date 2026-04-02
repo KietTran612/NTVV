@@ -68,7 +68,7 @@ namespace NTVV.Managers
             {
                 inventoryDict[item.itemId] = item.quantity;
             }
-            StorageSystem.Instance.LoadData(inventoryDict, data.storageCapacity > 0 ? data.storageCapacity : 50);
+            StorageSystem.Instance.LoadData(inventoryDict, data.storageCapacity > 0 ? data.storageCapacity : 50, data.storageTier);
         }
 
         private void RestoreWorldState(PlayerSaveData data)
@@ -101,6 +101,7 @@ namespace NTVV.Managers
                 currentXP = LevelSystem.Instance.CurrentXP,
                 currentLevel = LevelSystem.Instance.CurrentLevel,
                 storageCapacity = StorageSystem.Instance.MaxCapacity,
+                storageTier = StorageSystem.Instance.CurrentTier,
                 lastSaveTimestamp = DateTime.Now.Ticks
             };
 

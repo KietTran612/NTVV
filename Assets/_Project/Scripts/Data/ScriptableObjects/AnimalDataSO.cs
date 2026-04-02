@@ -8,13 +8,18 @@ namespace NTVV.Data.ScriptableObjects
     {
         public AnimalData data;
 
-        [Header("Visual Assets")]
-        public Sprite animalIcon;
-        public GameObject animalPrefab; // Prefab chứa SpriteAnimation/Spine cho 2.5D
-        
+        [Header("Growth Assets (Required)")]
+        [Tooltip("Assign 3 stages: Baby, Stage 2, Mature")]
+        public Sprite[] stageSprites; 
+        public Sprite deadSprite;
+
+        [Header("Production Visuals")]
+        public Sprite readyToCollectIcon; // Icon shown when egg/milk is ready
+
         [Header("Audio")]
         public AudioClip sfxHappy;
         public AudioClip sfxHungry;
         public AudioClip sfxMature;
+        public AudioClip sfxCollect;
     }
 }

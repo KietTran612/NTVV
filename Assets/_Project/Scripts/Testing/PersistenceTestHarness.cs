@@ -56,7 +56,7 @@ namespace NTVV.Testing
         {
             if (EconomySystem.Instance != null) EconomySystem.Instance.SetGold(0);
             if (LevelSystem.Instance != null) LevelSystem.Instance.LoadData(1, 0);
-            if (StorageSystem.Instance != null) StorageSystem.Instance.LoadData(new Dictionary<string, int>(), 50);
+            if (StorageSystem.Instance != null) StorageSystem.Instance.LoadData(new Dictionary<string, int>(), 50, 0);
             
             Debug.Log("<color=orange>[PersistenceTest]</color> Runtime systems cleared. Ready to test LOAD.");
         }
@@ -78,7 +78,7 @@ namespace NTVV.Testing
                     inventoryDict[item.itemId] = item.quantity;
                 }
                 if (StorageSystem.Instance != null) 
-                    StorageSystem.Instance.LoadData(inventoryDict, saveData.storageCapacity);
+                    StorageSystem.Instance.LoadData(inventoryDict, saveData.storageCapacity, saveData.storageTier);
 
                 Debug.Log("<color=cyan>[PersistenceTest]</color> Data loaded and restored successfully.");
             }
@@ -96,6 +96,7 @@ namespace NTVV.Testing
             if (StorageSystem.Instance != null)
             {
                 data.storageCapacity = StorageSystem.Instance.MaxCapacity;
+                data.storageTier = StorageSystem.Instance.CurrentTier;
                 foreach (var kvp in StorageSystem.Instance.GetAllItems())
                 {
                     data.inventory.Add(new InventoryItemData { itemId = kvp.Key, quantity = kvp.Value });

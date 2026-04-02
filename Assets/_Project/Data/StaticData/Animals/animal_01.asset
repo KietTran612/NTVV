@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea88b76405ee124db40fb91ff94a3a1, type: 3}
   m_Name: animal_01
   m_EditorClassIdentifier: Assembly-CSharp::NTVV.Data.ScriptableObjects.AnimalDataSO
-  itemId: 
+  itemId: animal_01
   itemName: "G\xE0"
   unlockLevel: 1
   Icon: {fileID: 0}

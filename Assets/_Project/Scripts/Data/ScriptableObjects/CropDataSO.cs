@@ -8,12 +8,16 @@ namespace NTVV.Data.ScriptableObjects
     {
         public CropData data;
 
-        [Header("Visual Assets")]
-        public Sprite seedIcon;
-        public Sprite cropIcon;
-        public GameObject growthStagesPrefab; // Prefab chứa các giai đoạn phát triển 2.5D
+        [Header("Growth Assets (Required)")]
+        [Tooltip("Assign 4 stages: Seedling, Growing, Large, Ripe")]
+        public Sprite[] growthStageSprites; 
+        public Sprite deadSprite;
+
+        [Header("Shop & UI")]
+        public Sprite seedIcon; // Icon shown in Seed Shop
+        public Sprite cropIcon; // Icon shown in Storage/Inventory (item icon)
         
-        [Header("Audio")]
+        [Header("Audio (Optional)")]
         public AudioClip plantSfx;
         public AudioClip harvestSfx;
     }

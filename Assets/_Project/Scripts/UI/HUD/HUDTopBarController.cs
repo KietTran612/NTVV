@@ -51,9 +51,10 @@ namespace NTVV.UI.HUD
         {
             if (_levelLabel != null) _levelLabel.text = $"Level {level}";
             
-            // Visual progress logic - refined in LevelSystem, here just UI mapping
-            float progress = (xp % 100) / 100f; // Placeholder mapping
-            if (_xpBarFill != null) _xpBarFill.fillAmount = progress;
+            if (LevelSystem.Instance != null && _xpBarFill != null)
+            {
+                _xpBarFill.fillAmount = LevelSystem.Instance.GetXPProgress();
+            }
         }
 
         private void UpdateStorage(int used, int max)

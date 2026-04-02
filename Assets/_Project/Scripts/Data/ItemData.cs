@@ -4,6 +4,7 @@ namespace NTVV.Data
 
     /// <summary>
     /// Base ScriptableObject for all game items (Seeds, Crops, Animals, Food).
+    /// Standardized to camelCase.
     /// </summary>
     public abstract class ItemData : ScriptableObject
     {
@@ -11,9 +12,9 @@ namespace NTVV.Data
         public string itemId;
         public string itemName;
         public int unlockLevel = 1;
-        public Sprite Icon;
+        public Sprite icon;
 
-        [Header("Visuals")]
-        public GameObject Prefab;
+        [Header("World Representation")]
+        public GameObject worldPrefab; // Prefab for dropped items or world representation
     }
 }

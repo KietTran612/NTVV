@@ -48,8 +48,15 @@ namespace NTVV.Editor.Tools
             
             EditorGUILayout.BeginHorizontal();
             
-            DrawSidebar();
-            DrawDetailView();
+            if (_currentTab == Tab.Settings)
+            {
+                DrawSettingsTab();
+            }
+            else
+            {
+                DrawSidebar();
+                DrawDetailView();
+            }
             
             EditorGUILayout.EndHorizontal();
         }
@@ -165,6 +172,48 @@ namespace NTVV.Editor.Tools
             EditorGUILayout.Space(2);
             Handles.color = Color.gray;
             Handles.DrawLine(new Vector3(0, GUILayoutUtility.GetLastRect().yMax + 5), new Vector3(position.width, GUILayoutUtility.GetLastRect().yMax + 5));
+        }
+
+        private void DrawSettingsTab()
+        {
+            EditorGUILayout.BeginVertical(new GUIStyle { padding = new RectOffset(20, 20, 20, 20) });
+            
+            EditorGUILayout.LabelField("Global Game Settings", EditorStyles.boldLabel);
+            EditorGUILayout.Space(10);
+
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUILayout.LabelField("Storage System", EditorStyles.miniBoldLabel);
+            EditorGUILayout.Space(5);
+
+            if (GUILayout.Button("Create Storage Upgrade Config Asset", GUILayout.Height(30)))
+            {
+                CreateStorageConfig();
+            }
+            
+            EditorGUILayout.HelpBox("Use this to define Gold costs and Level requirements for expanding the warehouse.", MessageType.Info);
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.EndVertical();
+        }
+
+        private void CreateStorageConfig()
+        {
+            string path = "Assets/_Project/Data/StorageUpgradeConfig.asset";
+            
+            // Check if directory exists
+            if (!AssetDatabase.IsValidFolder("Assets/_Project/Data"))
+            {
+                AssetDatabase.CreateFolder("Assets/_Project", "Data");
+            }
+
+            StorageUpgradeDataSO asset = ScriptableObject.CreateInstance<StorageUpgradeDataSO>();
+            AssetDatabase.CreateAsset(asset, path);
+            AssetDatabase.SaveAssets();
+
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = asset;
+            
+            Debug.Log($"<color=green>[NTVV]</color> Storage Upgrade Config created at: {path}");
         }
     }
 }

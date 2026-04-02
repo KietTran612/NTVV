@@ -2,6 +2,7 @@ namespace NTVV.World.Views
 {
     using UnityEngine;
     using NTVV.Data;
+    using NTVV.Data.ScriptableObjects;
     using NTVV.Gameplay.Economy;
     using NTVV.Gameplay.Progression;
     using NTVV.Gameplay.Storage;
@@ -22,10 +23,21 @@ namespace NTVV.World.Views
         [SerializeField] private float _growthProgress; 
         [SerializeField] private float _hungerTimer;
         [SerializeField] private float _timeSinceMature;
+        
+        [Header("Production State")]
+        [SerializeField] private float _productionTimer;
+        [SerializeField] private bool _isReadyToProduce;
+
+        [Header("Visual References")]
+        [SerializeField] private SpriteRenderer _bodyRenderer;
+        [SerializeField] private GameObject _hungerVisual;
+        [SerializeField] private GameObject _produceVisual;
+        [SerializeField] private GameDataRegistrySO _registry;
 
         public AnimalData CurrentData => _data;
         public GrowthStage CurrentStage => _currentStage;
         public bool IsHungry => _isHungry;
+        public bool IsReadyToProduce => _isReadyToProduce;
 
         public void Initialize(AnimalData data)
         {
@@ -34,6 +46,9 @@ namespace NTVV.World.Views
             _isHungry = false;
             _hungerTimer = 0f;
             _growthProgress = 0f;
+            _productionTimer = 0f;
+            _isReadyToProduce = false;
+            RefreshVisuals();
         }
 
         private void OnEnable() { TimeManager.OnTick += HandleTick; }
@@ -57,8 +72,56 @@ namespace NTVV.World.Views
             if (_currentStage == GrowthStage.Mature)
             {
                 _timeSinceMature += tickDelta;
-                if (_timeSinceMature >= _data.LifeAfterMatureInSeconds) _currentStage = GrowthStage.Dead;
+                if (_timeSinceMature >= _data.LifeAfterMatureInSeconds) 
+                {
+                    _currentStage = GrowthStage.Dead;
+                    RefreshVisuals();
+                }
+
+                // Production Logic: Only if not hungry and mature
+                if (!_isHungry && !_isReadyToProduce)
+                {
+                    _productionTimer += tickDelta;
+                    if (_productionTimer >= (_data.produceTimeMin * 60f))
+                    {
+                        _isReadyToProduce = true;
+                        RefreshVisuals();
+                    }
+                }
             }
+        }
+        
+        private void RefreshVisuals()
+        {
+            UpdateGrowthVisuals();
+            UpdateStatusVisuals();
+        }
+
+        private void UpdateGrowthVisuals()
+        {
+            if (_bodyRenderer == null || _registry == null) return;
+
+            var so = _registry.GetAnimal(_data.animalId);
+            if (so == null) return;
+
+            if (_currentStage == GrowthStage.Dead)
+            {
+                _bodyRenderer.sprite = so.deadSprite;
+            }
+            else
+            {
+                int stageIdx = (int)_currentStage;
+                if (so.stageSprites != null && stageIdx < so.stageSprites.Length)
+                {
+                    _bodyRenderer.sprite = so.stageSprites[stageIdx];
+                }
+            }
+        }
+
+        private void UpdateStatusVisuals()
+        {
+            if (_hungerVisual != null) _hungerVisual.SetActive(_isHungry);
+            if (_produceVisual != null) _produceVisual.SetActive(_isReadyToProduce);
         }
 
         private void UpdateGrowth(float tickDelta)
@@ -84,6 +147,7 @@ namespace NTVV.World.Views
         {
             if (_currentStage == GrowthStage.Baby) _currentStage = GrowthStage.Stage2;
             else if (_currentStage == GrowthStage.Stage2) _currentStage = GrowthStage.Mature;
+            RefreshVisuals();
         }
 
         public void Feed()
@@ -102,6 +166,23 @@ namespace NTVV.World.Views
                 _isHungry = false;
                 _hungerTimer = 0f;
                 Debug.Log($"<color=green>[Animal]</color> Fed {_data.animalName}");
+                RefreshVisuals();
+            }
+        }
+
+        public void CollectProduct()
+        {
+            if (!_isReadyToProduce) return;
+
+            if (StorageSystem.Instance != null && StorageSystem.Instance.CanAddItem(_data.produceItemId, 1))
+            {
+                StorageSystem.Instance.AddItem(_data.produceItemId, 1);
+                if (LevelSystem.Instance != null) LevelSystem.Instance.AddXP(_data.produceXp);
+                
+                _isReadyToProduce = false;
+                _productionTimer = 0f;
+                RefreshVisuals();
+                Debug.Log($"<color=cyan>[Production]</color> Collected product from {_data.animalName}");
             }
         }
 

@@ -4,6 +4,9 @@ namespace NTVV.Gameplay.Storage
     using System;
     using System.Collections.Generic;
     using NTVV.Core;
+    using NTVV.Data.ScriptableObjects;
+    using NTVV.Gameplay.Economy;
+    using NTVV.Gameplay.Progression;
 
     /// <summary>
     /// System for managing player inventory and storage capacity.
@@ -16,15 +19,20 @@ namespace NTVV.Gameplay.Storage
         public static event Action<bool> OnNearFullWarning;
 
         [Header("Config")]
-        [SerializeField] private int _maxCapacity = 50;
+        [SerializeField] private int _defaultCapacity = 50;
+        [SerializeField] private StorageUpgradeDataSO _upgradeConfig;
 
         [Header("State")]
+        [SerializeField] private int _maxCapacity = 50;
+        [SerializeField] private int _currentTier = 0;
         private Dictionary<string, int> _items = new Dictionary<string, int>();
         private int _currentSlotsUsed = 0;
 
         public int CurrentSlotsUsed => _currentSlotsUsed;
         public int MaxCapacity => _maxCapacity;
+        public int CurrentTier => _currentTier;
         public bool IsFull => _currentSlotsUsed >= _maxCapacity;
+        public StorageUpgradeDataSO UpgradeConfig => _upgradeConfig;
 
         protected override void OnInitialize()
         {
@@ -66,10 +74,11 @@ namespace NTVV.Gameplay.Storage
         /// <summary>
         /// Restore items and capacity (used during save load initialization).
         /// </summary>
-        public void LoadData(Dictionary<string, int> items, int maxCapacity)
+        public void LoadData(Dictionary<string, int> items, int maxCapacity, int currentTier)
         {
             _items = items ?? new Dictionary<string, int>();
             _maxCapacity = maxCapacity;
+            _currentTier = currentTier;
             RecalculateTotalSlots();
             RefreshUI();
         }
@@ -82,6 +91,38 @@ namespace NTVV.Gameplay.Storage
         public Dictionary<string, int> GetAllItems()
         {
             return new Dictionary<string, int>(_items);
+        }
+
+        public bool TryUpgradeStorage()
+        {
+            if (_upgradeConfig == null || !_upgradeConfig.HasNextTier(_currentTier)) return false;
+
+            var nextTier = _upgradeConfig.GetTier(_currentTier);
+            
+            // Per-tier Level Check (Skip if -1)
+            if (nextTier.minLevelToAccess != -1 && LevelSystem.Instance != null)
+            {
+                if (LevelSystem.Instance.CurrentLevel < nextTier.minLevelToAccess)
+                {
+                    Debug.LogWarning($"<color=red>Upgrade Failed:</color> Level {nextTier.minLevelToAccess} required!");
+                    return false;
+                }
+            }
+
+            // Check Gold
+            if (EconomySystem.Instance != null && EconomySystem.Instance.CurrentGold >= nextTier.upgradeCostGold)
+            {
+                EconomySystem.Instance.AddGold(-nextTier.upgradeCostGold);
+                _maxCapacity += nextTier.bonusCapacity;
+                _currentTier++;
+                
+                NotifyStorageChanged();
+                Debug.Log($"<color=cyan>[Storage]</color> Upgraded to Tier {_currentTier}. Max Capacity: {_maxCapacity}");
+                return true;
+            }
+
+            Debug.LogWarning("<color=red>Upgrade Failed:</color> Not enough Gold!");
+            return false;
         }
 
         public void UpgradeCapacity(int extraSlots)

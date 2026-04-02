@@ -2,6 +2,7 @@ namespace NTVV.World.Views
 {
     using UnityEngine;
     using NTVV.Data;
+    using NTVV.Data.ScriptableObjects;
     using NTVV.Gameplay.Economy;
     using NTVV.Gameplay.Storage;
     using NTVV.Gameplay.Progression;
@@ -34,6 +35,14 @@ namespace NTVV.World.Views
         [SerializeField] private bool _hasPests;
         [SerializeField] private bool _needsWater;
 
+        [Header("Visual References")]
+        [SerializeField] private SpriteRenderer _soilRenderer;
+        [SerializeField] private SpriteRenderer _cropRenderer;
+        [SerializeField] private GameObject _weedVisual;
+        [SerializeField] private GameObject _bugVisual;
+        [SerializeField] private GameObject _waterVisual;
+        [SerializeField] private GameDataRegistrySO _registry; // Required for sprites
+
         public string TileId => _tileId;
         public float ElapsedTime => _elapsedTime;
         public CropData CurrentCropData => _currentCropData;
@@ -60,6 +69,7 @@ namespace NTVV.World.Views
                 _timeSinceRipe = 0f;
                 _currentHP = 100f;
                 Debug.Log($"<color=green>[Plot]</color> Planted: {data.cropName}");
+                RefreshVisuals();
             }
         }
 
@@ -155,7 +165,59 @@ namespace NTVV.World.Views
             _elapsedTime = 0f;
             _timeSinceRipe = 0f;
             _currentHP = 100f;
+            _currentHP = 100f;
             _hasWeeds = _hasPests = _needsWater = false;
+            RefreshVisuals();
+        }
+
+        private void RefreshVisuals()
+        {
+            UpdateAilmentVisuals();
+            UpdateGrowthVisuals();
+        }
+
+        private void UpdateAilmentVisuals()
+        {
+            if (_weedVisual != null) _weedVisual.SetActive(_hasWeeds);
+            if (_bugVisual != null) _bugVisual.SetActive(_hasPests);
+            if (_waterVisual != null) _waterVisual.SetActive(_needsWater);
+            
+            // Soil visual can change based on water
+            // if (_soilRenderer != null && _needsWater) ...
+        }
+
+        private void UpdateGrowthVisuals()
+        {
+            if (_cropRenderer == null) return;
+
+            if (_currentState == TileState.Empty || _currentCropData == null)
+            {
+                _cropRenderer.gameObject.SetActive(false);
+                return;
+            }
+
+            _cropRenderer.gameObject.SetActive(true);
+            
+            // Try to find the SO for sprites
+            if (_registry != null)
+            {
+                var so = _registry.GetCrop(_currentCropData.cropId);
+                if (so != null)
+                {
+                    if (_currentState == TileState.Dead)
+                    {
+                        _cropRenderer.sprite = so.deadSprite;
+                    }
+                    else
+                    {
+                        int stageIdx = (int)_currentStage;
+                        if (so.growthStageSprites != null && stageIdx < so.growthStageSprites.Length)
+                        {
+                            _cropRenderer.sprite = so.growthStageSprites[stageIdx];
+                        }
+                    }
+                }
+            }
         }
 
         private void UpdateStage()
@@ -181,20 +243,41 @@ namespace NTVV.World.Views
 
             _elapsedTime += tickDelta;
             _growthProgress = Mathf.Clamp01(_elapsedTime / _currentCropData.GrowthTimeInSeconds);
-            UpdateStage();
             
+            var oldStage = _currentStage;
+            UpdateStage();
+            if (oldStage != _currentStage) UpdateGrowthVisuals();
+
+            // Ailment Generation Logic
+            if (_currentState == TileState.Growing && UnityEngine.Random.value < 0.005f) // Small chance per tick
+            {
+                if (!_hasWeeds && UnityEngine.Random.value < _currentCropData.weedChancePct) _hasWeeds = true;
+                if (!_hasPests && UnityEngine.Random.value < _currentCropData.bugChancePct) _hasPests = true;
+                if (!_needsWater && UnityEngine.Random.value < _currentCropData.waterChancePct) _needsWater = true;
+                
+                RefreshVisuals();
+            }
+
             // HP Drain logic...
             float drainRate = (_hasWeeds ? _currentCropData.WeedsHPDrain : 0) + (_hasPests ? _currentCropData.PestsHPDrain : 0) + (_needsWater ? _currentCropData.WaterHPDrain : 0);
             if (drainRate > 0)
             {
                 _currentHP = Mathf.Max(0, _currentHP - (drainRate * tickDelta / 10f));
-                if (_currentHP <= 0) _currentState = TileState.Dead;
-                else _currentState = TileState.NeedsCare;
+                if (_currentHP <= 0) 
+                {
+                    _currentState = TileState.Dead;
+                    RefreshVisuals();
+                }
+                else if (_currentState != TileState.NeedsCare)
+                {
+                    _currentState = TileState.NeedsCare;
+                }
             }
-            else if (_growthProgress >= 1f)
+            else if (_growthProgress >= 1f && _currentState != TileState.Ripe)
             {
                 _currentState = TileState.Ripe;
                 _currentStage = GrowthStage.Ripe;
+                RefreshVisuals();
             }
         }
     }

@@ -75,6 +75,7 @@ namespace NTVV.Editor.Tools
                     AssetDatabase.CreateAsset(so, assetPath);
                 }
 
+                so.itemId = item.cropId;
                 so.data = item;
                 so.itemName = item.cropName; // Sync common name
                 EditorUtility.SetDirty(so);
@@ -112,6 +113,7 @@ namespace NTVV.Editor.Tools
                     AssetDatabase.CreateAsset(so, assetPath);
                 }
 
+                so.itemId = item.animalId;
                 so.data = item;
                 so.itemName = item.animalName; // Sync common name
                 EditorUtility.SetDirty(so);
