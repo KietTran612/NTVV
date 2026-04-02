@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c349961df873c9418c3f1b77556b131, type: 3}
+  m_Name: q_harvest_wheat
+  m_EditorClassIdentifier: Assembly-CSharp::NTVV.Data.ScriptableObjects.QuestDataSO
+  questId: q_harvest_wheat
+  questName: "Ng\u01B0\u1EDDi n\xF4ng d\xE2n t\u1EADp s\u1EF1"
+  questDescription: "H\xE3y thu ho\u1EA1ch l\xFAa m\xEC \u0111\u1EA7u ti\xEAn c\u1EE7a
+    b\u1EA1n \u0111\u1EC3 l\xE0m quen v\u1EDBi n\xF4ng tr\u1EA1i."
+  minLevelRequired: 1
+  prerequisiteQuestId: 
+  objectives:
+  - actionType: 0
+    targetId: crop_wheat
+    requiredAmount: 5
+    description: "Thu ho\u1EA1ch 5 L\xFAa m\xEC"
+    currentAmount: 0
+  rewards:
+    goldReward: 100
+    xpReward: 50
+    unlockType: 0
+    unlockId: 
+  questIcon: {fileID: 0}

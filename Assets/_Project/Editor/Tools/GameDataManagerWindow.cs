@@ -11,7 +11,7 @@ namespace NTVV.Editor.Tools
     /// </summary>
     public class GameDataManagerWindow : EditorWindow
     {
-        private enum Tab { Crops, Animals, Settings }
+        private enum Tab { Crops, Animals, Quests, Settings }
         private Tab _currentTab = Tab.Crops;
         private Vector2 _sidebarScroll;
         private Vector2 _detailScroll;
@@ -40,6 +40,11 @@ namespace NTVV.Editor.Tools
         private void RefreshRegistry()
         {
             _registry = DataImportUtility.GetOrCreateRegistry();
+            if (_registry != null)
+            {
+                DataImportUtility.SyncQuestsFromAssets(_registry);
+                _registry.Initialize();
+            }
         }
 
         private void OnGUI()
@@ -65,9 +70,18 @@ namespace NTVV.Editor.Tools
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             
+            Tab oldTab = _currentTab;
             if (GUILayout.Toggle(_currentTab == Tab.Crops, "Crops", EditorStyles.toolbarButton)) _currentTab = Tab.Crops;
             if (GUILayout.Toggle(_currentTab == Tab.Animals, "Animals", EditorStyles.toolbarButton)) _currentTab = Tab.Animals;
+            if (GUILayout.Toggle(_currentTab == Tab.Quests, "Quests", EditorStyles.toolbarButton)) _currentTab = Tab.Quests;
             if (GUILayout.Toggle(_currentTab == Tab.Settings, "Settings", EditorStyles.toolbarButton)) _currentTab = Tab.Settings;
+
+            if (oldTab != _currentTab)
+            {
+                _selectedId = string.Empty;
+                _selectedObject = null;
+                if (_cachedEditor != null) DestroyImmediate(_cachedEditor);
+            }
 
             GUILayout.FlexibleSpace();
 
@@ -105,6 +119,21 @@ namespace NTVV.Editor.Tools
                     {
                         if (animal == null) continue;
                         DrawItemButton(animal.data.animalId, animal.data.animalName, animal);
+                    }
+                }
+                else if (_currentTab == Tab.Quests)
+                {
+                    if (GUILayout.Button("Scan & Register Quests", EditorStyles.miniButton))
+                    {
+                        DataImportUtility.SyncQuestsFromAssets(_registry);
+                        RefreshRegistry();
+                    }
+                    EditorGUILayout.Space(5);
+
+                    foreach (var quest in _registry.quests)
+                    {
+                        if (quest == null) continue;
+                        DrawItemButton(quest.questId, quest.questName, quest);
                     }
                 }
             }
@@ -207,6 +236,20 @@ namespace NTVV.Editor.Tools
             EditorGUILayout.HelpBox("Use this to define capacity tiers and upgrade costs for animal coops and barns.", MessageType.Info);
             EditorGUILayout.EndVertical();
 
+            EditorGUILayout.Space(15);
+
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUILayout.LabelField("Quest System", EditorStyles.miniBoldLabel);
+            EditorGUILayout.Space(5);
+
+            if (GUILayout.Button("Create New Quest Asset", GUILayout.Height(30)))
+            {
+                CreateQuestAsset();
+            }
+            
+            EditorGUILayout.HelpBox("Use this to create a single Quest configuration asset.", MessageType.Info);
+            EditorGUILayout.EndVertical();
+
             EditorGUILayout.EndVertical();
         }
 
@@ -255,6 +298,29 @@ namespace NTVV.Editor.Tools
             Selection.activeObject = asset;
             
             Debug.Log($"<color=green>[NTVV]</color> Animal Pen Upgrade Config created at: {path}");
+        }
+
+        private void CreateQuestAsset()
+        {
+            string path = "Assets/_Project/Data/Quests/NewQuest.asset";
+            
+            if (!AssetDatabase.IsValidFolder("Assets/_Project/Data/Quests"))
+            {
+                if (!AssetDatabase.IsValidFolder("Assets/_Project/Data"))
+                    AssetDatabase.CreateFolder("Assets/_Project", "Data");
+                AssetDatabase.CreateFolder("Assets/_Project/Data", "Quests");
+            }
+
+            QuestDataSO asset = ScriptableObject.CreateInstance<QuestDataSO>();
+            path = AssetDatabase.GenerateUniqueAssetPath(path);
+            
+            AssetDatabase.CreateAsset(asset, path);
+            AssetDatabase.SaveAssets();
+
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = asset;
+            
+            Debug.Log($"<color=green>[NTVV]</color> Quest Asset created at: {path}");
         }
     }
 }

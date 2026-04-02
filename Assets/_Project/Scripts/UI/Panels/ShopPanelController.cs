@@ -116,6 +116,10 @@ namespace NTVV.UI.Panels
             {
                 EconomySystem.Instance.AddGold(-cost);
                 StorageSystem.Instance.AddItem(cropId, 1);
+
+                // [Quest] Báo cáo mua vật phẩm (hạt giống)
+                NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.BuyItem, cropId, 1);
+
                 Debug.Log($"<color=cyan>[Shop]</color> Bought Seed: {cropId}");
             }
             else
@@ -146,6 +150,10 @@ namespace NTVV.UI.Panels
             {
                 EconomySystem.Instance.AddGold(-cost);
                 targetPen.PurchaseAnimalFromShop(); // Cần thêm một hàm Public khác không trừ tiền lại
+
+                // [Quest] Báo cáo mua thú nuôi
+                NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.BuyItem, animalId, 1);
+
                 Debug.Log($"<color=cyan>[Shop]</color> Bought Animal: {animalId}");
             }
         }

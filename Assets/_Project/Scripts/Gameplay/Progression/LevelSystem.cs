@@ -78,8 +78,9 @@ namespace NTVV.Gameplay.Progression
                 if (milestone.Level > _currentLevel && _currentXP >= milestone.XPRequired)
                 {
                     _currentLevel = milestone.Level;
-                    OnLevelUp?.Invoke(_currentLevel);
-                    
+                    // [Quest] Báo cáo thăng cấp
+                    NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.ReachLevel, "Player", _currentLevel);
+
                     // Trigger save on milestone reach (Hybrid Save)
                     if (NTVV.Managers.GameManager.Instance != null)
                         NTVV.Managers.GameManager.Instance.TriggerSave();

@@ -165,6 +165,10 @@ namespace NTVV.World.Views
                 
                 _isHungry = false;
                 _hungerTimer = 0f;
+
+                // [Quest] Báo cáo cho ăn
+                NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.FeedAnimal, _data.animalId, 1);
+
                 Debug.Log($"<color=green>[Animal]</color> Fed {_data.animalName}");
                 RefreshVisuals();
             }
@@ -181,6 +185,10 @@ namespace NTVV.World.Views
                 
                 _isReadyToProduce = false;
                 _productionTimer = 0f;
+
+                // [Quest] Báo cáo thu hoạch sản phẩm từ vật nuôi
+                NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.CollectProduct, _data.produceItemId, 1);
+
                 RefreshVisuals();
                 Debug.Log($"<color=cyan>[Production]</color> Collected product from {_data.animalName}");
             }

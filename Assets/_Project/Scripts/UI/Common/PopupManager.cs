@@ -23,6 +23,7 @@ namespace NTVV.UI.Common
         [SerializeField] private GameObject _shopPrefab;
         [SerializeField] private GameObject _alertsPrefab;
         [SerializeField] private GameObject _animalDetailPrefab;
+        [SerializeField] private GameObject _questsPrefab;
 
         private GameObject _activeModal;
 
@@ -83,6 +84,7 @@ namespace NTVV.UI.Common
                 case "Shop": prefabToSpawn = _shopPrefab; break;
                 case "Alerts": prefabToSpawn = _alertsPrefab; break;
                 case "Animal": prefabToSpawn = _animalDetailPrefab; break;
+                case "Quests": prefabToSpawn = _questsPrefab; break;
             }
 
             if (prefabToSpawn != null && _modalParent != null)

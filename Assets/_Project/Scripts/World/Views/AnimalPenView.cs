@@ -60,6 +60,10 @@ namespace NTVV.World.Views
             {
                 EconomySystem.Instance.AddGold(-upgradeData.upgradeCostGold);
                 _currentTier = nextTier;
+
+                // [Quest] Báo cáo nâng cấp chuồng
+                NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.UpgradePen, "AnimalPen", _currentTier);
+
                 Debug.Log($"<color=green>[AnimalPen]</color> Upgraded to Tier {_currentTier}. New Capacity: {upgradeData.maxCapacity}");
                 return true;
             }

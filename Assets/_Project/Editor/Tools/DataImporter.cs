@@ -124,6 +124,37 @@ namespace NTVV.Editor.Tools
             return count;
         }
 
+        /// <summary>
+        /// Scans the entire project for QuestDataSO assets and adds them to the registry.
+        /// </summary>
+        public static int SyncQuestsFromAssets(GameDataRegistrySO registry)
+        {
+            if (registry == null) return 0;
+
+            string[] guids = AssetDatabase.FindAssets("t:QuestDataSO");
+            int count = 0;
+
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                QuestDataSO quest = AssetDatabase.LoadAssetAtPath<QuestDataSO>(path);
+                
+                if (quest != null && !registry.quests.Contains(quest))
+                {
+                    registry.quests.Add(quest);
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                EditorUtility.SetDirty(registry);
+                AssetDatabase.SaveAssets();
+            }
+
+            return count;
+        }
+
         [System.Serializable]
         private class CropDataList { public List<CropData> items; }
         

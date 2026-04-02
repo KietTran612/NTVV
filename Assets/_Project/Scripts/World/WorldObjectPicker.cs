@@ -64,6 +64,14 @@ namespace NTVV.World
                     OnShopSelected(shop);
                     return;
                 }
+
+                // Try to find a QuestGiver component
+                QuestGiver giver = hit.collider.GetComponentInParent<QuestGiver>();
+                if (giver != null)
+                {
+                    OnQuestGiverSelected(giver);
+                    return;
+                }
             }
         }
 
@@ -71,6 +79,12 @@ namespace NTVV.World
         {
             Debug.Log($"<color=cyan>Shop Selected: </color> {shop.name}");
             shop.OpenShop();
+        }
+
+        private void OnQuestGiverSelected(QuestGiver giver)
+        {
+            Debug.Log($"<color=cyan>Quest Giver Selected: </color> {giver.name}");
+            giver.Interact();
         }
 
         private void OnTileSelected(CropTileView tile)

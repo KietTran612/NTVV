@@ -7,6 +7,7 @@ namespace NTVV.Managers
     using NTVV.Gameplay.Economy;
     using NTVV.Gameplay.Storage;
     using NTVV.Gameplay.Progression;
+    using NTVV.Gameplay.Quests;
     using NTVV.World.Views;
     using NTVV.Data;
     using NTVV.Data.ScriptableObjects;
@@ -57,6 +58,11 @@ namespace NTVV.Managers
                 EconomySystem.Instance.RefreshUI();
                 StorageSystem.Instance.RefreshUI();
                 LevelSystem.Instance.RefreshUI();
+                
+                // [Quest] Khởi tạo QuestManager nếu không có save
+                if (QuestManager.Instance != null) 
+                    QuestManager.Instance.LoadData(null, null, _dataRegistry);
+                    
                 return;
             }
 
@@ -69,6 +75,10 @@ namespace NTVV.Managers
                 inventoryDict[item.itemId] = item.quantity;
             }
             StorageSystem.Instance.LoadData(inventoryDict, data.storageCapacity > 0 ? data.storageCapacity : 50, data.storageTier);
+
+            // [Quest] Restore state
+            if (QuestManager.Instance != null)
+                QuestManager.Instance.LoadData(data.activeQuests, data.completedQuestIds, _dataRegistry);
         }
 
         private void RestoreWorldState(PlayerSaveData data)
@@ -127,8 +137,12 @@ namespace NTVV.Managers
                 long elapsedTicks = TimeSpan.FromSeconds(tile.ElapsedTime).Ticks;
                 tData.plantTimestamp = DateTime.Now.Ticks - elapsedTicks;
                 
-                data.tiles.Add(tData);
+            data.tiles.Add(tData);
             }
+
+            // [Quest] Capture quests
+            if (QuestManager.Instance != null)
+                QuestManager.Instance.SaveData(data);
 
             return data;
         }

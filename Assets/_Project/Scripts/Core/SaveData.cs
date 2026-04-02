@@ -17,11 +17,15 @@ namespace NTVV.Core
         public long lastSaveTimestamp; // Ticks of the last save time for offline calculations
         public List<InventoryItemData> inventory = new List<InventoryItemData>();
         public List<TileSaveData> tiles = new List<TileSaveData>();
+        public List<QuestSaveData> activeQuests = new List<QuestSaveData>();
+        public List<string> completedQuestIds = new List<string>();
         
         public PlayerSaveData()
         {
             inventory = new List<InventoryItemData>();
             tiles = new List<TileSaveData>();
+            activeQuests = new List<QuestSaveData>();
+            completedQuestIds = new List<string>();
             lastSaveTimestamp = DateTime.Now.Ticks;
         }
     }
@@ -50,5 +54,15 @@ namespace NTVV.Core
         public bool hasWeeds;
         public bool hasBugs;
         public bool needsWater;
+    }
+
+    /// <summary>
+    /// Persistence data for an active quest.
+    /// </summary>
+    [Serializable]
+    public class QuestSaveData
+    {
+        public string questId;
+        public List<int> objectiveProgress = new List<int>();
     }
 }

@@ -119,6 +119,9 @@ namespace NTVV.World.Views
                 StorageSystem.Instance.AddItem(_currentCropData.cropId, finalYield);
                 if (LevelSystem.Instance != null) LevelSystem.Instance.AddXP(_currentCropData.xpReward);
                 
+                // [Quest] Báo cáo thu hoạch
+                NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.HarvestCrop, _currentCropData.cropId, finalYield);
+
                 Debug.Log($"<color=cyan>[Harvest]</color> Success! Received {finalYield} {_currentCropData.cropName}.");
                 ResetTile();
             }

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c349961df873c9418c3f1b77556b131, type: 3}
+  m_Name: q_reach_level_2
+  m_EditorClassIdentifier: Assembly-CSharp::NTVV.Data.ScriptableObjects.QuestDataSO
+  questId: q_reach_level_2
+  questName: "S\u1EF1 ti\u1EBFn b\u1ED9 kinh ng\u1EA1c"
+  questDescription: "B\u1EA1n \u0111ang l\xE0m r\u1EA5t t\u1ED1t! H\xE3y ti\u1EBFp
+    t\u1EE5c t\xEDch l\u0169y kinh nghi\u1EC7m \u0111\u1EC3 l\xEAn c\u1EA5p 2."
+  minLevelRequired: 2
+  prerequisiteQuestId: 
+  objectives:
+  - actionType: 4
+    targetId: Player
+    requiredAmount: 2
+    description: "\u0110\u1EA1t c\u1EA5p \u0111\u1ED9 2"
+    currentAmount: 0
+  rewards:
+    goldReward: 200
+    xpReward: 100
+    unlockType: 0
+    unlockId: 
+  questIcon: {fileID: 0}
