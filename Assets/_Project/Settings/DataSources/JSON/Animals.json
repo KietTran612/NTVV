@@ -1,0 +1,50 @@
+{
+  "items": [
+    {
+      "animalId": "animal_01",
+      "animalName": "Gà",
+      "unlockLevel": 4,
+      "penType": "Chuồng Gà",
+      "penCostGold": 180,
+      "buyCostGold": 220,
+      "feedType": "Worm",
+      "hungerIntervalHours": 24,
+      "feedQtyGrass": 0,
+      "feedQtyWorm": 1,
+      "stage1AgeDays": 1,
+      "sellStage1Gold": 180,
+      "stage2AgeDays": 2,
+      "sellStage2Gold": 280,
+      "stage3AgeDays": 3,
+      "sellStage3Gold": 420,
+      "xpStage1": 18,
+      "xpStage2": 28,
+      "xpStage3": 42,
+      "lifetimeAfterMatureDays": 1,
+      "notes": "Thú mở đầu; thức ăn chính là sâu."
+    },
+    {
+      "animalId": "animal_02",
+      "animalName": "Vịt",
+      "unlockLevel": 7,
+      "penType": "Chuồng Vịt",
+      "penCostGold": 280,
+      "buyCostGold": 320,
+      "feedType": "Worm + Grass",
+      "hungerIntervalHours": 24,
+      "feedQtyGrass": 1,
+      "feedQtyWorm": 1,
+      "stage1AgeDays": 1,
+      "sellStage1Gold": 250,
+      "stage2AgeDays": 3,
+      "sellStage2Gold": 420,
+      "stage3AgeDays": 4,
+      "sellStage3Gold": 620,
+      "xpStage1": 25,
+      "xpStage2": 40,
+      "xpStage3": 62,
+      "lifetimeAfterMatureDays": 1,
+      "notes": "Ăn hỗn hợp, gắn chặt với loop chăm cây."
+    }
+  ]
+}

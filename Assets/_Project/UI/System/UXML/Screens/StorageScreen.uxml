@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project:///Assets/_Project/UI/System/USS/farm-theme.uss" />
+    <ui:VisualElement name="StorageOverlay" class="modal-bg">
+        <ui:VisualElement name="StorageContainer" class="modal-container">
+            
+            <!-- Left: Storage Area -->
+            <ui:VisualElement name="StorageArea" style="flex-grow: 1;">
+                <ui:Label text="Storage" class="title-text" style="margin-left: 48px; margin-top: 48px;" />
+                <ui:ScrollView name="StorageScroll" class="storage-grid" />
+            </ui:VisualElement>
+
+            <!-- Right: Sell Area -->
+            <ui:VisualElement name="SellArea" class="sell-panel">
+                <ui:Label text="Sell Item" class="title-text" style="color: var(--soft-orange); font-size: 24px;" />
+                
+                <ui:VisualElement name="SelectedItemPreview" style="margin-top: 48px; width: 200px; height: 200px; background-color: #F5F5F5; border-radius: 100px; align-items: center; justify-content: center;">
+                    <ui:Image name="SelectedItemIcon" style="width: 120px; height: 120px;" />
+                </ui:VisualElement>
+
+                <ui:Label name="SelectedItemName" text="Select an Item" class="hud-text" style="color: var(--deep-leaf-green); margin-top: 24px; font-size: 20px;" />
+
+                <!-- Quantity Adjuster -->
+                <ui:VisualElement name="QuantityContainer" style="flex-direction: row; align-items: center; margin-top: 48px; gap: 16px;">
+                    <ui:Button name="BtnMinus" text="-" class="primary-btn" style="width: 48px; height: 48px; background-color: #EEE; color: #333;" />
+                    <ui:Label name="QuantityText" text="0" class="hud-text" style="color: #333; min-width: 40px; -unity-text-align: middle-center;" />
+                    <ui:Button name="BtnPlus" text="+" class="primary-btn" style="width: 48px; height: 48px; background-color: var(--farm-green);" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="TotalRow" style="flex-direction: row; justify-content: space-between; width: 100%; margin-top: 48px;">
+                    <ui:Label text="Total:" class="hud-text" style="color: var(--farm-green);" />
+                    <ui:Label name="TotalPrice" text="0g" class="hud-text" style="color: var(--soft-orange);" />
+                </ui:VisualElement>
+
+                <ui:Button name="BtnSellNow" text="SELL NOW" class="primary-btn" style="width: 100%; height: 64px; margin-top: auto; background-color: var(--soft-orange);" />
+            </ui:VisualElement>
+
+            <!-- Close Button Corner -->
+            <ui:Button name="BtnClose" class="primary-btn" style="position: absolute; right: 24px; top: 24px; width: 48px; height: 48px; border-radius: 24px; background-color: rgba(0,0,0,0.1); color: #333;" text="X" />
+            
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project:///Assets/_Project/UI/System/USS/farm-theme.uss" />
+    <ui:VisualElement name="ShopOverlay" class="modal-bg" style="justify-content: flex-end; align-items: stretch; background-color: rgba(0,0,0,0.2);">
+        <ui:VisualElement name="ShopPanel" style="width: 500px; height: 100%; background-color: var(--cream-white); border-left-width: 4px; border-left-color: var(--farm-green); padding: 32px;">
+            
+            <ui:VisualElement name="ShopHeader" style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                <ui:Label text="SEED SHOP" class="title-text" />
+                <ui:Button name="BtnClose" text="X" class="primary-btn" style="width: 40px; height: 40px; border-radius: 20px; background-color: rgba(0,0,0,0.05); color: #333;" />
+            </ui:VisualElement>
+
+            <!-- Tabs -->
+            <ui:VisualElement name="ShopTabs" style="flex-direction: row; gap: 16px; margin-bottom: 24px;">
+                <ui:Button name="TabSeeds" text="Seeds" class="primary-btn" style="flex-grow: 1; height: 40px;" />
+                <ui:Button name="TabTools" text="Tools" class="primary-btn" style="flex-grow: 1; height: 40px; background-color: #DDD; color: #666;" />
+            </ui:VisualElement>
+
+            <!-- Shop List -->
+            <ui:ScrollView name="ShopList" style="flex-grow: 1; margin-bottom: 32px;" />
+
+            <!-- Footer: Gold Balance -->
+            <ui:VisualElement name="ShopFooter" style="height: 100px; border-top-width: 1px; border-top-color: rgba(0,0,0,0.1); justify-content: center; align-items: center;">
+                <ui:VisualElement class="hud-chip" style="width: 200px; background-color: var(--sun-yellow); border-radius: 12px;">
+                    <ui:Image name="GoldIcon" class="hud-icon" />
+                    <ui:Label name="GoldBalance" text="1,250g" class="hud-text" style="color: #333;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

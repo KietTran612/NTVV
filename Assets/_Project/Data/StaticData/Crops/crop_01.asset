@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3aa1b5e28733ef41ad80cc50c6fa516, type: 3}
+  m_Name: crop_01
+  m_EditorClassIdentifier: Assembly-CSharp::NTVV.Data.ScriptableObjects.CropDataSO
+  itemId: 
+  itemName: "C\xE0 r\u1ED1t"
+  unlockLevel: 1
+  Icon: {fileID: 0}
+  Prefab: {fileID: 0}
+  data:
+    cropId: crop_01
+    cropName: "C\xE0 r\u1ED1t"
+    unlockLevel: 1
+    seedCostGold: 8
+    growTimeMin: 2
+    phase1Pct: 0.25
+    phase2Pct: 0.35
+    phase3Pct: 0.4
+    baseYieldUnits: 3
+    sellPriceGold: 4
+    xpReward: 4
+    weedChancePct: 0.1
+    bugChancePct: 0.08
+    waterChancePct: 0.1
+    maxCareEvents: 1
+    perfectWindowMin: 1
+    postRipeLifeMin: 3
+    notes: "C\xE2y m\u1EDF \u0111\u1EA7u, quay v\xF2ng v\u1ED1n nhanh."
+  seedIcon: {fileID: 0}
+  cropIcon: {fileID: 0}
+  growthStagesPrefab: {fileID: 0}
+  plantSfx: {fileID: 0}
+  harvestSfx: {fileID: 0}
