@@ -7,6 +7,7 @@ namespace NTVV.Gameplay.Storage
     using NTVV.Data.ScriptableObjects;
     using NTVV.Gameplay.Economy;
     using NTVV.Gameplay.Progression;
+    using NTVV.Managers;
 
     /// <summary>
     /// System for managing player inventory and storage capacity.
@@ -36,6 +37,13 @@ namespace NTVV.Gameplay.Storage
         protected override void OnInitialize()
         {
             _isPersistent = true;
+
+            // Self-healing: if no upgrade config assigned, fetch from Registry
+            if (_upgradeConfig == null && GameManager.Instance != null && GameManager.Instance.DataRegistry != null)
+            {
+                _upgradeConfig = GameManager.Instance.DataRegistry.storageUpgradeConfig;
+                if (_upgradeConfig != null) Debug.Log("<color=cyan>[StorageSystem]</color> Automatically linked storage upgrade config from Registry.");
+            }
         }
 
         public bool CanAddItem(string itemId, int quantity)

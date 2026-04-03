@@ -409,8 +409,14 @@ namespace NTVV.Editor.Tools
 
         private void CreateStorageConfig()
         {
-            string path = "Assets/_Project/Data/StorageUpgradeConfig.asset";
-            if (!AssetDatabase.IsValidFolder("Assets/_Project/Data")) AssetDatabase.CreateFolder("Assets/_Project", "Data");
+            string folder = "Assets/_Project/Data/Configs";
+            if (!AssetDatabase.IsValidFolder(folder))
+            {
+                if (!AssetDatabase.IsValidFolder("Assets/_Project/Data")) AssetDatabase.CreateFolder("Assets/_Project", "Data");
+                AssetDatabase.CreateFolder("Assets/_Project/Data", "Configs");
+            }
+
+            string path = folder + "/StorageUpgradeConfig.asset";
             StorageUpgradeDataSO asset = ScriptableObject.CreateInstance<StorageUpgradeDataSO>();
             path = AssetDatabase.GenerateUniqueAssetPath(path);
             AssetDatabase.CreateAsset(asset, path);
@@ -421,8 +427,14 @@ namespace NTVV.Editor.Tools
 
         private void CreateAnimalPenConfig()
         {
-            string path = "Assets/_Project/Data/AnimalPenUpgradeConfig.asset";
-            if (!AssetDatabase.IsValidFolder("Assets/_Project/Data")) AssetDatabase.CreateFolder("Assets/_Project", "Data");
+            string folder = "Assets/_Project/Data/Configs";
+            if (!AssetDatabase.IsValidFolder(folder))
+            {
+                if (!AssetDatabase.IsValidFolder("Assets/_Project/Data")) AssetDatabase.CreateFolder("Assets/_Project", "Data");
+                AssetDatabase.CreateFolder("Assets/_Project/Data", "Configs");
+            }
+
+            string path = folder + "/AnimalPenUpgradeConfig.asset";
             AnimalPenUpgradeDataSO asset = ScriptableObject.CreateInstance<AnimalPenUpgradeDataSO>();
             path = AssetDatabase.GenerateUniqueAssetPath(path);
             AssetDatabase.CreateAsset(asset, path);

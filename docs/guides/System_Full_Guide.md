@@ -14,6 +14,15 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
 - **Mô tả**: Hệ thống sử dụng sự kiện `OnTick` để đồng bộ thời gian cho cây trồng và vật nuôi thay vì dùng `Update` riêng lẻ.
 - **File**: `Assets/_Project/Scripts/Core/TimeManager.cs`
 
+### 3. Kiến trúc Dữ liệu Tập trung (Centralized Data Registry)
+- **Mô tả**: Toàn bộ dữ liệu tĩnh của Game (Cây, Thú, Nhiệm vụ, Cấu hình nâng cấp) được quản lý tập trung trong một file Registry duy nhất. 
+- **Lợi ích**: Giúp tránh việc phải kéo thả liên kết thủ công trong từng Scene, đảm bảo tính nhất quán của dữ liệu toàn dự án.
+- **File**: `Assets/_Project/Data/Registry/GameDataRegistry.asset`
+
+### 4. Mô hình Tự khắc phục (Self-Healing Pattern)
+- **Mô tả**: Các hệ thống quan trọng (`LevelSystem`, `StorageSystem`) được lập trình để tự động tìm kiếm cấu hình cần thiết từ Registry nếu chúng bị thiếu liên kết khi khởi tạo.
+- **Cơ chế**: Khi `OnInitialize`, nếu `config == null`, hệ thống sẽ gọi `GameManager.Instance.DataRegistry` để tự động kết nối dữ liệu.
+
 ---
 
 ## 🌱 Hệ thống Trồng trọt (Crop System)
@@ -23,6 +32,7 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
     2. Chọn hạt giống -> Giảm vật phẩm trong kho -> Trồng.
     3. Cây lớn dần theo Tick. Khi chín (Ripe) -> Nhấn để thu hoạch.
 - **Dữ liệu**: Định nghĩa trong `CropDataSO`.
+- **Thư mục**: `Assets/_Project/Data/Crops/`
 - **Cách Test**:
     - Trồng cây -> Chờ lớn -> Thu hoạch -> Kiểm tra XP và Kho tăng lên.
     - Test khi kho đầy có cho thu hoạch không.
@@ -43,7 +53,7 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
 ## 📦 Kho bãi & Nâng cấp (Storage & Upgrade)
 
 - **Vận hành**: `StorageSystem` quản lý số lượng vật phẩm. Hỗ trợ nâng cấp dung lượng theo Tier.
-- **Nâng cấp**: Yêu cầu Vàng và Cấp độ người chơi (`minLevelToAccess`).
+- **Nâng cấp**: Yêu cầu Vàng và Cấp độ người chơi (`minLevelToAccess`). Dữ liệu cấu hình được lấy từ Registry.
 - **Cách Test**:
     - Thêm vật phẩm quá giới hạn -> Phải báo lỗi hoặc không cho thêm.
     - Nâng cấp Kho -> Kiểm tra Max Capacity tăng lên và trừ tiền.
@@ -54,6 +64,7 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
 
 - **Vận hành**: Mua thú -> Thú xuất hiện trong chuồng (`AnimalPenView`). 
 - **Chu kỳ**: Thú đói -> Hiện icon đói -> Người chơi Cho ăn (tốn cỏ/sâu) -> Thú lớn/Sản xuất sản phẩm.
+- **Nâng cấp Chuồng**: Tăng sức chứa tối đa của chuồng, cấu hình được nạp tự động từ Registry.
 - **Cách Test**:
     - Để thú đói lâu -> Thú có thể chết (Dead Stage).
     - Thu hoạch sản phẩm thú -> Kiểm tra kho.
@@ -67,6 +78,7 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
     1. Tương tác NPC/Bảng thông báo (`QuestGiver`) -> Nhận nhiệm vụ.
     2. Thực hiện hành động (Gặt, Cho ăn, Lên cấp) -> Bắn sự kiện qua `QuestEvents`.
     3. `QuestManager` ghi nhận tiến độ -> Hiện nút **CLAIM** trong bảng Quest.
+- **Thư mục**: `Assets/_Project/Data/Quests/`
 - **Cách Test**:
     - Nhận nhiệm vụ "Thu hoạch 5 Lúa mì" -> Thu hoạch -> Kiểm tra UI Quest Panel có nhảy số 1/5, 2/5... không.
     - Hoàn thành -> Claim -> Kiểm tra nhận đúng thưởng Vàng/XP.
@@ -76,28 +88,14 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
 ## 🎨 Giao diện & Đa chủ đề (Managed Multi-Theme UI)
 
 - **Cơ chế**: Dự án sử dụng kiến trúc giao diện theo hướng dữ liệu (Data-driven), cho phép thay đổi toàn bộ visual (skin) mà không làm thay đổi logic code.
-- **Thanh phần cốt lõi**:
-    - `UIStyleDataSO`: Chứa định nghĩa về màu sắc chính, phụ, font chữ và các icon đặc trưng cho một Theme.
-    - `UIStyleApplier`: Gắn trên các Object UI (Nút, Chữ, Nền) để tự động "ép" style từ SO vào component tương ứng.
-    - `IUIAssetProvider` & `ResourcesUIProvider`: Hệ thống nạp Prefab theo đường dẫn Theme. Ưu tiên tìm trong folder Theme hiện tại, nếu không có sẽ tự động lấy từ folder `Default`.
+- **Tập trung Dữ liệu UI**: `UIStyleDataSO` và Prefab theo Theme được quản lý trong `Resources/UI/`.
 - **Cấu trúc Thư mục Theme**:
     - `Assets/_Project/Resources/UI/Default/`: Chứa các Prefab gốc.
     - `Assets/_Project/Resources/UI/[ThemeName]/`: Chứa các Prefab ghi đè (Override) riêng cho theme đó.
-- **Cách sử dụng & Tạo Theme mới**:
-    1. Mở `NTVV > Game Data Manager > Tab UI/Themes`.
-    2. Nhấn **Create New Theme**, nhập tên (ví dụ: `Modern`).
-    3. Hệ thống sẽ:
-        - Tạo file `ModernStyle.asset` trong `Settings/UI/`.
-        - Tạo thư mục `Assets/_Project/Resources/UI/Modern/`.
-    4. Để tùy chỉnh giao diện:
-        - Kéo Prefab gốc từ `Default` vào thư mục `Modern`.
-        - Thay đổi Layout, Sprite hoặc Font trong Prefab mới này. Hệ thống sẽ tự động ưu tiên bản trong thư mục `Modern` khi Theme này được kích hoạt.
-- **Cơ chế nạp UI (Loading Logic)**:
-    - Dự án sử dụng `ResourcesUIProvider` với logic **Tìm kiếm đệ quy (Recursive Fallback)**:
-        - Bước 1: Tìm tại `UI/[ActiveTheme]/[Name]`.
-        - Bước 2: Nếu không thấy, tìm tại `UI/Default/[Name]`.
-        - Bước 3: Nếu vẫn không thấy, tìm tại gốc `UI/[Name]`.
-    - Điều này cho phép bạn chỉ cần ghi đè (Override) những màn hình thực sự cần thay đổi, các màn hình khác sẽ tự động dùng bản mặc định (Default).
+- **Tiêu chuẩn Thiết kế**: 
+    - Toàn bộ UI thiết kế trên **Canvas uGUI**.
+    - Độ phân giải chuẩn: **1920x1080**.
+    - Sử dụng `UIStyleApplier` để đồng bộ Font/Color.
 
 ---
 
@@ -121,24 +119,27 @@ Hệ thống UI hiện tại được thiết kế theo Interface `IUIAssetProvi
 
 ### 1. Game Data Manager (Trung tâm Quản lý)
 - **Vị trí**: Menu `NTVV > Game Data Manager`.
-- **Giao diện & Chức năng**:
-    - **Toolbar (Phía trên)**: 
-        - Nút **Sync from JSON**: Tự động đọc dữ liệu từ các file JSON trong `Assets/_Project/Settings/DataSources/JSON/` và cập nhật vào ScriptableObjects.
-        - Các Tab (**Crops, Animals, Quests, UI/Themes, Settings**): Chuyển đổi giữa các loại dữ liệu.
-    - **Tab UI/Themes**:
-        - Liệt kê danh sách các Theme hiện có.
-        - **Create New Theme**: Tạo theme mới và tự động tạo cấu trúc thư mục Resources tương ứng.
-        - **Clone Theme**: Sao chép style từ một theme có sẵn.
-        - **Set Active Theme**: Thiết lập Theme mặc định khi khởi động game.
-    - **Sidebar & Detail View**: Quản lý chi tiết từng Item/Quest.
+- **Chức năng**: Quản lý Crops, Animals, Quests, Themes tập trung.
+- **Tự động hóa**: Nút **Sync from JSON** để cập nhật toàn bộ database từ file nguồn.
 
-### 2. UI Initializer (Khởi tạo UI)
-- **Menu**: `NTVV > UI > Setup Phase 1`.
-- **Mục đích**: Tự động tạo cấu trúc thư mục chuẩn cho Resource UI và tạo các file Style ban đầu nếu chưa có.
-
-### 3. Game Scene Initializer (Thiết lập Scene chơi game)
+### 2. Game Scene Initializer (Setup Playtest)
 - **Menu**: `NTVV > Setup Full Game Scene`.
-- **Mục đích**: Tự động tạo Scene `SCN_Gameplay` hoàn chỉnh, gắn sẵn tất cả các Manager, UI Canvas, HUD và các ô đất tương tác để có thể chơi ngay lập tức.
+- **Mục đích**: 1-Click để tạo Scene gameplay hoàn chỉnh. Tự động gắn Manager, Registry và UI Shell.
+
+### 3. Repair Registry Tool (Khôi phục liên kết)
+- **Menu**: `NTVV > UI > Restore Core Assets & Repair Registry`.
+- **Mục đích**: Tự động quét toàn bộ thư mục `Data/Configs/`, tìm kiếm và kết nối lại các file cấu hình bị mất vào Registry. Hữu ích khi bạn di chuyển folder hoặc bị lỗi liên kết.
+
+---
+
+## 📁 Cấu trúc Thư mục Dữ liệu (Data Structure)
+
+Dự án tuân thủ cấu trúc thư mục phẳng và nhất quán trong `Assets/_Project/Data/`:
+- `Registry/`: Chứa file `GameDataRegistry.asset` (Trái tim của dữ liệu).
+- `Configs/`: Chứa cấu hình hệ thống (Level, Storage Tier, Animal Pen Tier).
+- `Crops/`: Danh sách các loại cây.
+- `Animals/`: Danh sách các vật nuôi.
+- `Quests/`: Danh sách các nhiệm vụ.
 
 ---
 

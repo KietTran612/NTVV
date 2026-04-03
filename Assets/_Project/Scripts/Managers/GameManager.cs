@@ -29,6 +29,7 @@ namespace NTVV.Managers
         [SerializeField] private GameDataRegistrySO _dataRegistry;
 
         public GameState CurrentState => _currentState;
+        public GameDataRegistrySO DataRegistry => _dataRegistry;
 
         protected override void OnInitialize()
         {

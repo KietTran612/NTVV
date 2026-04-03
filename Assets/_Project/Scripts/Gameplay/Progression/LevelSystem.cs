@@ -48,6 +48,13 @@ namespace NTVV.Gameplay.Progression
         protected override void OnInitialize()
         {
             _isPersistent = true;
+
+            // Self-healing: if no level data assigned, fetch from Registry
+            if (_levelData == null && GameManager.Instance != null && GameManager.Instance.DataRegistry != null)
+            {
+                _levelData = GameManager.Instance.DataRegistry.levelData;
+                if (_levelData != null) Debug.Log("<color=cyan>[LevelSystem]</color> Automatically linked level data from Registry.");
+            }
         }
 
         public void AddXP(int amount)

@@ -14,9 +14,9 @@ namespace NTVV.Editor.Tools
     public static class DataImportUtility
     {
         private const string JSON_PATH = "Assets/_Project/Settings/DataSources/JSON/";
-        private const string CROPS_OUTPUT_PATH = "Assets/_Project/Data/StaticData/Crops/";
-        private const string ANIMALS_OUTPUT_PATH = "Assets/_Project/Data/StaticData/Animals/";
-        private const string REGISTRY_PATH = "Assets/_Project/Data/StaticData/GameDataRegistry.asset";
+        private const string CROPS_OUTPUT_PATH = "Assets/_Project/Data/Crops/";
+        private const string ANIMALS_OUTPUT_PATH = "Assets/_Project/Data/Animals/";
+        private const string REGISTRY_PATH = "Assets/_Project/Data/Registry/GameDataRegistry.asset";
 
         [MenuItem("NTVV/Tools/Import Static Data")]
         public static void ImportAll()

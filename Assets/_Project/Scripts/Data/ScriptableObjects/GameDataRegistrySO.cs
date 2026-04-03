@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using NTVV.Data;
 
 namespace NTVV.Data.ScriptableObjects
 {
@@ -15,6 +16,10 @@ namespace NTVV.Data.ScriptableObjects
 
         [Header("Upgrades")]
         public AnimalPenUpgradeDataSO animalPenUpgradeConfig;
+        public StorageUpgradeDataSO storageUpgradeConfig;
+
+        [Header("Progression")]
+        public PlayerLevelData levelData;
 
         [Header("Quests")]
         public List<QuestDataSO> quests = new List<QuestDataSO>();

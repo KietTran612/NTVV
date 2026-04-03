@@ -19,9 +19,10 @@ MonoBehaviour:
   animals:
   - {fileID: 11400000, guid: 9fdf02460b216fe4cac95395b03d1444, type: 2}
   - {fileID: 11400000, guid: 6be0b9e46e5630b4a8fbe8f1e43fc8eb, type: 2}
-  animalPenUpgradeConfig: {fileID: 0}
+  animalPenUpgradeConfig: {fileID: 11400000, guid: 4c01307b6e456f24ea47414b149772db, type: 2}
+  storageUpgradeConfig: {fileID: 11400000, guid: b5ba14b2d84e0404fa8f408c849936a6, type: 2}
+  levelData: {fileID: 11400000, guid: aac1078c39344274aa8dd3d29db277ce, type: 2}
   quests:
   - {fileID: 11400000, guid: 8b7ca485782e8934297e6754d16ffdaa, type: 2}
   - {fileID: 11400000, guid: 00fbd26489dc79440a955f846d4681b5, type: 2}
   - {fileID: 11400000, guid: 8c3335e1cd0714c48a74328ea4958863, type: 2}
-  - {fileID: 11400000, guid: 31e21c5c0957af24dbb8c331f6f9c98f, type: 2}

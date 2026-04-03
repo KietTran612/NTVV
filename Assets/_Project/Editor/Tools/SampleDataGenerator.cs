@@ -10,13 +10,14 @@ namespace NTVV.Editor.Tools
         [MenuItem("NTVV/Tools/Generate Sample Storage Config")]
         public static void GenerateStorageConfig()
         {
-            string path = "Assets/_Project/Data/SampleStorageUpgradeConfig.asset";
-            
-            // Ensure directory exists
-            if (!AssetDatabase.IsValidFolder("Assets/_Project/Data"))
+            string folder = "Assets/_Project/Data/Configs";
+            if (!AssetDatabase.IsValidFolder(folder))
             {
-                AssetDatabase.CreateFolder("Assets/_Project", "Data");
+                if (!AssetDatabase.IsValidFolder("Assets/_Project/Data")) AssetDatabase.CreateFolder("Assets/_Project", "Data");
+                AssetDatabase.CreateFolder("Assets/_Project/Data", "Configs");
             }
+
+            string path = folder + "/SampleStorageUpgradeConfig.asset";
 
             StorageUpgradeDataSO asset = ScriptableObject.CreateInstance<StorageUpgradeDataSO>();
             asset.tiers = new List<StorageUpgradeTier>
@@ -35,18 +36,20 @@ namespace NTVV.Editor.Tools
             Selection.activeObject = asset;
 
             Debug.Log($"<color=green>[NTVV]</color> Sample Storage Config generated at: {path}");
-            EditorUtility.DisplayDialog("Thành công!", "Đã tạo xong bản Config mẫu tại Assets/_Project/Data.", "OK");
+            EditorUtility.DisplayDialog("Thành công!", $"Đã tạo xong bản Config mẫu tại {path}", "OK");
         }
 
         [MenuItem("NTVV/Tools/Generate Sample Animal Pen Config")]
         public static void GenerateAnimalPenConfig()
         {
-            string path = "Assets/_Project/Data/SampleAnimalPenUpgradeConfig.asset";
-            
-            if (!AssetDatabase.IsValidFolder("Assets/_Project/Data"))
+            string folder = "Assets/_Project/Data/Configs";
+            if (!AssetDatabase.IsValidFolder(folder))
             {
-                AssetDatabase.CreateFolder("Assets/_Project", "Data");
+                if (!AssetDatabase.IsValidFolder("Assets/_Project/Data")) AssetDatabase.CreateFolder("Assets/_Project", "Data");
+                AssetDatabase.CreateFolder("Assets/_Project/Data", "Configs");
             }
+
+            string path = folder + "/SampleAnimalPenUpgradeConfig.asset";
 
             AnimalPenUpgradeDataSO asset = ScriptableObject.CreateInstance<AnimalPenUpgradeDataSO>();
             asset.tiers = new List<AnimalPenUpgradeTier>
@@ -64,7 +67,7 @@ namespace NTVV.Editor.Tools
             Selection.activeObject = asset;
 
             Debug.Log($"<color=green>[NTVV]</color> Sample Animal Pen Config generated at: {path}");
-            EditorUtility.DisplayDialog("Thành công!", "Đã tạo xong bản Config mẫu cho Chuồng thú tại Assets/_Project/Data.", "OK");
+            EditorUtility.DisplayDialog("Thành công!", $"Đã tạo xong bản Config mẫu cho Chuồng thú tại {path}", "OK");
         }
 
         [MenuItem("NTVV/Tools/Generate Sample Quests")]
