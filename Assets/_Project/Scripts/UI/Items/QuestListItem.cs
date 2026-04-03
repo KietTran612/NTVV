@@ -29,14 +29,8 @@ namespace NTVV.UI.Items
             if (_questDescLabel != null) _questDescLabel.text = quest.questDescription;
             if (_questIcon != null && quest.questIcon != null) _questIcon.sprite = quest.questIcon;
 
-            // Simple progress display (Sum of objectives)
-            int totalRequired = 0;
-            int totalCurrent = 0;
-            foreach (var obj in quest.objectives)
-            {
-                totalRequired += obj.requiredAmount;
-                totalCurrent += obj.currentAmount;
-            }
+            // Get runtime progress from QuestManager (never read from SO directly)
+            var (totalCurrent, totalRequired) = QuestManager.Instance.GetQuestTotalProgress(quest);
 
             if (_progressLabel != null)
                 _progressLabel.text = $"{totalCurrent}/{totalRequired}";

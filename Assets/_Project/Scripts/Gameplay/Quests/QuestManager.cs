@@ -12,12 +12,19 @@ namespace NTVV.Gameplay.Quests
     /// <summary>
     /// Singleton Manager for the Quest system.
     /// Tracks active quests and progress.
+    /// FIX: Progress is stored in a runtime Dictionary (_questProgress) 
+    /// instead of mutating ScriptableObject assets directly.
+    /// This prevents quest data corruption in Editor Play Mode.
     /// </summary>
     public class QuestManager : Singleton<QuestManager>
     {
         [Header("State")]
         [SerializeField] private List<QuestDataSO> _activeQuests = new List<QuestDataSO>();
         [SerializeField] private HashSet<string> _completedQuestIds = new HashSet<string>();
+
+        // Runtime progress tracker: questId -> list of objective currentAmounts
+        // SO assets are NEVER modified — they are read-only templates.
+        private Dictionary<string, List<int>> _questProgress = new Dictionary<string, List<int>>();
 
         public List<QuestDataSO> ActiveQuests => _activeQuests;
         public HashSet<string> CompletedQuestIds => _completedQuestIds;
@@ -34,7 +41,7 @@ namespace NTVV.Gameplay.Quests
         }
 
         /// <summary>
-        /// Accept a new quest.
+        /// Accept a new quest. Initializes runtime progress for all objectives.
         /// </summary>
         public void AcceptQuest(QuestDataSO quest)
         {
@@ -48,6 +55,10 @@ namespace NTVV.Gameplay.Quests
             }
 
             _activeQuests.Add(quest);
+
+            // Initialize runtime progress (all zeros) — never touch the SO
+            _questProgress[quest.questId] = new List<int>(new int[quest.objectives.Count]);
+
             Debug.Log($"<color=cyan>[Quest Accepted]</color>: {quest.questName}");
             QuestEvents.InvokeQuestStateChanged(quest.questId);
         }
@@ -57,17 +68,20 @@ namespace NTVV.Gameplay.Quests
             bool anyChanged = false;
             foreach (var quest in _activeQuests)
             {
+                if (!_questProgress.TryGetValue(quest.questId, out var progress)) continue;
+
                 for (int i = 0; i < quest.objectives.Count; i++)
                 {
                     var objective = quest.objectives[i];
                     if (objective.actionType == action && (string.IsNullOrEmpty(targetId) || objective.targetId == targetId))
                     {
-                        if (!objective.IsReached)
+                        int current = i < progress.Count ? progress[i] : 0;
+                        if (current < objective.requiredAmount)
                         {
-                            objective.currentAmount += amount;
-                            quest.objectives[i] = objective;
+                            // Clamp so we don't exceed required amount
+                            progress[i] = Mathf.Min(current + amount, objective.requiredAmount);
                             anyChanged = true;
-                            Debug.Log($"[Quest Update] {quest.questName}: {objective.currentAmount}/{objective.requiredAmount}");
+                            Debug.Log($"[Quest Update] {quest.questName}: {progress[i]}/{objective.requiredAmount}");
                         }
                     }
                 }
@@ -81,7 +95,30 @@ namespace NTVV.Gameplay.Quests
 
         public bool IsQuestComplete(QuestDataSO quest)
         {
-            return quest.objectives.All(o => o.IsReached);
+            if (!_questProgress.TryGetValue(quest.questId, out var progress)) return false;
+
+            for (int i = 0; i < quest.objectives.Count; i++)
+            {
+                int current = i < progress.Count ? progress[i] : 0;
+                if (current < quest.objectives[i].requiredAmount) return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the total (current, required) progress across all objectives for display in UI.
+        /// </summary>
+        public (int current, int required) GetQuestTotalProgress(QuestDataSO quest)
+        {
+            int totalRequired = 0, totalCurrent = 0;
+            _questProgress.TryGetValue(quest.questId, out var progress);
+
+            for (int i = 0; i < quest.objectives.Count; i++)
+            {
+                totalRequired += quest.objectives[i].requiredAmount;
+                totalCurrent += (progress != null && i < progress.Count) ? progress[i] : 0;
+            }
+            return (totalCurrent, totalRequired);
         }
 
         public void ClaimReward(QuestDataSO quest)
@@ -95,9 +132,10 @@ namespace NTVV.Gameplay.Quests
             // Handle feature unlocks
             HandleUnlock(quest.rewards.unlockType, quest.rewards.unlockId);
 
-            // Move to completed
+            // Move to completed and clear runtime progress
             _activeQuests.Remove(quest);
             _completedQuestIds.Add(quest.questId);
+            _questProgress.Remove(quest.questId);
 
             Debug.Log($"<color=green>[Quest Reward Claimed]</color>: {quest.questName}");
             QuestEvents.InvokeQuestStateChanged(quest.questId);
@@ -115,6 +153,7 @@ namespace NTVV.Gameplay.Quests
         {
             _activeQuests.Clear();
             _completedQuestIds.Clear();
+            _questProgress.Clear();
 
             if (completedIds != null)
             {
@@ -128,15 +167,12 @@ namespace NTVV.Gameplay.Quests
                     var questSO = registry.GetQuest(s.questId);
                     if (questSO != null)
                     {
-                        // Restore progress (Note: This modifies the ScriptableObject instance in memory, 
-                        // which is fine for runtime but we should be careful with original assets).
-                        for (int i = 0; i < questSO.objectives.Count && i < s.objectiveProgress.Count; i++)
-                        {
-                            var obj = questSO.objectives[i];
-                            obj.currentAmount = s.objectiveProgress[i];
-                            questSO.objectives[i] = obj;
-                        }
                         _activeQuests.Add(questSO);
+
+                        // Restore runtime progress — SO is never touched
+                        var progress = new List<int>(s.objectiveProgress);
+                        while (progress.Count < questSO.objectives.Count) progress.Add(0);
+                        _questProgress[questSO.questId] = progress;
                     }
                 }
             }
@@ -149,10 +185,13 @@ namespace NTVV.Gameplay.Quests
             data.activeQuests = new List<QuestSaveData>();
             foreach (var quest in _activeQuests)
             {
+                _questProgress.TryGetValue(quest.questId, out var progress);
                 var qSave = new QuestSaveData
                 {
                     questId = quest.questId,
-                    objectiveProgress = quest.objectives.Select(o => o.currentAmount).ToList()
+                    objectiveProgress = progress != null
+                        ? new List<int>(progress)
+                        : new List<int>(new int[quest.objectives.Count])
                 };
                 data.activeQuests.Add(qSave);
             }

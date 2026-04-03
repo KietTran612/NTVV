@@ -168,7 +168,6 @@ namespace NTVV.World.Views
             _elapsedTime = 0f;
             _timeSinceRipe = 0f;
             _currentHP = 100f;
-            _currentHP = 100f;
             _hasWeeds = _hasPests = _needsWater = false;
             RefreshVisuals();
         }

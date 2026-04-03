@@ -22,7 +22,8 @@ namespace NTVV.World
         /// </summary>
         public void OnTap(InputValue value)
         {
-            Vector2 screenPos = Mouse.current.position.ReadValue();
+            // Use InputValue directly — platform-agnostic (works for both Mouse and Touch)
+            Vector2 screenPos = value.Get<Vector2>();
             HandlePick(screenPos);
         }
 

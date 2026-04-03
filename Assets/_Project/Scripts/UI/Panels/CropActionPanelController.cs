@@ -34,6 +34,9 @@ namespace NTVV.UI.Panels
         [Header("Theme Source")]
         [SerializeField] private UIStyleDataSO _fallbackStyle;
 
+        [Header("Data (Required for Plant)")]
+        [SerializeField] private GameDataRegistrySO _registry;
+
         private CropTileView _targetTile;
         private AnimalPenView _targetPen;
         private AnimalView _targetAnimal;
@@ -42,7 +45,8 @@ namespace NTVV.UI.Panels
         {
             _closeButton?.onClick.AddListener(() => gameObject.SetActive(false));
             
-            _plantButton?.onClick.AddListener(() => { _targetTile?.Plant(null); RefreshUI(); });
+            // FIX BUG-01: Plant button now calls TryAutoPlant() instead of Plant(null)
+            _plantButton?.onClick.AddListener(() => { TryAutoPlant(); RefreshUI(); });
             _harvestButton?.onClick.AddListener(() => { _targetTile?.Harvest(); gameObject.SetActive(false); });
             _resetButton?.onClick.AddListener(() => { _targetTile?.ClearDead(); gameObject.SetActive(false); });
             
@@ -56,6 +60,35 @@ namespace NTVV.UI.Panels
             _weedButton?.onClick.AddListener(() => { _targetTile?.ClearWeeds(); RefreshUI(); });
 
             ApplyThemeToButtons();
+        }
+
+        /// <summary>
+        /// Automatically plants the first affordable crop found in the registry.
+        /// If none affordable, opens the Shop for the player to buy seeds first.
+        /// </summary>
+        private void TryAutoPlant()
+        {
+            if (_targetTile == null) return;
+
+            if (_registry == null)
+            {
+                Debug.LogError("[CropAction] _registry is not assigned! Cannot auto-plant.");
+                return;
+            }
+
+            foreach (var cropSO in _registry.crops)
+            {
+                if (cropSO?.data == null) continue;
+                if (Gameplay.Economy.EconomySystem.Instance?.CanAfford(cropSO.data.seedCostGold) == true)
+                {
+                    _targetTile.Plant(cropSO.data);
+                    return;
+                }
+            }
+
+            // No affordable crop found — open shop so player can buy seeds
+            Debug.LogWarning("[CropAction] No affordable crop found. Opening Shop...");
+            Common.PopupManager.Instance?.ShowScreen("Shop");
         }
 
         public void Setup(CropTileView target) { ClearTargets(); _targetTile = target; RefreshUI(); }

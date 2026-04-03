@@ -18,11 +18,11 @@ namespace NTVV.UI.Common
 
         private void Start()
         {
-            _btnFarm.onClick.AddListener(() => OnNavClick("Farm"));
-            _btnStorage.onClick.AddListener(() => OnNavClick("Storage"));
-            _btnShop.onClick.AddListener(() => OnNavClick("Shop"));
-            _btnBarn.onClick.AddListener(() => OnNavClick("Barn"));
-            _btnEvent.onClick.AddListener(() => OnNavClick("Event"));
+            _btnFarm?.onClick.AddListener(() => OnNavClick("Farm"));
+            _btnStorage?.onClick.AddListener(() => OnNavClick("Storage"));
+            _btnShop?.onClick.AddListener(() => OnNavClick("Shop"));
+            _btnBarn?.onClick.AddListener(() => OnNavClick("Barn"));
+            _btnEvent?.onClick.AddListener(() => OnNavClick("Event"));
         }
 
         private void OnNavClick(string destination)

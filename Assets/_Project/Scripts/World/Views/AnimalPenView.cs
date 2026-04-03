@@ -22,18 +22,26 @@ namespace NTVV.World.Views
         [Header("State")]
         [SerializeField] private int _currentTier = 0;
         [SerializeField] private List<AnimalView> _currentAnimals = new List<AnimalView>();
+
+        // Cached registry — FindObjectsOfTypeAll is too expensive to call per-frame
+        private GameDataRegistrySO _registry;
         
         public AnimalData AnimalType => _animalType;
         public int Capacity => GetCurrentCapacity();
         public int CurrentCount => _currentAnimals.Count;
         public bool IsFull => _currentAnimals.Count >= Capacity;
 
+        private void Awake()
+        {
+            // Cache once on startup instead of FindObjectsOfTypeAll every frame
+            _registry = Resources.FindObjectsOfTypeAll<GameDataRegistrySO>().FirstOrDefault();
+        }
+
         private int GetCurrentCapacity()
         {
-            var registry = Resources.FindObjectsOfTypeAll<GameDataRegistrySO>().FirstOrDefault();
-            if (registry != null && registry.animalPenUpgradeConfig != null)
+            if (_registry != null && _registry.animalPenUpgradeConfig != null)
             {
-                var tier = registry.animalPenUpgradeConfig.GetTier(_currentTier);
+                var tier = _registry.animalPenUpgradeConfig.GetTier(_currentTier);
                 return tier.maxCapacity;
             }
             return _capacity; // Default if no data found
@@ -41,13 +49,12 @@ namespace NTVV.World.Views
 
         public bool Upgrade()
         {
-            var registry = Resources.FindObjectsOfTypeAll<GameDataRegistrySO>().FirstOrDefault();
-            if (registry == null || registry.animalPenUpgradeConfig == null) return false;
+            if (_registry == null || _registry.animalPenUpgradeConfig == null) return false;
 
             int nextTier = _currentTier + 1;
-            if (!registry.animalPenUpgradeConfig.HasNextTier(_currentTier)) return false;
+            if (!_registry.animalPenUpgradeConfig.HasNextTier(_currentTier)) return false;
 
-            var upgradeData = registry.animalPenUpgradeConfig.GetTier(nextTier);
+            var upgradeData = _registry.animalPenUpgradeConfig.GetTier(nextTier);
 
             // Kiểm tra Cấp độ
             if (LevelSystem.Instance != null && upgradeData.minLevelToAccess > 0 && LevelSystem.Instance.CurrentLevel < upgradeData.minLevelToAccess)
