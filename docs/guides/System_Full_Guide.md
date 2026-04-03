@@ -73,6 +73,50 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
 
 ---
 
+## 🎨 Giao diện & Đa chủ đề (Managed Multi-Theme UI)
+
+- **Cơ chế**: Dự án sử dụng kiến trúc giao diện theo hướng dữ liệu (Data-driven), cho phép thay đổi toàn bộ visual (skin) mà không làm thay đổi logic code.
+- **Thanh phần cốt lõi**:
+    - `UIStyleDataSO`: Chứa định nghĩa về màu sắc chính, phụ, font chữ và các icon đặc trưng cho một Theme.
+    - `UIStyleApplier`: Gắn trên các Object UI (Nút, Chữ, Nền) để tự động "ép" style từ SO vào component tương ứng.
+    - `IUIAssetProvider` & `ResourcesUIProvider`: Hệ thống nạp Prefab theo đường dẫn Theme. Ưu tiên tìm trong folder Theme hiện tại, nếu không có sẽ tự động lấy từ folder `Default`.
+- **Cấu trúc Thư mục Theme**:
+    - `Assets/_Project/Resources/UI/Default/`: Chứa các Prefab gốc.
+    - `Assets/_Project/Resources/UI/[ThemeName]/`: Chứa các Prefab ghi đè (Override) riêng cho theme đó.
+- **Cách sử dụng & Tạo Theme mới**:
+    1. Mở `NTVV > Game Data Manager > Tab UI/Themes`.
+    2. Nhấn **Create New Theme**, nhập tên (ví dụ: `Modern`).
+    3. Hệ thống sẽ:
+        - Tạo file `ModernStyle.asset` trong `Settings/UI/`.
+        - Tạo thư mục `Assets/_Project/Resources/UI/Modern/`.
+    4. Để tùy chỉnh giao diện:
+        - Kéo Prefab gốc từ `Default` vào thư mục `Modern`.
+        - Thay đổi Layout, Sprite hoặc Font trong Prefab mới này. Hệ thống sẽ tự động ưu tiên bản trong thư mục `Modern` khi Theme này được kích hoạt.
+- **Cơ chế nạp UI (Loading Logic)**:
+    - Dự án sử dụng `ResourcesUIProvider` với logic **Tìm kiếm đệ quy (Recursive Fallback)**:
+        - Bước 1: Tìm tại `UI/[ActiveTheme]/[Name]`.
+        - Bước 2: Nếu không thấy, tìm tại `UI/Default/[Name]`.
+        - Bước 3: Nếu vẫn không thấy, tìm tại gốc `UI/[Name]`.
+    - Điều này cho phép bạn chỉ cần ghi đè (Override) những màn hình thực sự cần thay đổi, các màn hình khác sẽ tự động dùng bản mặc định (Default).
+
+---
+
+## 🏗 Lộ trình nâng cấp Addressables (Addressables Roadmap)
+
+Hệ thống UI hiện tại được thiết kế theo Interface `IUIAssetProvider` để dễ dàng nâng cấp lên **Unity Addressables** trong tương lai:
+
+1. **Chuyển đổi Provider**: 
+    - Thay thế `ResourcesUIProvider` bằng `AddressableUIProvider`.
+    - `PopupManager` sẽ không cần thay đổi code logic vì cả hai đều dùng chung Interface.
+2. **Quản lý tài nguyên**:
+    - Các thư mục Theme sẽ được chuyển thành **Addressable Groups**.
+    - Sử dụng **Labels** (ví dụ: `Theme_Cartoon`, `Theme_Retro`) để lọc và tải tài nguyên theo cụm.
+3. **Luồng tải bất đồng bộ (Async Loading)**:
+    - Phương thức `LoadPrefab` sẽ được chuyển thành `Task<GameObject>` hoặc sử dụng `AsyncOperationHandle`.
+    - Giúp giảm thời gian treo máy khi chuyển Theme hoặc mở Popup lớn.
+
+---
+
 ## 🛠 Công cụ Editor & Dữ liệu (Tools)
 
 ### 1. Game Data Manager (Trung tâm Quản lý)
@@ -80,38 +124,38 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
 - **Giao diện & Chức năng**:
     - **Toolbar (Phía trên)**: 
         - Nút **Sync from JSON**: Tự động đọc dữ liệu từ các file JSON trong `Assets/_Project/Settings/DataSources/JSON/` và cập nhật vào ScriptableObjects.
-        - Các Tab (**Crops, Animals, Quests, Settings**): Chuyển đổi giữa các loại dữ liệu.
-    - **Sidebar (Cột trái)**: 
-        - Liệt kê toàn bộ vật phẩm có trong `GameDataRegistry`. 
-        - Riêng tab **Quests** có thêm nút **Scan & Register Quests** để tự động tìm kiếm các bộ nhiệm vụ mới tạo trong Project.
-    - **Detail View (Cột phải)**: 
-        - Hiển thị toàn bộ thuộc tính của vật phẩm đang chọn. 
-        - Nút **Ping Asset**: Giúp bạn tìm nhanh vị trí file Asset đó trong cửa sổ Project.
-    - **Tab Settings**: 
-        - Nơi tạo ra các file cấu hình hệ thống (Storage Upgrade, Animal Pen Upgrade).
-        - Nút **Create New Quest Asset**: Tạo một nhiệm vụ mới với tên duy nhất, tự động lưu vào folder `Quests`.
+        - Các Tab (**Crops, Animals, Quests, UI/Themes, Settings**): Chuyển đổi giữa các loại dữ liệu.
+    - **Tab UI/Themes**:
+        - Liệt kê danh sách các Theme hiện có.
+        - **Create New Theme**: Tạo theme mới và tự động tạo cấu trúc thư mục Resources tương ứng.
+        - **Clone Theme**: Sao chép style từ một theme có sẵn.
+        - **Set Active Theme**: Thiết lập Theme mặc định khi khởi động game.
+    - **Sidebar & Detail View**: Quản lý chi tiết từng Item/Quest.
 
-### 2. Import Data (Công cụ Nhập liệu)
-- **Menu**: `NTVV > Tools > Import Static Data` (Tương đương nút Sync trong Manager).
-- **Cơ chế**: Chuyển đổi dữ liệu thô từ JSON sang `CropDataSO` và `AnimalDataSO`.
+### 2. UI Initializer (Khởi tạo UI)
+- **Menu**: `NTVV > UI > Setup Phase 1`.
+- **Mục đích**: Tự động tạo cấu trúc thư mục chuẩn cho Resource UI và tạo các file Style ban đầu nếu chưa có.
 
-### 3. Sample Generator (Công cụ Tạo mẫu)
-- **Menu**: `NTVV > Tools > Generate Sample...`
-- **Mục đích**: Tạo nhanh dữ liệu chuẩn (Storage, Animal Pen, Quests) để lập trình viên có thể test ngay các chức năng mà không cần nhập liệu thủ công.
+### 3. Game Scene Initializer (Thiết lập Scene chơi game)
+- **Menu**: `NTVV > Setup Full Game Scene`.
+- **Mục đích**: Tự động tạo Scene `SCN_Gameplay` hoàn chỉnh, gắn sẵn tất cả các Manager, UI Canvas, HUD và các ô đất tương tác để có thể chơi ngay lập tức.
 
 ---
 
 ## 💾 Lưu trữ & Khôi phục (Persistence)
 
 - **Cơ chế**: Dữ liệu lưu dưới dạng JSON tại `Application.persistentDataPath/ntvv_save.json`.
-- **GameManager**: Khi khởi động (BootSequence), GameManager sẽ đọc file save và nạp lại trạng thái cho tất cả các hệ thống (Tiền, Level, Cây trồng, Nhiệm vụ).
-- **Cách Test**:
-    - Chơi game -> Tắt game (Alt+F4 hoặc Stop Editor) -> Mở lại -> Các cây đã trồng và Nhiệm vụ đang làm phải còn nguyên.
+- **GameManager**: Khi khởi động (BootSequence), GameManager sẽ đọc file save và nạp lại trạng thái cho tất cả các hệ thống.
+- **Phục hồi an toàn (Defensive Loading)**: Hệ thống tự động kiểm tra và bỏ qua các vật phẩm bị lỗi hoặc thiếu ID trong file save để tránh làm hỏng luồng chạy của trò chơi.
 
 ---
 
 ## 📝 Nhật ký Cập nhật (Change Log)
 
+- **2026-04-03**:
+    - Tích hợp hệ thống **Managed Multi-Theme UI** (Đa chủ đề).
+    - Thêm công cụ **Game Scene Initializer** để tự động thiết lập Scene.
+    - Cập nhật Tab **UI/Themes** trong Game Data Manager.
 - **2026-04-02**: 
     - Khởi tạo tài liệu hướng dẫn hệ thống.
     - Cập nhật chi tiết Quest System và Editor Tools.

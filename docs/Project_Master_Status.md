@@ -13,6 +13,7 @@ Tài liệu này tổng hợp toàn bộ tiến độ dự án, kết nối các
 | **Epic 3** | Shop, Economy & Animal Pen | ✅ Hoàn thành | [Economic Implementation](file:///d:/soflware/Unity/Source/NTVV/docs/plans/2026-04-02-Epic4-Shop-Economy-Implementation.md) |
 | **Epic 4** | Quest System & Editor Tools | ✅ Hoàn thành | [Quest Task Tracker](file:///d:/soflware/Unity/Source/NTVV/docs/plans/task_quest_system.md) |
 | **Epic 5** | Persistence & Sync | ✅ Hoàn thành | [Persistence Design](file:///d:/soflware/Unity/Source/NTVV/docs/plans/2026-04-02-enhanced-persistence-test-design.md) |
+| **Epic 6** | Multi-Theme UI & Scene Automation | ✅ Hoàn thành | [UI Migration & Scene Setup](file:///C:/Users/Hoang.H/.gemini/antigravity/brain/c562547a-dba6-474c-8d7a-0a5a61cb6538/implementation_plan.md) |
 
 ---
 
@@ -39,9 +40,17 @@ Tài liệu này tổng hợp toàn bộ tiến độ dự án, kết nối các
 - Thưởng Vàng, XP và Mở khóa tính năng.
 
 ### 6. Quản trị Dữ liệu (Editor Tools)
-- **Data Manager Window**: Chỉnh sửa tập trung cho toàn bộ project.
+- **Data Manager Window**: Chỉnh sửa tập trung cho toàn bộ project. Thêm tab **UI/Themes** để quản lý giao diện.
 - **Sample Generator**: Tạo nhanh dữ liệu chuẩn để Playtest.
 - **Auto-Sync**: Tự động đăng ký Quest vào Registry.
+
+### 7. Hệ thống Đa chủ đề (Multi-Theme UI)
+- Tách biệt logic và hình ảnh qua `UIStyleApplier` và `ResourcesUIProvider`.
+- Hỗ trợ ghi đè (Override) Prefab theo từng Theme riêng biệt.
+
+### 8. Tự động hóa Scene (Scene Automation)
+- Công cụ **Setup Full Game Scene** giúp tạo môi trường chơi game hoàn chỉnh chỉ với 1 click.
+- Tự động nạp và kết nối các Manager, UI, và Data Registry.
 
 ---
 

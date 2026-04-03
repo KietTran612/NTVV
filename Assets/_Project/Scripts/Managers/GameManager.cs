@@ -72,6 +72,7 @@ namespace NTVV.Managers
             Dictionary<string, int> inventoryDict = new Dictionary<string, int>();
             foreach (var item in data.inventory)
             {
+                if (item == null || string.IsNullOrEmpty(item.itemId)) continue;
                 inventoryDict[item.itemId] = item.quantity;
             }
             StorageSystem.Instance.LoadData(inventoryDict, data.storageCapacity > 0 ? data.storageCapacity : 50, data.storageTier);

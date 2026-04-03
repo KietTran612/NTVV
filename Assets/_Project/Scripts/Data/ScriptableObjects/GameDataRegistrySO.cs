@@ -25,9 +25,41 @@ namespace NTVV.Data.ScriptableObjects
 
         public void Initialize()
         {
-            _cropLookup = crops.ToDictionary(c => c.data.cropId, c => c);
-            _animalLookup = animals.ToDictionary(a => a.data.animalId, a => a);
-            _questLookup = quests.ToDictionary(q => q.questId, q => q);
+            // 1. Safe Crop Initialization
+            if (crops != null)
+            {
+                foreach (var c in crops.Where(c => c != null && (c.data == null || string.IsNullOrEmpty(c.data.cropId))))
+                    Debug.LogWarning($"[Data Error] Crop asset '{c.name}' is missing a cropId or has null data.");
+
+                _cropLookup = crops
+                    .Where(c => c != null && c.data != null && !string.IsNullOrEmpty(c.data.cropId))
+                    .ToDictionary(c => c.data.cropId, c => c);
+            }
+            else _cropLookup = new Dictionary<string, CropDataSO>();
+
+            // 2. Safe Animal Initialization
+            if (animals != null)
+            {
+                foreach (var a in animals.Where(a => a != null && (a.data == null || string.IsNullOrEmpty(a.data.animalId))))
+                    Debug.LogWarning($"[Data Error] Animal asset '{a.name}' is missing an animalId or has null data.");
+
+                _animalLookup = animals
+                    .Where(a => a != null && a.data != null && !string.IsNullOrEmpty(a.data.animalId))
+                    .ToDictionary(a => a.data.animalId, a => a);
+            }
+            else _animalLookup = new Dictionary<string, AnimalDataSO>();
+
+            // 3. Safe Quest Initialization (Source of the original crash)
+            if (quests != null)
+            {
+                foreach (var q in quests.Where(q => q != null && string.IsNullOrEmpty(q.questId)))
+                    Debug.LogWarning($"[Data Error] Quest asset '{q.name}' is missing a questId.");
+
+                _questLookup = quests
+                    .Where(q => q != null && !string.IsNullOrEmpty(q.questId))
+                    .ToDictionary(q => q.questId, q => q);
+            }
+            else _questLookup = new Dictionary<string, QuestDataSO>();
         }
 
         public CropDataSO GetCrop(string cropId)
