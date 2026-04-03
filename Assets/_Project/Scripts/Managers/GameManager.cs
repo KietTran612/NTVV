@@ -86,7 +86,7 @@ namespace NTVV.Managers
         {
             if (data == null || data.tiles == null || _dataRegistry == null) return;
 
-            CropTileView[] allTileViews = FindObjectsOfType<CropTileView>();
+            CropTileView[] allTileViews = FindObjectsByType<CropTileView>(FindObjectsSortMode.None);
             foreach (var tileData in data.tiles)
             {
                 CropTileView match = allTileViews.FirstOrDefault(t => t.TileId == tileData.tileId || t.gameObject.name == tileData.tileId);
@@ -121,7 +121,7 @@ namespace NTVV.Managers
                 data.inventory.Add(new InventoryItemData { itemId = item.Key, quantity = item.Value });
             }
 
-            CropTileView[] allTiles = FindObjectsOfType<CropTileView>();
+            CropTileView[] allTiles = FindObjectsByType<CropTileView>(FindObjectsSortMode.None);
             foreach (var tile in allTiles)
             {
                 TileSaveData tData = new TileSaveData

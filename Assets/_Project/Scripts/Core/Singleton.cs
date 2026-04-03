@@ -24,8 +24,9 @@ namespace NTVV.Core
                 {
                     if (_instance == null)
                     {
-                        // Look for any instance in the scene
-                        _instance = (T)FindObjectOfType(typeof(T));
+                        // Use non-deprecated API (Unity 2022.2+). FindAnyObjectByType is faster
+                        // than FindObjectOfType since it doesn't sort by InstanceID.
+                        _instance = FindAnyObjectByType<T>();
 
                         if (_instance == null)
                         {

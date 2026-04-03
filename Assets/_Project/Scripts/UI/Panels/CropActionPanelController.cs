@@ -6,6 +6,8 @@ namespace NTVV.UI.Panels
     using NTVV.World.Views;
     using NTVV.UI.Styling;
     using NTVV.UI.Common;
+    using NTVV.Data.ScriptableObjects;
+    using NTVV.Gameplay.Economy;
 
     /// <summary>
     /// Controller for the World-space Context Action Panel.
@@ -79,7 +81,7 @@ namespace NTVV.UI.Panels
             foreach (var cropSO in _registry.crops)
             {
                 if (cropSO?.data == null) continue;
-                if (Gameplay.Economy.EconomySystem.Instance?.CanAfford(cropSO.data.seedCostGold) == true)
+                if (EconomySystem.Instance?.CanAfford(cropSO.data.seedCostGold) == true)
                 {
                     _targetTile.Plant(cropSO.data);
                     return;
@@ -88,7 +90,7 @@ namespace NTVV.UI.Panels
 
             // No affordable crop found — open shop so player can buy seeds
             Debug.LogWarning("[CropAction] No affordable crop found. Opening Shop...");
-            Common.PopupManager.Instance?.ShowScreen("Shop");
+            PopupManager.Instance?.ShowScreen("Shop");
         }
 
         public void Setup(CropTileView target) { ClearTargets(); _targetTile = target; RefreshUI(); }

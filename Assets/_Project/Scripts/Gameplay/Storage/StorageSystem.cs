@@ -19,7 +19,6 @@ namespace NTVV.Gameplay.Storage
         public static event Action<bool> OnNearFullWarning;
 
         [Header("Config")]
-        [SerializeField] private int _defaultCapacity = 50;
         [SerializeField] private StorageUpgradeDataSO _upgradeConfig;
 
         [Header("State")]

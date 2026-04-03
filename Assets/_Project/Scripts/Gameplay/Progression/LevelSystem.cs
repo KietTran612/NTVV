@@ -78,6 +78,8 @@ namespace NTVV.Gameplay.Progression
                 if (milestone.Level > _currentLevel && _currentXP >= milestone.XPRequired)
                 {
                     _currentLevel = milestone.Level;
+                    // Notify subscribers (HUD, Alert system, etc.)
+                    OnLevelUp?.Invoke(_currentLevel);
                     // [Quest] Báo cáo thăng cấp
                     NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.ReachLevel, "Player", _currentLevel);
 
