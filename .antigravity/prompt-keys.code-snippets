@@ -1,0 +1,62 @@
+{
+  "CTX": {
+    "scope": "markdown,plaintext",
+    "prefix": ["ctx", "[ctx"],
+    "body": ["[CTX] ${1:Read relevant docs first.}"],
+    "description": "Load extra context before work"
+  },
+  "PLAN": {
+    "scope": "markdown,plaintext",
+    "prefix": ["plan", "[plan"],
+    "body": ["[PLAN] ${1:Plan this task before implementation.}"],
+    "description": "Planning mode"
+  },
+  "STRUCT": {
+    "scope": "markdown,plaintext",
+    "prefix": ["struct", "[struct"],
+    "body": ["[STRUCT] ${1:Inspect the current project structure first.}"],
+    "description": "Inspect current folder structure first"
+  },
+  "UI": {
+    "scope": "markdown,plaintext",
+    "prefix": ["ui", "[ui"],
+    "body": ["[UI] ${1:Work on Unity UI for this task.}"],
+    "description": "Unity UI task"
+  },
+  "ASSET": {
+    "scope": "markdown,plaintext",
+    "prefix": ["asset", "[asset"],
+    "body": ["[ASSET] ${1:Handle asset pipeline for this task.}"],
+    "description": "Asset pipeline task"
+  },
+  "MCPTEST": {
+    "scope": "markdown,plaintext",
+    "prefix": ["mcptest", "[mcp"],
+    "body": ["[MCPTEST] ${1:Use the relevant MCP server only.}"],
+    "description": "Narrow MCP testing mode"
+  },
+  "SAFE": {
+    "scope": "markdown,plaintext",
+    "prefix": ["safe", "[safe"],
+    "body": ["[SAFE] Do not modify anything."],
+    "description": "No-modification safety instruction"
+  },
+  "PROPOSE": {
+    "scope": "markdown,plaintext",
+    "prefix": ["propose", "[prop"],
+    "body": ["[PROPOSE] ${1:If a new folder is needed, propose it first.}"],
+    "description": "Propose before create"
+  },
+  "USE THIS FOLDER": {
+    "scope": "markdown,plaintext",
+    "prefix": ["folder", "[folder"],
+    "body": ["[USE THIS FOLDER] ${1:Assets/...}"],
+    "description": "Force a specific folder choice"
+  },
+  "READ THESE FILES": {
+    "scope": "markdown,plaintext",
+    "prefix": ["readfiles", "[read"],
+    "body": ["[READ THESE FILES] ${1:Docs/project_map.md}"],
+    "description": "Force reading specific files first"
+  }
+}

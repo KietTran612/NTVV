@@ -9,8 +9,7 @@
 /[Uu]serSettings/
 
 # AI & Scrap files (Temporary)
-/.antigravity/
-/.agent/
+/tmp/
 /tmp/
 /*.rar
 /*.zip
