@@ -96,6 +96,12 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
     - Toàn bộ UI thiết kế trên **Canvas uGUI**.
     - Độ phân giải chuẩn: **1920x1080**.
     - Sử dụng `UIStyleApplier` để đồng bộ Font/Color.
+- **Kiến trúc UI 3 Bước (3-Step Workflow)**:
+    Dự án áp dụng quy trình 3 giai đoạn để đảm bảo 100% độ chính xác:
+    1.  **Giai đoạn 1: Blueprinting (Kiến trúc)**: Sử dụng skill **`ui-blueprinting`** để bóc tách thông số từ Mockup/Ảnh. AI xuất bản thiết kế chi tiết để người dùng duyệt.
+    2.  **Giai đoạn 2: Standardization (Xây dựng)**: Sử dụng skill **`ui-standardization`** để xây cấu trúc Prefab và nối dây Controller tự động.
+    3.  **Giai đoạn 3: Visual Styling (Trang trí)**: Sử dụng skill **`ui-visual-styling`** để nạp visual (màu sắc, sprite, shadow) dựa trên bản Blueprint đã duyệt.
+
 - **Tiêu chuẩn Đấu nối (Auto-Wiring Suffixes)**:
     - Dự án áp dụng skill **`ui-standardization`** để đảm bảo liên kết bền vững và tự động hóa.
     - **Các chức năng chính của Skill**:
@@ -211,7 +217,8 @@ Dự án tuân thủ cấu trúc thư mục phẳng và nhất quán trong `Asse
 ## 📝 Nhật ký Cập nhật (Change Log)
 
 - **2026-04-06**:
-    - **Kiến trúc UI 2 Lớp**: Tách biệt Functional Layer (logic) và Decorator Layer (visual).
+    - Ra mắt kĩ năng **`ui-blueprinting`** (Kiến trúc sư) giúp phân tích Mockup và Ảnh chính xác trước khi thực thi.
+    - Thiết lập **Kiến trúc UI 2 Lớp**: Tách biệt Functional Layer (logic) và Decorator Layer (visual).
     - Ra mắt hệ thống **`ui-visual-styling`** quản lý màu sắc, sprite, font qua ScriptableObject.
     - Nâng cấp `PrefabAssembler` với logic **"Create or Verify"**, bảo vệ thiết kế visual khi chạy lại tool.
     - Chuẩn hóa hệ thống UI với skill **`ui-standardization`**.

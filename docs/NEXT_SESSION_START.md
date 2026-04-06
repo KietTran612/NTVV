@@ -8,8 +8,9 @@
 
 Hãy dùng công cụ `view_file` để đọc các file này theo đúng thứ tự để nắm bắt kiến trúc:
 
-1.  **`.agent/skills/ui-standardization/SKILL.md`**: Quy tắc xây dựng cấu trúc (Functional Layer) và nối dây Auto-Wiring.
-2.  **`.agent/skills/ui-visual-styling/SKILL.md`**: Quy tắc trang trí Visual (Decorator Layer) qua ScriptableObject.
+1.  **`.agent/skills/ui-blueprinting/SKILL.md`**: "Kiến trúc sư" - Phân tích Mockup/Ảnh và bóc tách Visual thành Blueprint.
+2.  **`.agent/skills/ui-standardization/SKILL.md`**: "Thợ xây" - Xây dựng cấu trúc (Functional Layer) và nối dây Auto-Wiring.
+3.  **`.agent/skills/ui-visual-styling/SKILL.md`**: "Thợ sơn" - Trang trí Visual (Decorator Layer) qua StyleData.
 3.  **`docs/plans/2026-04-06-ui-visual-styling-design.md`**: Bản thiết kế chi tiết về hệ thống Styling v2 và cơ chế an toàn của `PrefabAssembler`.
 4.  **`docs/HANDOVER.md`**: Để biết trạng thái chính xác của các Epic và Context của dự án.
 
@@ -19,10 +20,9 @@ Hãy dùng công cụ `view_file` để đọc các file này theo đúng thứ 
 
 Chúng ta đang vận hành hệ thống UI theo mô hình tách biệt hoàn toàn Logic và Visual:
 
-| Lớp (Layer) | Đối tượng quản lý | Quy tắc đặt tên | Skill tương ứng |
-| :--- | :--- | :--- | :--- |
-| **Functional** (Logic) | Controller, Button, Text hiển thị data | Hậu tố: `_Label`, `_Icon`, `_Button` | `@ui-standardization` |
-| **Decorator** (Visual) | Nền, Bóng đổ, Viền, Hiệu ứng | Tiền tố: `bg_`, `shadow_`, `border_`, `overlay_` | `@ui-visual-styling` |
+| **Architect** (Analysis) | Phân tích Mockup/Ảnh/Mô tả & Gợi ý **Unity Layout Component** (Responsive) | Xuất **Blueprint** MD | `@ui-blueprinting` |
+| **Functional** (Logic) | Controller, Button, Text hiển thị data | Hậu tố: `_Label`, `_Button` | `@ui-standardization` |
+| **Decorator** (Visual) | Nền, Bóng đổ, Viền, Hiệu ứng | Tiền tố: `bg_`, `shadow_` | `@ui-visual-styling` |
 
 **Quy tắc An toàn:**
 - `PrefabAssembler.cs` hoạt động theo cơ chế **"Create or Verify"**: Không bao giờ ghi đè lớp Decorator nếu Prefab đã tồn tại.
@@ -63,11 +63,10 @@ Chúng ta đang vận hành hệ thống UI theo mô hình tách biệt hoàn to
 
 Người dùng muốn bắt đầu **tạo các Prefab thực tế** (như ShopEntry, InventorySlot) và **thiết kế UI** cho chúng.
 
-**Luồng làm việc (Workflow) dành cho bạn:**
-1.  **Bước 1**: Dùng `@ui-standardization` để xây cấu trúc thô và nối dây logic cho prefab.
-2.  **Bước 2**: Yêu cầu người dùng cung cấp mô tả UI hoặc Mockup hình ảnh.
-3.  **Bước 3**: Dùng `@ui-visual-styling` để phân tích ảnh/mô tả, tạo các object `bg_`, `shadow_` và sinh file `StyleData.asset`.
-4.  **Bước 4**: Gắn `UIStyleApplier` và nhấn **Apply Style to Prefab NOW** để hoàn thiện.
+**Luồng làm việc (Workflow) chuẩn 3 Bước:**
+1.  **Bước 1: Blueprinting**: Dùng `@ui-blueprinting` để bóc tách Mockup/Ảnh. **Dừng lại để người dùng duyệt Blueprint.**
+2.  **Bước 2: Standardization**: Một khi Blueprint đã được duyệt, dùng `@ui-standardization` để xây khung và nối dây.
+3.  **Bước 3: Styling**: Dùng `@ui-visual-styling` để hoàn thiện visual 100% theo Blueprint.
 
 ---
 
