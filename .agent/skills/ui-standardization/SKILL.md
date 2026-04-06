@@ -1,4 +1,4 @@
-﻿---
+---
 name: ui-standardization
 description: Use when creating or updating Unity uGUI prefabs in the NTVV project. Applies when building UI hierarchy from scratch, fixing broken prefab links, wiring controllers to child components, or encountering missing references in Inspector.
 ---
@@ -19,6 +19,21 @@ Prevent "Dead Prefabs" and broken Inspector links. This skill standardizes how U
 5.  **Quality & Styling Enforcement**: Ensures consistent fonts (no default TMP fonts), optimized raycasts, and project-standard palettes.
 6.  **Code-based Event Binding**: Mandates `AddListener` in code for traceability and to prevent Inspector link breakage.
 7.  **Verification Checklist**: A built-in "Final Check" to eliminate null references before completion.
+
+## Skill Scope & Handoff
+
+This skill covers: **Structure + Controller Wiring** (the functional layer).
+**Prerequisite**: Must be executed AFTER **`@ui-blueprinting`** has defined the layout and hierarchy blueprint.
+
+After this skill is done, invoke **`@ui-visual-styling`** for the decorator/visual layer (colors, sprites, backgrounds, shadows, fonts).
+
+**Naming jurisdiction:**
+- `_Suffix` names (`Name_Label`, `Buy_Button`) → **this skill's domain**
+- `prefix_` names (`bg_Card`, `shadow_Button`) → **ui-visual-styling's domain**
+
+Never create `bg_`, `shadow_`, `border_`, `overlay_`, or `fx_` prefixed children in this skill.
+
+---
 
 ## Decision Matrix: Do I Need a Controller?
 
@@ -148,8 +163,8 @@ Follow this sequence for every new prefab:
 
 ## Part 4: Styling Requirements
 
-- TMP_Text MUST NOT use "Liberation Sans" (Unity default) - verify in Inspector font asset field
-- Project font assets are located in: `Assets/_Project/Fonts/`
+- TMP_Text MUST use the **Dosis** font family (Dosis-Bold or Dosis-ExtraBold) - verify in Inspector font asset field.
+- Project font assets are located in: `Assets/_Project/Fonts/Dosis/`
 - Image components for icons should have raycastTarget = false unless they are buttons
 - Colors must use the project palette defined in `UIStyleApplier` (Assets/_Project/Scripts/UI/Common/)
 - Do NOT hardcode pure white (#FFFFFF) or pure black (#000000) unless explicitly required
@@ -173,7 +188,7 @@ Before calling any prefab "done":
 - [ ] All data/interaction children use full descriptive suffix naming (e.g. Price_Label)
 - [ ] No None references in Inspector
 - [ ] onClick listeners registered in code, not Inspector
-- [ ] Font is NOT Liberation Sans (check Assets/_Project/Fonts/ for correct asset)
+- [ ] Font is **Dosis** (Check `Assets/_Project/Fonts/Dosis/` for correct asset)
 - [ ] ApplyModifiedProperties() called after SerializedObject changes in Editor code
 - [ ] PrefabUtility.SaveAsPrefabAsset() called after editing in Editor tool
 

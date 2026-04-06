@@ -24,7 +24,7 @@ Phần lớn các công cụ thiết kế của AI (đọc file `.pen`, xử lý
 
 ### 2.2 Đồng bộ Skills & Prompt Keys
 Vì thư mục `.agent/` và `.antigravity/` đã được push lên GitHub, AI sẽ tự động đọc được các Skill sau khi bạn `git pull`.
-- **Kiểm tra**: Gõ chat `@ui-standardization` hoặc `@ui-visual-styling`. Nếu AI hiển thị mô tả về kĩ năng tương ứng, nghĩa là AI đã nhận diện được folder `.agent/skills/`.
+- **Kiểm tra**: Gõ chat `@ui-blueprinting`, `@ui-standardization` hoặc `@ui-visual-styling`. Nếu AI hiển thị mô tả về kĩ năng tương ứng, nghĩa là AI đã nhận diện được folder `.agent/skills/`.
 
 ---
 
@@ -37,5 +37,5 @@ Nếu AI trả lời chi tiết, bạn đã hoàn tất quá trình setup!
 ---
 
 ## 4. Troubleshooting (Xử lý sự cố)
-- **AI không tìm thấy Skill**: Chắc chắn rằng bạn đã gõ đúng tên `@ui-standardization` hoặc `@ui-visual-styling` và các file `.agent/skills/[skill-name]/SKILL.md` tồn tại trong thư mục dự án.
+- **AI không tìm thấy Skill**: Chắc chắn rằng bạn đã gõ đúng tên `@ui-blueprinting`, `@ui-standardization` hoặc `@ui-visual-styling` và các file `.agent/skills/[skill-name]/SKILL.md` tồn tại trong thư mục dự án.
 - **Lỗi Pencil MCP**: Nếu AI không thể sửa file `.pen`, hãy kiểm tra lại cài đặt MCP Server trong phân Settings.

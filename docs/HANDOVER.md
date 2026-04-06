@@ -15,9 +15,10 @@ Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi b
 Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầu não" mới:
 1.  **Dữ liệu Tập trung & Cấu hình**: `GameDataRegistry.asset` và thư mục `Assets/_Project/Data/Configs/`.
 2.  **Tiêu chuẩn UI (Architect, Builder, Stylist)**:
-    - `.agent/skills/ui-blueprinting/SKILL.md`: Phân tích Mockup/Ảnh/Mô tả & Gợi ý **Component Layout Responsive**.
-    - `.agent/skills/ui-standardization/SKILL.md`: Xây dựng cấu trúc & nối dây (Logic).
-    - `.agent/skills/ui-visual-styling/SKILL.md`: Trang trí, màu sắc, bóng đổ (Visual).
+    - `.agent/skills/ui-blueprinting/SKILL.md`: Kiến trúc sư - Phân tích Mockup/Ảnh/Mô tả & Gợi ý Component Layout Responsive. **Phải dùng đầu tiên.**
+    - `.agent/skills/ui-standardization/SKILL.md`: Thợ xây - Xây dựng cấu trúc (Functional Layer) và nối dây Auto-Wiring.
+    - `.agent/skills/ui-visual-styling/SKILL.md`: Thợ sơn - Trang trí Visual (Decorator Layer) dựa trên Blueprint.
+    - `Assets/_Project/Fonts/Dosis/`: Master Font của dự án.
     - `PrefabAssembler.cs`: Công cụ "Create or Verify" (không ghi đè visual nếu đã tồn tại).
     - `UIStyleApplier.cs` & `UIStyleDataSO.cs`: Bộ đôi quản lý theme và nạp visual khi game chạy.
 3.  **Hướng dẫn cài đặt máy mới**: `docs/guides/New_Machine_Setup.md`.
@@ -25,9 +26,9 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
 ## 🎯 Trạng thái hiện tại & Bước tiếp theo
 - **Đã xong**: Quy hoạch dữ liệu tập trung (Registry). Thiết lập xong Skill chuẩn hóa UI và chiến lược 3 tầng cho AI. Cập nhật tài liệu hướng dẫn chuyên sâu về **Theme thiết kế (Prefab Variant)** và **Quy hoạch Addressables (Grouping per Theme)**.
 - **Cần làm ngay**: 
-    1. Khi nhận được yêu cầu UI mới, hãy gọi **`@ui-blueprinting`** trước để phân tích Mockup/Ảnh và xuất bản Blueprint chi tiết.
+    1. Khi nhận được yêu cầu UI mới, hãy gọi **`@ui-blueprinting`** trước để phân tích Mockup/Ảnh/Mô tả. AI sẽ xuất bản Blueprint (Layout, Color, Font Dosis).
     2. Một khi người dùng đã duyệt Blueprint, hãy dùng **`@ui-standardization`** để xây khung Prefab.
-    3. Cuối cùng, dùng **`@ui-visual-styling`** để nạp visual chuẩn 100% theo Blueprint.
+    3. Cuối cùng, dùng **`@ui-visual-styling`** để nạp visual chuẩn 100% theo Blueprint và tạo `StyleData.asset`.
     3. Luôn nhấn **Apply Style to Prefab NOW** để xem trực diện kết quả trong Unity Editor.
     4. Thử nghiệm đổi Theme từ `Default` sang `Cartoon` bằng cách swap `StyleData` Asset trên `UIStyleApplier`.
 

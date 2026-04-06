@@ -57,6 +57,12 @@ Chúng ta đang vận hành hệ thống UI theo mô hình tách biệt hoàn to
   - `Assets/_Project/UI/System/` (Các icon hệ thống).
 - **UI Textures**: `Assets/_Project/Textures/`
 
+### 5. Typography (Phông chữ)
+- **Master Font**: **Dosis** (Bold/ExtraBold).
+- **Material Presets**: Sử dụng các bản Outline màu (Green, Blue, Yellow, Red) để phù hợp ngữ cảnh.
+- **Asset Path**: `Assets/_Project/Fonts/Dosis/`
+- *Tất cả text phải sử dụng TextMeshPro với Dosis SDF.*
+
 ---
 
 ## 3. 🎯 Mục tiêu của Phiên làm việc mới
@@ -64,9 +70,13 @@ Chúng ta đang vận hành hệ thống UI theo mô hình tách biệt hoàn to
 Người dùng muốn bắt đầu **tạo các Prefab thực tế** (như ShopEntry, InventorySlot) và **thiết kế UI** cho chúng.
 
 **Luồng làm việc (Workflow) chuẩn 3 Bước:**
-1.  **Bước 1: Blueprinting**: Dùng `@ui-blueprinting` để bóc tách Mockup/Ảnh. **Dừng lại để người dùng duyệt Blueprint.**
-2.  **Bước 2: Standardization**: Một khi Blueprint đã được duyệt, dùng `@ui-standardization` để xây khung và nối dây.
-3.  **Bước 3: Styling**: Dùng `@ui-visual-styling` để hoàn thiện visual 100% theo Blueprint.
+1.  **Bước 1: Blueprinting**: Dùng **`@ui-blueprinting`** để bóc tách Mockup/Ảnh/Mô tả. 
+    - **Mục tiêu**: Xác định Layout Component (Grid/Vertical), Color, Font Dosis, Chi tiết Object Decorator (`bg_`, `shadow_`).
+    - **Dừng lại**: **Yêu cầu người dùng duyệt Blueprint** trước khi thực hiện bước tiếp theo.
+2.  **Bước 2: Standardization**: Một khi Blueprint đã được duyệt, dùng **`@ui-standardization`** để xây khung và nối dây.
+    - **Mục tiêu**: Xây dựng cấu trúc bền vững và nối dây Auto-Wiring (Logic).
+3.  **Bước 3: Styling**: Dùng **`@ui-visual-styling`** để hoàn thiện visual 100% theo Blueprint.
+    - **Mục tiêu**: Tạo object trang trí, nạp Sprite/Color và tạo `StyleData.asset`. Gắn `UIStyleApplier` và nhấn **Apply Style to Prefab NOW**.
 
 ---
 

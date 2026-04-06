@@ -95,12 +95,22 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
 - **Tiêu chuẩn Thiết kế**: 
     - Toàn bộ UI thiết kế trên **Canvas uGUI**.
     - Độ phân giải chuẩn: **1920x1080**.
-    - Sử dụng `UIStyleApplier` để đồng bộ Font/Color.
+    - Sử dụng `UIStyleApplier` để đồng bộ bộ font **Dosis** và bảng màu.
 - **Kiến trúc UI 3 Bước (3-Step Workflow)**:
-    Dự án áp dụng quy trình 3 giai đoạn để đảm bảo 100% độ chính xác:
-    1.  **Giai đoạn 1: Blueprinting (Kiến trúc)**: Sử dụng skill **`ui-blueprinting`** để bóc tách thông số từ Mockup/Ảnh. AI xuất bản thiết kế chi tiết để người dùng duyệt.
-    2.  **Giai đoạn 2: Standardization (Xây dựng)**: Sử dụng skill **`ui-standardization`** để xây cấu trúc Prefab và nối dây Controller tự động.
-    3.  **Giai đoạn 3: Visual Styling (Trang trí)**: Sử dụng skill **`ui-visual-styling`** để nạp visual (màu sắc, sprite, shadow) dựa trên bản Blueprint đã duyệt.
+    Dự án áp dụng quy trình 3 giai đoạn để đảm bảo 100% độ chính xác và tính Responsive:
+    1.  **Giai đoạn 1: Blueprinting (Kiến trúc)**: 
+        - **Skill**: `@ui-blueprinting`.
+        - **Cách dùng**: Cung cấp file `.pen`, ảnh screenshot hoặc mô tả văn bản (VD: "Bảng này có 3 cột, tự co giãn").
+        - **Đầu ra**: Bản thiết kế chi tiết (Blueprint) chứa: Cấu trúc Layout (Grid/Vertical), Ràng buộc kích thước (Min/Max size), Màu sắc Hex, Font Dosis & Material Preset.
+        - **Lưu ý**: **Dừng lại để người dùng duyệt Blueprint** trước khi sang bước tiếp theo.
+    2.  **Giai đoạn 2: Standardization (Xây dựng)**: 
+        - **Skill**: `@ui-standardization`.
+        - **Cách dùng**: Thực thi sau khi Blueprint được duyệt. 
+        - **Đầu ra**: Xây dựng hierarchy bền vững, đặt tên hậu tố chuẩn (`_Label`, `_Button`) và tự động nối dây (Auto-Wiring) vào Controller.
+    3.  **Giai đoạn 3: Visual Styling (Trang trí)**: 
+        - **Skill**: `@ui-visual-styling`.
+        - **Cách dùng**: Nạp visual dựa trên các thông số từ Blueprint.
+        - **Đầu ra**: Tạo các object tiền tố (`bg_`, `shadow_`), nạp Sprite và sinh file `StyleData.asset` cho `UIStyleApplier`.
 
 - **Tiêu chuẩn Đấu nối (Auto-Wiring Suffixes)**:
     - Dự án áp dụng skill **`ui-standardization`** để đảm bảo liên kết bền vững và tự động hóa.
@@ -139,6 +149,17 @@ Khi tạo một bản hiển thị (Visual) mới cho Theme:
     - **KHÔNG** được đổi tên hoặc xóa các Object con có hậu tố chuẩn (`_Label`, `_Icon`) vì code Controller dựa vào các tên này để gán dữ liệu.
 4. **Quản lý Decorator**: Luôn sử dụng `UIStyleApplier` để quản lý các lớp `bg_`, `shadow_`. Nếu cần thêm lớp trang trí mới, hãy dùng đúng tiền tố quy định.
 5. **Đường dẫn Lưu trữ**: Lưu bản Variant vào thư mục `Assets/_Project/Resources/UI/[ThemeName]/` với cùng tên file như bản gốc.
+
+### 🔠 Typography (Phong cách Chữ)
+- **Font Chủ đạo**: **Dosis** (Bộ font chính cho game).
+    - `Dosis-Bold SDF`: Dùng cho tiêu đề, nội dung quan trọng.
+    - `Dosis-ExtraBold SDF`: Dùng cho các con số, nhấn mạnh, UI Button.
+- **Dosis Material Presets**: Tận dụng bộ sưu tập Outline có sẵn để phân loại trạng thái:
+    - `Outline-Green/Lime`: Thành công, tăng trưởng, thu hoạch.
+    - `Outline-Blue/Cyan`: Thông tin, cấp độ, hệ thống.
+    - `Outline-Yellow`: Tiền vàng, phần thưởng, VIP.
+    - `Outline-Red/Berry`: Cảnh báo, lỗi, tiêu hao.
+- **Quy tắc**: Toàn bộ UI Text phải sử dụng **TextMeshPro** và ưu tiên dùng các Preset Material này để đồng nhất visual.
 
 ---
 
