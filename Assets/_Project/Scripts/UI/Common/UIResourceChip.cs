@@ -12,18 +12,18 @@ namespace NTVV.UI.Common
     public class UIResourceChip : MonoBehaviour
     {
         [SerializeField] private Image _resource_Icon;
-        [SerializeField] private TMP_Text _value_Label;
+        [SerializeField] private TMP_Text _amount_Label;
 
         private void Awake()
         {
             // Tier 1: Recursive Auto-Wiring (Self-Healing)
             if (_resource_Icon == null) _resource_Icon = FindNamed<Image>("Resource_Icon");
-            if (_value_Label == null) _value_Label = FindNamed<TMP_Text>("Value_Label");
+            if (_amount_Label == null) _amount_Label = FindNamed<TMP_Text>("Amount_Label");
         }
 
         public void SetValue(string text)
         {
-            if (_value_Label != null) _value_Label.text = text;
+            if (_amount_Label != null) _amount_Label.text = text;
         }
 
         public void SetIcon(Sprite sprite)

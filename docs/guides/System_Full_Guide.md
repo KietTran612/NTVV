@@ -103,14 +103,16 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
         - **Cách dùng**: Cung cấp file `.pen`, ảnh screenshot hoặc mô tả văn bản (VD: "Bảng này có 3 cột, tự co giãn").
         - **Đầu ra**: Bản thiết kế chi tiết (Blueprint) chứa: Cấu trúc Layout (Grid/Vertical), Ràng buộc kích thước (Min/Max size), Màu sắc Hex, Font Dosis & Material Preset.
         - **Lưu ý**: **Dừng lại để người dùng duyệt Blueprint** trước khi sang bước tiếp theo.
-    2.  **Giai đoạn 2: Standardization (Xây dựng)**: 
+    2.  **Giai đoạn 2: Standardization (Xây dựng - Builder)**: 
         - **Skill**: `@ui-standardization`.
-        - **Cách dùng**: Thực thi sau khi Blueprint được duyệt. 
-        - **Đầu ra**: Xây dựng hierarchy bền vững, đặt tên hậu tố chuẩn (`_Label`, `_Button`) và tự động nối dây (Auto-Wiring) vào Controller.
-    3.  **Giai đoạn 3: Visual Styling (Trang trí)**: 
+        - **Công cụ**: `PrefabAssembler.cs` (MenuItem: NTVV > Setup > Assemble All).
+        - **Đầu ra**: Xây dựng hierarchy chức năng, đặt tên hậu tố chuẩn (`_Label`, `_Button`).
+        - **Mới (V2.1)**: **Semantic Labeling** - Tool sẽ tự động nhận diện tên để gán `StyleType` tương ứng vào `UIStyleApplier`. Đảm bảo có `CanvasRenderer` cho mọi linh kiện.
+    3.  **Giai đoạn 3: Visual Styling (Trang trí - Stylist)**: 
         - **Skill**: `@ui-visual-styling`.
-        - **Cách dùng**: Nạp visual dựa trên các thông số từ Blueprint.
-        - **Đầu ra**: Tạo các object tiền tố (`bg_`, `shadow_`), nạp Sprite và sinh file `StyleData.asset` cho `UIStyleApplier`.
+        - **Công cụ**: Menu **`NTVV > Styling > Apply Visual Styles`**.
+        - **Đầu ra**: Nạp visual dựa trên các thông số từ Blueprint và Theme Asset (`UIStyleDataSO`).
+        - **Bảo trì**: Khi sửa đổi Prefab, chỉ cần chạy lại Giai đoạn 2 để "Verifiy & Repair" mà không làm hỏng thiết kế đã làm ở Giai đoạn 3.
 
 - **Tiêu chuẩn Đấu nối (Auto-Wiring Suffixes)**:
     - Dự án áp dụng skill **`ui-standardization`** để đảm bảo liên kết bền vững và tự động hóa.

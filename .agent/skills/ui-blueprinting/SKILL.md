@@ -35,7 +35,7 @@ Bạn là chuyên gia phân tích UI cấp cao. Nhiệm vụ của bạn là bó
 
 ### 4. Nội dung lớn (Large Content/Panels) - Tiền tố `bg_`
 - **Container**: Xác định lớp nền chính (`bg_Main`).
-- **Responsive Layer**: BẮT BUỘC chỉ định Layout Group (Vertical/Horizontal/Grid) và Padding/Spacing.
+- **Layout & Responsive**: BẮT BUỘC chỉ định Layout Group (Vertical/Horizontal/Grid) và Padding/Spacing. Lưu ý: Các thông số này sẽ được áp dụng ở **Bước 3 (Styling)** thông qua `UIStyleApplier`.
 - **Scrolling**: Nếu nội dung dài, phải chỉ định dùng `ScrollRect` và `Mask`.
 
 ---

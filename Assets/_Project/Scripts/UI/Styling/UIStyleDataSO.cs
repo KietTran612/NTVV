@@ -32,5 +32,15 @@ namespace NTVV.UI.Styling
         public Sprite ButtonBackground;
         public Sprite PanelBackground;
         public Sprite ItemFrame;
+
+        [Header("Layout Configurations (Blueprint Data)")]
+        public LayoutConfig ChipLayout = new LayoutConfig { Padding = new Vector4(16, 16, 8, 8), Spacing = 8 };
+    }
+
+    [System.Serializable]
+    public struct LayoutConfig
+    {
+        public Vector4 Padding; // x=Left, y=Right, z=Top, w=Bottom
+        public float Spacing;
     }
 }

@@ -18,7 +18,8 @@ namespace NTVV.UI.Styling
             Gold,             // Yellow
             Header,
             BackgroundDim,
-            BodyText
+            BodyText,
+            ResourceChip      // NEW: Specific type for Chips
         }
 
         [Header("Style Strategy")]
@@ -26,29 +27,32 @@ namespace NTVV.UI.Styling
         [SerializeField] private bool _applyColor = true;
         [SerializeField] private bool _applyFont = true;
         [SerializeField] private bool _applySprite = true;
+        [SerializeField] private bool _applyLayout = true; // NEW: Control layout application
 
         [Header("Optional Internal References")]
         [SerializeField] private Image _targetImage;
         [SerializeField] private TMP_Text _targetText;
+        [SerializeField] private LayoutGroup _targetLayout;
 
         private void Awake()
         {
             if (_targetImage == null) _targetImage = GetComponent<Image>();
             if (_targetText == null) _targetText = GetComponent<TMP_Text>();
+            if (_targetLayout == null) _targetLayout = GetComponent<LayoutGroup>();
         }
 
-        /// <summary>
-        /// Apply style using the provided style data.
-        /// Can be called from the Inspector or by a UI Manager.
-        /// </summary>
         public void ApplyStyle(UIStyleDataSO style)
         {
             if (style == null) return;
 
+            // Apply Visuals
             if (_targetImage != null)
             {
                 if (_applyColor) _targetImage.color = GetColor(style);
-                if (_applySprite) _targetImage.sprite = GetSprite(style);
+                if (_applySprite) {
+                    Sprite s = GetSprite(style);
+                    if (s != null) _targetImage.sprite = s;
+                }
             }
 
             if (_targetText != null)
@@ -60,11 +64,27 @@ namespace NTVV.UI.Styling
                     _targetText.fontSize = (_styleType == StyleType.Header) ? style.HeaderFontSize : style.BodyFontSize;
                 }
             }
+
+            // Apply Layout (NEW)
+            if (_applyLayout && _targetLayout != null)
+            {
+                ApplyLayoutSettings(style);
+            }
         }
 
-        /// <summary>
-        /// Update the style type and re-apply.
-        /// </summary>
+        private void ApplyLayoutSettings(UIStyleDataSO style)
+        {
+            if (_styleType != StyleType.ResourceChip || _targetLayout == null) return;
+
+            var config = style.ChipLayout;
+            _targetLayout.padding = new RectOffset((int)config.Padding.x, (int)config.Padding.y, (int)config.Padding.z, (int)config.Padding.w);
+
+            if (_targetLayout is HorizontalOrVerticalLayoutGroup hvLayout)
+            {
+                hvLayout.spacing = config.Spacing;
+            }
+        }
+
         public void ChangeStyle(StyleType newType, UIStyleDataSO style)
         {
             _styleType = newType;
@@ -78,7 +98,8 @@ namespace NTVV.UI.Styling
                 case StyleType.PrimaryAction: return style.PrimaryActionColor;
                 case StyleType.CaringAction: return style.CaringActionColor;
                 case StyleType.Warning: return style.WarningColor;
-                case StyleType.Gold: return style.GoldColor;
+                case StyleType.Gold: 
+                case StyleType.ResourceChip: return style.GoldColor;
                 case StyleType.Header: return style.PanelHeaderColor;
                 case StyleType.BackgroundDim: return style.BackgroundDimColor;
                 default: return Color.white;
@@ -92,6 +113,7 @@ namespace NTVV.UI.Styling
                 case StyleType.PrimaryAction:
                 case StyleType.CaringAction:
                 case StyleType.Gold:
+                case StyleType.ResourceChip:
                     return style.ButtonBackground;
                 case StyleType.Header:
                 case StyleType.BodyText:

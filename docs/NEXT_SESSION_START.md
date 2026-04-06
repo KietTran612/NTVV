@@ -67,16 +67,14 @@ Chúng ta đang vận hành hệ thống UI theo mô hình tách biệt hoàn to
 
 ## 3. 🎯 Mục tiêu của Phiên làm việc mới
 
-Người dùng muốn bắt đầu **tạo các Prefab thực tế** (như ShopEntry, InventorySlot) và **thiết kế UI** cho chúng.
+Dự án đã có khung xương và hệ thống dán nhãn tự động cực mạnh. Phiên sau sẽ tập trung vào:
+1.  **Thay thế Asset Thật**: Cập nhật các Sprite thực tế từ họa sĩ vào `DefaultFarmStyle.asset`.
+2.  **Mở rộng Popup**: Hoàn thiện chi tiết Visual cho `QuestDetailPanel` và `AnimalDetailPanel`.
+3.  **Hệ thống Icon động**: Tự động đổi Icon Resource (Gold, Gem) dựa trên dữ liệu thật thay vì Placeholder.
 
-**Luồng làm việc (Workflow) chuẩn 3 Bước:**
-1.  **Bước 1: Blueprinting**: Dùng **`@ui-blueprinting`** để bóc tách Mockup/Ảnh/Mô tả. 
-    - **Mục tiêu**: Xác định Layout Component (Grid/Vertical), Color, Font Dosis, Chi tiết Object Decorator (`bg_`, `shadow_`).
-    - **Dừng lại**: **Yêu cầu người dùng duyệt Blueprint** trước khi thực hiện bước tiếp theo.
-2.  **Bước 2: Standardization**: Một khi Blueprint đã được duyệt, dùng **`@ui-standardization`** để xây khung và nối dây.
-    - **Mục tiêu**: Xây dựng cấu trúc bền vững và nối dây Auto-Wiring (Logic).
-3.  **Bước 3: Styling**: Dùng **`@ui-visual-styling`** để hoàn thiện visual 100% theo Blueprint.
-    - **Mục tiêu**: Tạo object trang trí, nạp Sprite/Color và tạo `StyleData.asset`. Gắn `UIStyleApplier` và nhấn **Apply Style to Prefab NOW**.
+**Luồng làm việc (Workflow) chuẩn 2 Bước (KHI ĐÃ CỒ BLUEPRINT):**
+1.  **Bước 1**: Nhấn **`NTVV > Setup > Assemble All`** (Xây xương + Nối dây + Dán nhãn Style).
+2.  **Bước 2**: Nhấn **`NTVV > Styling > Apply Visual Styles`** (Đổ màu + Nạp Font + Áp Sprite từ Theme).
 
 ---
 

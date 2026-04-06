@@ -6309,6 +6309,181 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "2cjlp",
+      "x": 2500,
+      "y": 4800,
+      "name": "Kawaii Atom Components",
+      "width": 800,
+      "height": 1200,
+      "fill": "$cream-white",
+      "cornerRadius": 40,
+      "layout": "vertical",
+      "gap": 60,
+      "padding": 50,
+      "children": [
+        {
+          "type": "frame",
+          "id": "RyBsH",
+          "name": "ShopEntry_Seed",
+          "reusable": true,
+          "width": 320,
+          "height": 480,
+          "fill": "#FFFFFF",
+          "cornerRadius": 32,
+          "stroke": {
+            "thickness": 6,
+            "fill": "$warm-soil-brown"
+          },
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#00000020",
+            "offset": {
+              "x": 0,
+              "y": 8
+            }
+          },
+          "layout": "vertical",
+          "gap": 20,
+          "padding": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "hKMNC",
+              "name": "Item_Icon",
+              "width": 240,
+              "height": 240,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./images/generated-1775447082101.png",
+                "mode": "fill"
+              },
+              "cornerRadius": 20
+            },
+            {
+              "type": "text",
+              "id": "4cVbH",
+              "name": "Name_Label",
+              "fill": "$warm-soil-brown",
+              "content": "WHEAT",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "900"
+            },
+            {
+              "type": "frame",
+              "id": "QXGf6",
+              "name": "price_row",
+              "width": "fill_container",
+              "gap": 10,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "5BaO6",
+                  "name": "Currency_Icon",
+                  "width": 44,
+                  "height": 44,
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "./images/generated-1775447097816.png",
+                    "mode": "fill"
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "aCfuJ",
+                  "name": "Price_Label",
+                  "fill": "$warm-soil-brown",
+                  "content": "10",
+                  "fontFamily": "Inter",
+                  "fontSize": 24,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "hBwNR",
+              "name": "Buy_Button",
+              "width": "fill_container",
+              "height": 84,
+              "fill": "$farm-green",
+              "cornerRadius": 20,
+              "stroke": {
+                "thickness": 4,
+                "fill": "$deep-leaf-green"
+              },
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "6wb9c",
+                  "name": "btn_text",
+                  "fill": "#FFFFFF",
+                  "content": "BUY",
+                  "fontFamily": "Inter",
+                  "fontSize": 26,
+                  "fontWeight": "900"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "iM7qI",
+          "name": "InventorySlot",
+          "reusable": true,
+          "width": 200,
+          "height": 220,
+          "fill": "#FFFFFF",
+          "cornerRadius": 24,
+          "stroke": {
+            "thickness": 4,
+            "fill": "$warm-soil-brown"
+          },
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "nv67E",
+              "name": "Item_Icon",
+              "width": 160,
+              "height": 160,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./images/generated-1775447110654.png",
+                "mode": "fill"
+              },
+              "cornerRadius": 16
+            },
+            {
+              "type": "text",
+              "id": "eYZUQ",
+              "name": "Quantity_Label",
+              "fill": "$warm-soil-brown",
+              "content": "x99",
+              "textAlign": "right",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            }
+          ]
+        }
+      ]
     }
   ],
   "variables": {

@@ -7,7 +7,6 @@ Dự án NTVV sử dụng hệ thống AI và Skill tùy chỉnh qua Antigravity
 ## 1. Môi trường Unity
 - **Phiên bản**: Đảm bảo cài đúng phiên bản Unity thông qua Unity Hub.
 - **Git Clone**: `git clone https://github.com/KietTran612/NTVV.git`
-- **Mở Dự án**: Unity sẽ tự động tải lại các Package và nội dung trong `Library/`.
 
 ---
 

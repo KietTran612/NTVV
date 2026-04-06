@@ -22,10 +22,14 @@ Prevent "Dead Prefabs" and broken Inspector links. This skill standardizes how U
 
 ## Skill Scope & Handoff
 
-This skill covers: **Structure + Controller Wiring** (the functional layer).
 **Prerequisite**: Must be executed AFTER **`@ui-blueprinting`** has defined the layout and hierarchy blueprint.
 
-After this skill is done, invoke **`@ui-visual-styling`** for the decorator/visual layer (colors, sprites, backgrounds, shadows, fonts).
+**Core Rule**: This skill and its tool (`PrefabAssembler.cs`) are for **STRUCTURAL ASSEMBLY** and **WIRING** only.
+- DO NOT set Padding, Spacing, or Colors here.
+- DO NOT apply Sprites or Fonts (except for basic Dosis assignment).
+- These aesthetic properties are the domain of **`@ui-visual-styling`**.
+
+After this skill is done, invoke **`@ui-visual-styling`** for the decorator/visual layer.
 
 **Naming jurisdiction:**
 - `_Suffix` names (`Name_Label`, `Buy_Button`) → **this skill's domain**

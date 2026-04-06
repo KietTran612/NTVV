@@ -158,6 +158,12 @@ fontStyle:  Bold
 > [!WARNING]
 > `ButtonStyleEntry` and `FontStyleEntry` reference `_Suffix` functional children by NAME ONLY (string lookup) — the StyleApplier does NOT hold a reference to the component itself. This keeps the two systems decoupled.
 
+### LayoutStyleEntry (NEW)
+Apply aesthetic layout configurations defined in the Blueprint to existing Layout Groups.
+- **`LayoutConfig.Padding`**: Set [Left, Right, Top, Bottom].
+- **`LayoutConfig.Spacing`**: Set GAP between elements.
+- **Target**: Horizontal/VerticalLayoutGroup on the prefab root or specific child.
+
 ---
 
 ## Part 5: Applying Styles
@@ -249,10 +255,12 @@ Before calling a prefab "styled":
 
 ```
 1. @ui-blueprinting         → Analyzes design & creates blueprint (MANDATORY START)
-2. @ui-standardization      → Verifies naming + wiring (Functional Layer)
-3. @ui-visual-styling       → Adds decoration layer (THIS SKILL - Visual Layer)
+2. @ui-standardization      → Verifies naming + wiring (Functional Layer - SKELETON)
+3. @ui-visual-styling       → Adds decoration layer (Visual Layer - SKIN)
    a. Analyze user input (text/image/both)
-   b. Scaffold decorator children (bg_, shadow_...)
+   b. Apply Colors, Sprites, Fonts (Dosis + Material)
+   c. Apply Layout Specs (Padding, Spacing) from Blueprint
+   d. Scaffold decorator children (bg_, shadow_...)
    c. Create/update _StyleData.asset
    d. Assign to UIStyleApplier
    e. [Apply to Prefab NOW]
