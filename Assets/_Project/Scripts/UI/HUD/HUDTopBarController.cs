@@ -10,14 +10,15 @@ namespace NTVV.UI.HUD
     /// <summary>
     /// Controller for the Top HUD using uGUI.
     /// Manages data binding for Gold, XP, Level, and Storage.
+    /// Follows ui-standardization suffix naming conventions.
     /// </summary>
     public class HUDTopBarController : MonoBehaviour
     {
         [Header("UI References")]
-        [SerializeField] private TMP_Text _goldLabel;
-        [SerializeField] private TMP_Text _levelLabel;
-        [SerializeField] private TMP_Text _storageLabel;
-        [SerializeField] private Image _xpBarFill;
+        [SerializeField] private TMP_Text _gold_Label;
+        [SerializeField] private TMP_Text _level_Label;
+        [SerializeField] private TMP_Text _storage_Label;
+        [SerializeField] private Image _xp_Fill;
 
         private void OnEnable()
         {
@@ -44,22 +45,22 @@ namespace NTVV.UI.HUD
 
         private void UpdateGold(int amount)
         {
-            if (_goldLabel != null) _goldLabel.text = amount.ToString("N0");
+            if (_gold_Label != null) _gold_Label.text = amount.ToString("N0");
         }
 
         private void UpdateXP(int xp, int level)
         {
-            if (_levelLabel != null) _levelLabel.text = $"Level {level}";
+            if (_level_Label != null) _level_Label.text = $"Level {level}";
             
-            if (LevelSystem.Instance != null && _xpBarFill != null)
+            if (LevelSystem.Instance != null && _xp_Fill != null)
             {
-                _xpBarFill.fillAmount = LevelSystem.Instance.GetXPProgress();
+                _xp_Fill.fillAmount = LevelSystem.Instance.GetXPProgress();
             }
         }
 
         private void UpdateStorage(int used, int max)
         {
-            if (_storageLabel != null) _storageLabel.text = $"{used}/{max}";
+            if (_storage_Label != null) _storage_Label.text = $"{used}/{max}";
         }
     }
 }

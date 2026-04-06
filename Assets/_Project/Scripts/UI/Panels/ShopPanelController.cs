@@ -84,30 +84,29 @@ namespace NTVV.UI.Panels
         private void CreateShopItem(string id, string name, int cost, int unlockLevel, bool isSeed)
         {
             var go = Instantiate(_shopItemPrefab, _shopContentContainer);
-            
-            TMP_Text nameLabel = go.transform.Find("ItemName")?.GetComponent<TMP_Text>();
-            Button buyBtn = go.transform.Find("BuyButton")?.GetComponent<Button>();
-            TMP_Text priceLabel = buyBtn?.transform.Find("Text")?.GetComponent<TMP_Text>();
-            TMP_Text lockLabel = go.transform.Find("LockLabel")?.GetComponent<TMP_Text>(); // Optional: add LockLabel in Prefab
+            var entry = go.GetComponent<ShopEntryController>();
 
-            if (nameLabel != null) nameLabel.text = name;
-            if (priceLabel != null) priceLabel.text = $"{cost}g";
-
-            bool isUnlocked = (LevelSystem.Instance == null) || (LevelSystem.Instance.CurrentLevel >= unlockLevel);
-            
-            if (buyBtn != null)
+            if (entry == null)
             {
-                buyBtn.interactable = isUnlocked;
-                if (!isUnlocked)
-                {
-                    if (priceLabel != null) priceLabel.text = $"LVL {unlockLevel}";
-                }
+                Debug.LogError($"[Shop] Prefab {_shopItemPrefab.name} is missing ShopEntryController!");
+                return;
+            }
 
-                buyBtn.onClick.AddListener(() => {
+            Sprite icon = null; // Tạm thời dùng null, Asset thực tế sẽ được nạp sau
+            
+            bool isUnlocked = (LevelSystem.Instance == null) || (LevelSystem.Instance.CurrentLevel >= unlockLevel);
+
+            entry.Initialize(id, name, cost, icon, (clickedId) => {
+                if (isUnlocked)
+                {
                     if (isSeed) TryBuySeed(id, cost);
                     else TryBuyAnimal(id, cost);
-                });
-            }
+                }
+                else
+                {
+                    Debug.LogWarning($"[Shop] Item {name} is locked until level {unlockLevel}");
+                }
+            });
         }
 
         private void TryBuySeed(string cropId, int cost)

@@ -85,19 +85,21 @@ namespace NTVV.UI.Panels
             foreach (var item in items)
             {
                 ItemData data = GetItemData(item.Key);
-                string displayName = data != null ? data.itemName : item.Key;
-
-                var go = Instantiate(_itemCardPrefab, _storageContentContainer);
-                TMP_Text nameLabel = go.transform.Find("ItemName")?.GetComponent<TMP_Text>();
-                Button cardBtn = go.GetComponent<Button>();
-
-                if (nameLabel != null) nameLabel.text = $"{displayName} x{item.Value}";
                 
-                if (cardBtn != null) 
+                var go = Instantiate(_itemCardPrefab, _storageContentContainer);
+                var slot = go.GetComponent<InventorySlotController>();
+
+                if (slot == null)
                 {
-                    string capturedKey = item.Key;
-                    cardBtn.onClick.AddListener(() => SelectItem(capturedKey, data));
+                    Debug.LogError($"[Storage] Prefab {_itemCardPrefab.name} is missing InventorySlotController!");
+                    continue;
                 }
+
+                Sprite icon = null; // Sẽ được nạp từ Registry sau này
+                string capturedKey = item.Key;
+                ItemData capturedData = data;
+
+                slot.Initialize(capturedKey, item.Value, icon, (id) => SelectItem(id, capturedData));
             }
 
             if (StorageSystem.Instance != null)
