@@ -96,6 +96,17 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
     - Toàn bộ UI thiết kế trên **Canvas uGUI**.
     - Độ phân giải chuẩn: **1920x1080**.
     - Sử dụng `UIStyleApplier` để đồng bộ Font/Color.
+- **Tiêu chuẩn Đấu nối (Auto-Wiring Suffixes)**:
+    - Dự án áp dụng skill **`ui-standardization`** để đảm bảo liên kết bền vững và tự động hóa.
+    - **Các chức năng chính của Skill**:
+        1. **Ma trận Quyết định**: Tự động đánh giá nhu cầu sử dụng Controller cho từng Prefab.
+        2. **Chuẩn Hậu tố (Suffixes)**: Ép buộc đặt tên `_Label`, `_Icon`, `_Button`, `_Fill`, `_Content`.
+        3. **Recursive Auto-Wiring**: Dò tìm linh kiện đệ quy, chống đứt gãy link khi thay đổi hierarchy.
+        4. **Luồng Wiring Chuẩn**: Quy trình 6 bước từ Hierarchy đến Verification.
+        5. **Kiểm soát Styling**: Chặn font mặc định, tối ưu Raycast và Palette màu chuẩn.
+        6. **Event Binding qua Code**: Đăng ký `AddListener` cho Button thay vì dùng Inspector.
+        7. **Verification Checklist**: Bảng kiểm tra cuối cùng để loại bỏ 100% lỗi Null Reference.
+    - **Lợi ích**: Giúp code Editor có thể tự động "dò dây" và gán biến vào Inspector mà không cần kéo thả thủ công.
 
 ---
 
@@ -153,6 +164,10 @@ Dự án tuân thủ cấu trúc thư mục phẳng và nhất quán trong `Asse
 
 ## 📝 Nhật ký Cập nhật (Change Log)
 
+- **2026-04-06**:
+    - Chuẩn hóa hệ thống UI với skill **`ui-standardization`**.
+    - Nâng cấp `PrefabAssembler` với logic **Recursive Auto-Wiring** (Dò dây đệ quy theo hậu tố).
+    - Tạo bộ controller nguyên tử: `UIResourceChip`, `UINavButton`, `UIProgressBar`.
 - **2026-04-03**:
     - Tích hợp hệ thống **Managed Multi-Theme UI** (Đa chủ đề).
     - Thêm công cụ **Game Scene Initializer** để tự động thiết lập Scene.

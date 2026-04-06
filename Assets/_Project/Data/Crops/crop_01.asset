@@ -15,8 +15,8 @@ MonoBehaviour:
   itemId: crop_01
   itemName: "C\xE0 r\u1ED1t"
   unlockLevel: 1
-  Icon: {fileID: 0}
-  Prefab: {fileID: 0}
+  icon: {fileID: 21300000, guid: 33b9f4eba5fc74ac19f33b43a905d570, type: 3}
+  worldPrefab: {fileID: 0}
   data:
     cropId: crop_01
     cropName: "C\xE0 r\u1ED1t"
@@ -36,8 +36,13 @@ MonoBehaviour:
     perfectWindowMin: 1
     postRipeLifeMin: 3
     notes: "C\xE2y m\u1EDF \u0111\u1EA7u, quay v\xF2ng v\u1ED1n nhanh."
-  seedIcon: {fileID: 0}
-  cropIcon: {fileID: 0}
-  growthStagesPrefab: {fileID: 0}
+  growthStageSprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  deadSprite: {fileID: 0}
+  seedIcon: {fileID: 21300000, guid: 9e23abf3c00864291b38eebf3a5dc927, type: 3}
+  cropIcon: {fileID: 21300000, guid: 33b9f4eba5fc74ac19f33b43a905d570, type: 3}
   plantSfx: {fileID: 0}
   harvestSfx: {fileID: 0}

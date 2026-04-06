@@ -15,8 +15,8 @@ MonoBehaviour:
   itemId: crop_02
   itemName: "Khoai t\xE2y"
   unlockLevel: 1
-  Icon: {fileID: 0}
-  Prefab: {fileID: 0}
+  icon: {fileID: 21300000, guid: 33b9f4eba5fc74ac19f33b43a905d570, type: 3}
+  worldPrefab: {fileID: 0}
   data:
     cropId: crop_02
     cropName: "Khoai t\xE2y"
@@ -36,8 +36,13 @@ MonoBehaviour:
     perfectWindowMin: 1
     postRipeLifeMin: 4
     notes: "\u1ED4n \u0111\u1ECBnh, ph\xF9 h\u1EE3p giai \u0111o\u1EA1n \u0111\u1EA7u."
-  seedIcon: {fileID: 0}
-  cropIcon: {fileID: 0}
-  growthStagesPrefab: {fileID: 0}
+  growthStageSprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  deadSprite: {fileID: 0}
+  seedIcon: {fileID: 21300000, guid: 9e23abf3c00864291b38eebf3a5dc927, type: 3}
+  cropIcon: {fileID: 21300000, guid: 33b9f4eba5fc74ac19f33b43a905d570, type: 3}
   plantSfx: {fileID: 0}
   harvestSfx: {fileID: 0}

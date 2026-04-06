@@ -15,8 +15,8 @@ MonoBehaviour:
   itemId: animal_01
   itemName: "G\xE0"
   unlockLevel: 1
-  Icon: {fileID: 0}
-  Prefab: {fileID: 0}
+  icon: {fileID: 21300000, guid: aef8792528e4849e68422e619f518665, type: 3}
+  worldPrefab: {fileID: 0}
   data:
     animalId: animal_01
     animalName: "G\xE0"
@@ -28,6 +28,9 @@ MonoBehaviour:
     hungerIntervalHours: 24
     feedQtyGrass: 0
     feedQtyWorm: 1
+    produceItemId: 
+    produceTimeMin: 0
+    produceXp: 0
     lifetimeAfterMatureDays: 1
     stage1AgeDays: 1
     stage2AgeDays: 2
@@ -39,8 +42,13 @@ MonoBehaviour:
     xpStage2: 28
     xpStage3: 42
     notes: "Th\xFA m\u1EDF \u0111\u1EA7u; th\u1EE9c \u0103n ch\xEDnh l\xE0 s\xE2u."
-  animalIcon: {fileID: 0}
-  animalPrefab: {fileID: 0}
+  stageSprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  deadSprite: {fileID: 0}
+  readyToCollectIcon: {fileID: 0}
   sfxHappy: {fileID: 0}
   sfxHungry: {fileID: 0}
   sfxMature: {fileID: 0}
+  sfxCollect: {fileID: 0}

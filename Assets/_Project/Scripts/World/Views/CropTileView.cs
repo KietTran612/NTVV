@@ -183,9 +183,6 @@ namespace NTVV.World.Views
             if (_weedVisual != null) _weedVisual.SetActive(_hasWeeds);
             if (_bugVisual != null) _bugVisual.SetActive(_hasPests);
             if (_waterVisual != null) _waterVisual.SetActive(_needsWater);
-            
-            // Soil visual can change based on water
-            // if (_soilRenderer != null && _needsWater) ...
         }
 
         private void UpdateGrowthVisuals()
@@ -206,9 +203,14 @@ namespace NTVV.World.Views
                 var so = _registry.GetCrop(_currentCropData.cropId);
                 if (so != null)
                 {
+                    // Reset color to white by default
+                    _cropRenderer.color = Color.white;
+
                     if (_currentState == TileState.Dead)
                     {
                         _cropRenderer.sprite = so.deadSprite;
+                        // Fallback color for dead plant: Brown
+                        if (_cropRenderer.sprite == null) _cropRenderer.color = new Color(0.4f, 0.2f, 0f); 
                     }
                     else
                     {
@@ -217,8 +219,26 @@ namespace NTVV.World.Views
                         {
                             _cropRenderer.sprite = so.growthStageSprites[stageIdx];
                         }
+                        
+                        // Fallback Color Coding if sprite is missing
+                        if (_cropRenderer.sprite == null)
+                        {
+                            _cropRenderer.color = GetStageColor(_currentStage);
+                        }
                     }
                 }
+            }
+        }
+
+        private Color GetStageColor(GrowthStage stage)
+        {
+            switch (stage)
+            {
+                case GrowthStage.Phase1: return new Color(0.6f, 1f, 0.6f); // Light Green
+                case GrowthStage.Phase2: return new Color(0.2f, 0.8f, 0.2f); // Medium Green
+                case GrowthStage.Phase3: return new Color(0f, 0.5f, 0f);    // Dark Green
+                case GrowthStage.Ripe:   return new Color(1f, 0.8f, 0f);    // Gold
+                default: return Color.white;
             }
         }
 
@@ -232,7 +252,6 @@ namespace NTVV.World.Views
 
         private void HandleTick(float tickDelta)
         {
-            // Logic tick đã được tối giản để tập trung vào naming
             if (_currentState == TileState.Empty || _currentState == TileState.Dead) return;
             if (_currentCropData == null) return;
 
@@ -251,7 +270,7 @@ namespace NTVV.World.Views
             if (oldStage != _currentStage) UpdateGrowthVisuals();
 
             // Ailment Generation Logic
-            if (_currentState == TileState.Growing && UnityEngine.Random.value < 0.005f) // Small chance per tick
+            if (_currentState == TileState.Growing && UnityEngine.Random.value < 0.005f)
             {
                 if (!_hasWeeds && UnityEngine.Random.value < _currentCropData.weedChancePct) _hasWeeds = true;
                 if (!_hasPests && UnityEngine.Random.value < _currentCropData.bugChancePct) _hasPests = true;

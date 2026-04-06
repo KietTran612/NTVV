@@ -99,22 +99,44 @@ namespace NTVV.World.Views
 
         private void UpdateGrowthVisuals()
         {
-            if (_bodyRenderer == null || _registry == null) return;
-
-            var so = _registry.GetAnimal(_data.animalId);
-            if (so == null) return;
+            if (_bodyRenderer == null) return;
 
             if (_currentStage == GrowthStage.Dead)
             {
-                _bodyRenderer.sprite = so.deadSprite;
+                _bodyRenderer.color = Color.gray;
+                return;
             }
-            else
+
+            _bodyRenderer.color = Color.white;
+
+            if (_registry != null && _data != null)
             {
-                int stageIdx = (int)_currentStage;
-                if (so.stageSprites != null && stageIdx < so.stageSprites.Length)
+                var so = _registry.GetAnimal(_data.animalId);
+                if (so != null && so.stageSprites != null)
                 {
-                    _bodyRenderer.sprite = so.stageSprites[stageIdx];
+                    int idx = (int)_currentStage;
+                    if (idx < so.stageSprites.Length)
+                    {
+                        _bodyRenderer.sprite = so.stageSprites[idx];
+                    }
+
+                    // Fallback Color Coding if sprite is missing
+                    if (_bodyRenderer.sprite == null)
+                    {
+                        _bodyRenderer.color = GetStageColor(_currentStage);
+                    }
                 }
+            }
+        }
+
+        private Color GetStageColor(GrowthStage stage)
+        {
+            switch (stage)
+            {
+                case GrowthStage.Baby:   return new Color(1f, 0.8f, 0.8f); // Light Pink
+                case GrowthStage.Stage2: return new Color(1f, 0.6f, 0f);    // Orange
+                case GrowthStage.Mature: return new Color(1f, 0.4f, 0f);    // Deep Orange
+                default: return Color.white;
             }
         }
 
@@ -154,7 +176,6 @@ namespace NTVV.World.Views
         {
             if (!_isHungry) return;
 
-            // Logic ăn uống dùng chuẩn camelCase (itemId, feedQtyGrass, feedQtyWorm)
             bool hasGrass = _data.feedQtyGrass <= 0 || (StorageSystem.Instance.GetItemCount("item_grass") >= _data.feedQtyGrass);
             bool hasWorm = _data.feedQtyWorm <= 0 || (StorageSystem.Instance.GetItemCount("item_worm") >= _data.feedQtyWorm);
 
@@ -166,9 +187,7 @@ namespace NTVV.World.Views
                 _isHungry = false;
                 _hungerTimer = 0f;
 
-                // [Quest] Báo cáo cho ăn
                 NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.FeedAnimal, _data.animalId, 1);
-
                 Debug.Log($"<color=green>[Animal]</color> Fed {_data.animalName}");
                 RefreshVisuals();
             }
@@ -186,9 +205,7 @@ namespace NTVV.World.Views
                 _isReadyToProduce = false;
                 _productionTimer = 0f;
 
-                // [Quest] Báo cáo thu hoạch sản phẩm từ vật nuôi
                 NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.CollectProduct, _data.produceItemId, 1);
-
                 RefreshVisuals();
                 Debug.Log($"<color=cyan>[Production]</color> Collected product from {_data.animalName}");
             }

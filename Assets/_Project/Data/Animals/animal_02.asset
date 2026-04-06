@@ -15,8 +15,8 @@ MonoBehaviour:
   itemId: animal_02
   itemName: "V\u1ECBt"
   unlockLevel: 1
-  Icon: {fileID: 0}
-  Prefab: {fileID: 0}
+  icon: {fileID: 21300000, guid: aef8792528e4849e68422e619f518665, type: 3}
+  worldPrefab: {fileID: 0}
   data:
     animalId: animal_02
     animalName: "V\u1ECBt"
@@ -28,6 +28,9 @@ MonoBehaviour:
     hungerIntervalHours: 24
     feedQtyGrass: 1
     feedQtyWorm: 1
+    produceItemId: 
+    produceTimeMin: 0
+    produceXp: 0
     lifetimeAfterMatureDays: 1
     stage1AgeDays: 1
     stage2AgeDays: 3
@@ -40,8 +43,13 @@ MonoBehaviour:
     xpStage3: 62
     notes: "\u0102n h\u1ED7n h\u1EE3p, g\u1EAFn ch\u1EB7t v\u1EDBi loop ch\u0103m
       c\xE2y."
-  animalIcon: {fileID: 0}
-  animalPrefab: {fileID: 0}
+  stageSprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  deadSprite: {fileID: 0}
+  readyToCollectIcon: {fileID: 0}
   sfxHappy: {fileID: 0}
   sfxHungry: {fileID: 0}
   sfxMature: {fileID: 0}
+  sfxCollect: {fileID: 0}
