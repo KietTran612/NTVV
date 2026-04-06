@@ -103,9 +103,24 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
         2. **Chuẩn Hậu tố (Suffixes)**: Ép buộc đặt tên `_Label`, `_Icon`, `_Button`, `_Fill`, `_Content`.
         3. **Recursive Auto-Wiring**: Dò tìm linh kiện đệ quy, chống đứt gãy link khi thay đổi hierarchy.
         4. **Luồng Wiring Chuẩn**: Quy trình 6 bước từ Hierarchy đến Verification.
-        5. **Kiểm soát Styling**: Chặn font mặc định, tối ưu Raycast và Palette màu chuẩn.
-        6. **Event Binding qua Code**: Đăng ký `AddListener` cho Button thay vì dùng Inspector.
-        7. **Verification Checklist**: Bảng kiểm tra cuối cùng để loại bỏ 100% lỗi Null Reference.
+        5. **Event Binding qua Code**: Đăng ký `AddListener` cho Button thay vì dùng Inspector.
+        6. **Verification Checklist**: Bảng kiểm tra cuối cùng để loại bỏ 100% lỗi Null Reference.
+
+- **Hệ thống Trang trí Visual (UI Visual Styling)**:
+    - Dự án tách biệt tầng **Logic/Cấu trúc** và tầng **Trang trí/Visual** để đảm bảo an toàn khi bảo trì.
+    - **Công nghệ**: Sử dụng bộ đôi `UIStyleApplier` và `UIStyleDataSO` (ScriptableObject).
+    - **Quy tắc Naming Prefix**:
+        - `bg_`: Background/Panel.
+        - `shadow_`: Bóng đổ.
+        - `border_`: Viền trang trí.
+        - `overlay_`: Hiệu ứng phủ/Highlight.
+        - `fx_`: Hiệu ứng Glow/Sparkle.
+    - **Workflow**: 
+        1. AI phân tích Layout/Mockup. 
+        2. Tạo các Object tiền tố trang trí (không chạm vào object hậu tố chức năng). 
+        3. Tạo file `StyleData.asset` chứa thông tin Sprite/Color/Font.
+        4. Nhấn **Apply Style to Prefab NOW** để nạp visual trực tiếp vào Prefab.
+    - **Lợi ích**: Cho phép đổi Theme cực nhanh chỉ bằng cách hoán đổi file `StyleData.asset` mà không bao giờ làm hỏng code Controller.
     - **Lợi ích**: Giúp code Editor có thể tự động "dò dây" và gán biến vào Inspector mà không cần kéo thả thủ công.
 
 ### 🛡️ Chiến lược Thiết kế Prefab theo Theme (Variant Strategy)
@@ -116,11 +131,31 @@ Khi tạo một bản hiển thị (Visual) mới cho Theme:
 3. **Bảo vệ Cấu trúc (Structure Integrity)**: 
     - Có thể thay đổi vị trí (Transform) hoặc Sprite/Font/Color.
     - **KHÔNG** được đổi tên hoặc xóa các Object con có hậu tố chuẩn (`_Label`, `_Icon`) vì code Controller dựa vào các tên này để gán dữ liệu.
-4. **Đường dẫn Lưu trữ**: Lưu bản Variant vào đúng thư mục `Assets/_Project/Resources/UI/[ThemeName]/` với cùng tên file như bản gốc.
+4. **Quản lý Decorator**: Luôn sử dụng `UIStyleApplier` để quản lý các lớp `bg_`, `shadow_`. Nếu cần thêm lớp trang trí mới, hãy dùng đúng tiền tố quy định.
+5. **Đường dẫn Lưu trữ**: Lưu bản Variant vào thư mục `Assets/_Project/Resources/UI/[ThemeName]/` với cùng tên file như bản gốc.
 
 ---
 
-## 🏗 Lộ trình nâng cấp Addressables (Addressables Roadmap)
+## 🛠 Công cụ Editor & Tự động hóa (Automation Tools)
+
+### 1. PrefabAssembler (Công cụ lắp ráp Prefab)
+- **Cơ chế "Create or Verify"**: 
+    - Nếu Prefab chưa có: Tự động xây dựng hierarchy chuẩn và nối dây Controller.
+    - Nếu Prefab đã có: Chỉ kiểm tra và sửa lỗi các liên kết (Verify/Repair), tuyệt đối **không xóa** hoặc ghi đè các lớp trang trí (`bg_`, `shadow_`) mà bạn đã dày công thiết kế.
+- **Lợi ích**: Cho phép bạn chạy lại Tool để cập nhật script logic mà không làm "bay màu" thiết kế UI visual.
+
+### 2. Game Data Manager (Trung tâm Quản lý)
+- **Vị trí**: Menu `NTVV > Game Data Manager`.
+- **Chức năng**: Quản lý Crops, Animals, Quests, Themes tập trung.
+- **Tự động hóa**: Nút **Sync from JSON** để cập nhật toàn bộ database từ file nguồn.
+
+### 3. Game Scene Initializer (Setup Playtest)
+- **Menu**: `NTVV > Setup Full Game Scene`.
+- **Mục đích**: 1-Click để tạo Scene gameplay hoàn chỉnh. Tự động gắn Manager, Registry và UI Shell.
+
+### 4. Repair Registry Tool (Khôi phục liên kết)
+- **Menu**: `NTVV > UI > Restore Core Assets & Repair Registry`.
+- **Mục đích**: Tự động quét toàn bộ thư mục `Data/Configs/`, tìm kiếm và kết nối lại các file cấu hình bị mất vào Registry.
 
 Hệ thống UI hiện tại được thiết kế theo Interface `IUIAssetProvider` để dễ dàng nâng cấp lên **Unity Addressables** trong tương lai:
 
@@ -176,8 +211,10 @@ Dự án tuân thủ cấu trúc thư mục phẳng và nhất quán trong `Asse
 ## 📝 Nhật ký Cập nhật (Change Log)
 
 - **2026-04-06**:
+    - **Kiến trúc UI 2 Lớp**: Tách biệt Functional Layer (logic) và Decorator Layer (visual).
+    - Ra mắt hệ thống **`ui-visual-styling`** quản lý màu sắc, sprite, font qua ScriptableObject.
+    - Nâng cấp `PrefabAssembler` với logic **"Create or Verify"**, bảo vệ thiết kế visual khi chạy lại tool.
     - Chuẩn hóa hệ thống UI với skill **`ui-standardization`**.
-    - Nâng cấp `PrefabAssembler` với logic **Recursive Auto-Wiring** (Dò dây đệ quy theo hậu tố).
     - Tạo bộ controller nguyên tử: `UIResourceChip`, `UINavButton`, `UIProgressBar`.
 - **2026-04-03**:
     - Tích hợp hệ thống **Managed Multi-Theme UI** (Đa chủ đề).
