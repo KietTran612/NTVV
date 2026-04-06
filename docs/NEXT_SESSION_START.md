@@ -49,6 +49,14 @@ Chúng ta đang vận hành hệ thống UI theo mô hình tách biệt hoàn to
 - **Hệ thống Registry**: `Assets/_Project/Data/Registry/` (Trái tim dữ liệu tĩnh).
 - **Cấu hình Hệ thống**: `Assets/_Project/Data/Configs/` (Level, Storage, AnimalPen).
 
+### 4. Art & Artistic Assets (Tài nguyên Hình ảnh)
+- **Mockups (Pencil Files)**: `Design/*.pen` (Sử dụng công cụ `pencil` để đọc các file này).
+- **UI Sprites (Icons/Panels)**:
+  - `Assets/_Project/Art/Sprites/`
+  - `Assets/_Project/Textures/UI/`
+  - `Assets/_Project/UI/System/` (Các icon hệ thống).
+- **UI Textures**: `Assets/_Project/Textures/`
+
 ---
 
 ## 3. 🎯 Mục tiêu của Phiên làm việc mới
