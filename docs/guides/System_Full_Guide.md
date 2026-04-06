@@ -108,6 +108,16 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
         7. **Verification Checklist**: Bảng kiểm tra cuối cùng để loại bỏ 100% lỗi Null Reference.
     - **Lợi ích**: Giúp code Editor có thể tự động "dò dây" và gán biến vào Inspector mà không cần kéo thả thủ công.
 
+### 🛡️ Chiến lược Thiết kế Prefab theo Theme (Variant Strategy)
+
+Khi tạo một bản hiển thị (Visual) mới cho Theme:
+1. **Dùng Prefab Variant**: Luôn tạo **Prefab Variant** từ Prefab gốc trong thư mục `Default/`.
+2. **Kế thừa Logic**: Tuyệt đối không xóa hoặc thay thế Script Controller của bản gốc trên bản Variant.
+3. **Bảo vệ Cấu trúc (Structure Integrity)**: 
+    - Có thể thay đổi vị trí (Transform) hoặc Sprite/Font/Color.
+    - **KHÔNG** được đổi tên hoặc xóa các Object con có hậu tố chuẩn (`_Label`, `_Icon`) vì code Controller dựa vào các tên này để gán dữ liệu.
+4. **Đường dẫn Lưu trữ**: Lưu bản Variant vào đúng thư mục `Assets/_Project/Resources/UI/[ThemeName]/` với cùng tên file như bản gốc.
+
 ---
 
 ## 🏗 Lộ trình nâng cấp Addressables (Addressables Roadmap)
@@ -117,9 +127,10 @@ Hệ thống UI hiện tại được thiết kế theo Interface `IUIAssetProvi
 1. **Chuyển đổi Provider**: 
     - Thay thế `ResourcesUIProvider` bằng `AddressableUIProvider`.
     - `PopupManager` sẽ không cần thay đổi code logic vì cả hai đều dùng chung Interface.
-2. **Quản lý tài nguyên**:
-    - Các thư mục Theme sẽ được chuyển thành **Addressable Groups**.
-    - Sử dụng **Labels** (ví dụ: `Theme_Cartoon`, `Theme_Retro`) để lọc và tải tài nguyên theo cụm.
+2. **Quản lý tài nguyên theo Theme (Grouping Strategy)**:
+    - **Addressable Groups**: Mỗi Theme sẽ tương ứng với một Group riêng biệt (ví dụ: `Theme_Default`, `Theme_Cartoon`).
+    - **Labels**: Toàn bộ Prefab trong một Theme sẽ được gán Label tương ứng để AI có thể thực hiện **Batch Loading**.
+    - **Optimization**: Cách phân nhóm này cho phép người chơi chỉ tải Theme họ đang sử dụng, giúp giảm dung lượng cài đặt và RAM.
 3. **Luồng tải bất đồng bộ (Async Loading)**:
     - Phương thức `LoadPrefab` sẽ được chuyển thành `Task<GameObject>` hoặc sử dụng `AsyncOperationHandle`.
     - Giúp giảm thời gian treo máy khi chuyển Theme hoặc mở Popup lớn.

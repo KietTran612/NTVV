@@ -17,7 +17,7 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
 3.  **Hướng dẫn cài đặt máy mới**: `docs/guides/New_Machine_Setup.md`.
 
 ## 🎯 Trạng thái hiện tại & Bước tiếp theo
-- **Đã xong**: Quy hoạch dữ liệu tập trung (Registry). Thiết lập xong Skill chuẩn hóa UI và chiến lược 3 tầng cho AI. Sửa lỗi `.gitignore` để đẩy được Folder AI lên GitHub.
+- **Đã xong**: Quy hoạch dữ liệu tập trung (Registry). Thiết lập xong Skill chuẩn hóa UI và chiến lược 3 tầng cho AI. Cập nhật tài liệu hướng dẫn chuyên sâu về **Theme thiết kế (Prefab Variant)** và **Quy hoạch Addressables (Grouping per Theme)**.
 - **Cần làm ngay**: 
     1. Sử dụng skill **`@ui-standardization`** để xây dựng các Prefab thực tế cho `ShopEntry` và `InventorySlot`.
     2. Chạy Tool **NTVV > Setup > Assemble All Placeholders** để kiểm tra việc "Dò dây đệ quy" (Recursive Wiring) của PrefabAssembler.
@@ -26,4 +26,4 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hãy bắt đầu bằng cách đọc `.agent/skills/ui-standardization/SKILL.md` để nắm được quy tắc xây dựng UI, sau đó kiểm tra `docs/guides/New_Machine_Setup.md` để đảm bảo Pencil MCP đã được cài đặt đúng."
+> **Dành cho AI**: "Chào người bạn AI mới! Hãy bắt đầu bằng cách đọc `.agent/skills/ui-standardization/SKILL.md` để nắm được quy tắc xây dựng UI. Sau đó xem mục **🛡️ Chiến lược Thiết kế Prefab theo Theme** trong `docs/guides/System_Full_Guide.md` để biết cách tạo Variant đúng chuẩn và tối ưu cho Addressables."
