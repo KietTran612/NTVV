@@ -104,9 +104,30 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
     2.  **Giai đoạn 2: Standardization (`@ui-standardization`)**: 
         - **Hành động (Pure MCP)**: Agent tự tay xây dựng Hierarchy trong Unity bằng `gameobject-create`. Tự thực hiện gán Reference (Manual Wiring) qua `object-modify`.
         - **Đầu ra**: Prefab "sạch", linh hoạt và không có các script tự động hoá dư thừa.
-    3.  **Giai đoạn 3: Visual Styling (`@ui-visual-styling`)**: 
-        - **Dữ liệu**: Lấy palette từ `UIStyleDataSO.asset`.
-        - **Thực thi**: Agent gán nhãn `UIStyleApplier` và thực hiện Bake từ `UIStyleDataSO` thông qua các lệnh `object-modify` (Gán Material Dosis, Sprite, Color).
+    3.  **Giai đoạn 3. **Trang trí & Styling (`@ui-visual-styling`)**:
+   - **Mục tiêu**: Áp dụng thẩm mỹ (Skins) lên Prefab mà không làm hỏng logic.
+   - **Dữ liệu**: Sử dụng `UIStyleDataSO.asset` làm nguồn Palette và Font duy nhất.
+   - **Thực thi**: Agent gán nhãn `UIStyleApplier` và thực hiện lệnh "Bake" (gán Material Dosis, Sprite, Color) trực tiếp vào Prefab thông qua các lệnh MCP.
+
+---
+
+## 4. Quy trình Chế tác Asset "Nguyên tử" (Atomic Asset Production)
+
+Để HUD có chất lượng AAA nhưng vẫn linh hoạt, chúng ta không dùng một tấm ảnh bẹt (flat). Thay vào đó, AI sẽ sản xuất các thành phần rời rạc (Atomic Layers).
+
+### Bước 4.1: Tiêu chuẩn Structural Prompting (Template V1)
+Mọi yêu cầu tạo ảnh cho HUD NTVV PHẢI tuân thủ cấu trúc sau:
+`[asset type] for [use case], [view], [style anchors], [material], [background], [must avoid], [quality target]`
+
+-   **View**: Quan trọng nhất để giữ tính đồng nhất (Consistency).
+    -   *Nền (Background/Panel)*: `Straight Front View (Orthographic)` để hỗ trợ 9-slicing.
+    -   *Vật phẩm (Icon/Prop)*: `3D Isometric View (45-degree angle)` để tạo độ nổi khối.
+-   **Background**: Ưu tiên `TRANSPARENT BACKGROUND`. Nếu AI không đáp ứng tốt, dùng `Solid Cyan/Magenta` (Chroma Key) để tách nền sạch mà không mất Highlights (quầng sáng trắng).
+
+### Bước 4.2: Luồng xử lý Asset AI
+1.  **Generate**: Dùng Prompt Structure để tạo ảnh thô.
+2.  **Alpha Processing**: Viết/Dùng Script C# (hoặc tool ngoài) để tẩy trắng hoặc khử màu Chroma Key sang Alpha 0.
+3.  **Import & Metadata**: Nạp vào Unity, cài đặt `Sprite Mode: Single`, gán `Mesh Type: Full Rect` để tối ưu hóa 9-slicing.
 
 - **Tiêu chuẩn Đấu nối (Auto-Wiring Suffixes)**:
     - Dự án áp dụng skill **`ui-standardization`** để đảm bảo liên kết bền vững và tự động hóa.

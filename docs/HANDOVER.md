@@ -5,7 +5,8 @@ Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi b
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
 - **Phiên 07/04/2026 (Hiện tại)**:
     - **Xác lập Quy trình UI Pure MCP**: Chấm dứt kỷ nguyên tự động hoá "đoán mò" (`PrefabAssembler`). Agent chuyển sang tự tay xây dựng GameObjects và nối dây Reference qua MCP.
-    - **Thanh lọc Hệ thống**: Xoá bỏ hoàn toàn các Editor Tools cũ, giữ lại `UIStyleDataSO` làm trung tâm quản lý Theme.
+    - **Atomic HUD Rebirth**: Khởi động quy trình tái thiết kế HUD theo lớp "Nguyên tử" (Atomic Layers). Sử dụng AI để tự sản xuất Asset cực phẩm (Glossy 3D Kawaii).
+    - **Structural Prompting**: Thiết lập tiêu chuẩn Prompting `[asset type] for [use case]...` để kiểm soát chất lượng và góc nhìn (Perspective) đồng nhất.
 - **Phiên 06/04/2026**: Hoàn thiện quy trình UI 1-Click cũ (Legacy).
 - **Phiên 03/04/2026**: Hoàn tất quy hoạch lại cấu trúc dữ liệu (**Centralized Data Architecture**). Triển khai cơ chế **Self-Healing** giúp hệ thống tự động kết nối dữ liệu cấu hình.
 
@@ -20,9 +21,9 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
 ## 🎯 Trạng thái hiện tại & Bước tiếp theo
 - **Đã xong**: Quy hoạch dữ liệu, Self-Healing, và Kiến trúc UI Tự động hóa 100% bằng Unity MCP. Hoàn tất cẩm nang tích hợp UI chéo.
 - **Cần làm ngay**: 
-    1. Yêu cầu Agent thực thi tác vụ UI tự động mới để kiểm tra dòng lệnh `unity-skill-create`.
-    2. Đọc file `docs/guides/AI_UI_Integration_Methodology.md` để nắm quy trình truy vấn dữ liệu từ file `.pen`.
-    3. Thử nghiệm đổi Theme từ `Default` sang `Cartoon` để xem Decorator Layer hoạt động mượt mà ra sao.
+    1. Tiếp tục đúc bộ Asset HUD (Blue Button, Yellow Circle, Scroll, Icons) theo tiêu chuẩn **Structural Prompting**.
+    2. Viết Script `RemoveWhiteBackground.cs` (hoặc Chroma Key) để xử lý Asset thô sang Sprite trong suốt.
+    3. Đọc `docs/guides/AI_UI_Integration_Methodology.md` để nắm quy trình sản xuất Asset Atomic.
 
 ---
 

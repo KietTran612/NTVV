@@ -48,6 +48,17 @@ Dữ liệu tĩnh của Game (Static Data) được lưu trữ dưới dạng **
     - Nằm tại: `NTVV > Tools > Import Static Data`.
     - Cách hoạt động: Đọc JSON -> Tạo/Cập nhật các file `.asset` tương ứng -> Tự động đăng ký chúng vào `GameDataRegistry`.
 
+### 📂 UI Assets & Metadata Standards
+Để hỗ trợ hệ thống Atomic HUD, mọi UI Sprite nạp vào Unity phải tuân thủ:
+-   **Naming**: Hậu tố `_Atomic` cho các layer thô (ví dụ: `bg_Button_Green_Atomic`).
+-   **Góc nhìn (Perspective)**: 
+    -   Nền (Background): **Frontal Orthographic** (Không biến dạng phối cảnh).
+    -   Icons: **Isometric** (Góc 45 độ top-down).
+-   **Import Settings**: 
+    -   `Texture Type: Sprite (2D and UI)`.
+    -   `Mesh Type: Full Rect` (Yêu cầu bắt buộc để 9-slicing hoạt động chính xác trên các góc bo tròn AI).
+    -   `Alpha Source: Input Texture Alpha` (Nếu đã tách nền).
+
 ---
 
 ## 🔄 4. Quy trình Nạp & Khởi tạo (Initialization Flow)
