@@ -13,13 +13,13 @@ Dự án NTVV sử dụng hệ thống AI và Skill tùy chỉnh qua Antigravity
 ## 2. Thiết lập AI (Antigravity/Gemini) - QUAN TRỌNG
 
 ### 2.1 Cài đặt MCP Servers
-Phần lớn các công cụ thiết kế của AI (đọc file `.pen`, xử lý UI chuyên sâu) nằm trong MCP Server `pencil`. 
+Phần lớn các công cụ thao tác của AI và kết xuất đồ họa đều chạy thông qua MCP Servers.
 > [!IMPORTANT]
-> **Hướng dẫn cài đặt Pencil MCP:**
-> 1. Mở phần **Settings** trong Antigravity/Gemini.
-> 2. Tìm đến mục **MCP Servers**.
-> 3. Cài đặt Server có tên là **`pencil`**.
-> 4. Kiểm tra trạng thái: Server phải hiển thị trạng thái "Connected" (Đã kết nối).
+> **Hướng dẫn cài đặt Core MCPs:**
+> 1. Mở phần **Settings** trong Antigravity/Gemini -> **MCP Servers**.
+> 2. Cài đặt Server **`pencil`**: (Công cụ mổ xẻ file Mockup UI `.pen`).
+> 3. Cài đặt Server **`ai-game-developer`**: (Công cụ kết nối Unity Editor API và sinh lệnh C# `unity-skill-create`).
+> 4. Kiểm tra: Cả 2 Server phải hiển thị "Connected".
 
 ### 2.2 Đồng bộ Skills & Prompt Keys
 Vì thư mục `.agent/` và `.antigravity/` đã được push lên GitHub, AI sẽ tự động đọc được các Skill sau khi bạn `git pull`.

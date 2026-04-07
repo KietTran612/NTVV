@@ -100,19 +100,17 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
     Dự án áp dụng quy trình 3 giai đoạn để đảm bảo 100% độ chính xác và tính Responsive:
     1.  **Giai đoạn 1: Blueprinting (Kiến trúc)**: 
         - **Skill**: `@ui-blueprinting`.
-        - **Cách dùng**: Cung cấp file `.pen`, ảnh screenshot hoặc mô tả văn bản (VD: "Bảng này có 3 cột, tự co giãn").
-        - **Đầu ra**: Bản thiết kế chi tiết (Blueprint) chứa: Cấu trúc Layout (Grid/Vertical), Ràng buộc kích thước (Min/Max size), Màu sắc Hex, Font Dosis & Material Preset.
-        - **Lưu ý**: **Dừng lại để người dùng duyệt Blueprint** trước khi sang bước tiếp theo.
+        - **Cách dùng**: Cung cấp file `.pen`, ảnh screenshot. AI dùng `pencil.batch_get` và tên reference từ `docs\document_md` để bắt chéo dữ liệu Layout (Grid/Vertical), Constraints, Màu, Font Dosis.
+        - **Đầu ra**: Bản thiết kế chi tiết (Blueprint) kèm Node ID chính xác.
     2.  **Giai đoạn 2: Standardization (Xây dựng - Builder)**: 
         - **Skill**: `@ui-standardization`.
-        - **Công cụ**: `PrefabAssembler.cs` (MenuItem: NTVV > Setup > Assemble All).
-        - **Đầu ra**: Xây dựng hierarchy chức năng, đặt tên hậu tố chuẩn (`_Label`, `_Button`).
-        - **Mới (V2.1)**: **Semantic Labeling** - Tool sẽ tự động nhận diện tên để gán `StyleType` tương ứng vào `UIStyleApplier`. Đảm bảo có `CanvasRenderer` cho mọi linh kiện.
+        - **Công cụ**: YÊU CẦU AI SỬ DỤNG `unity-skill-create` (Nếu chưa có tool). Tool đó sinh mã C# để xây hierarchy chuẩn, nối dây reference và đánh `Semantic Labeling` ngay trong Inspector.
+        - **Đầu ra**: Prefab hoàn thiện liên kết Logic (Functional Layer) mà không cần người dùng click nút "Assemble".
     3.  **Giai đoạn 3: Visual Styling (Trang trí - Stylist)**: 
         - **Skill**: `@ui-visual-styling`.
-        - **Công cụ**: Menu **`NTVV > Styling > Apply Visual Styles`**.
-        - **Đầu ra**: Nạp visual dựa trên các thông số từ Blueprint và Theme Asset (`UIStyleDataSO`).
-        - **Bảo trì**: Khi sửa đổi Prefab, chỉ cần chạy lại Giai đoạn 2 để "Verifiy & Repair" mà không làm hỏng thiết kế đã làm ở Giai đoạn 3.
+        - **Công cụ**: YÊU CẦU AI SỬ DỤNG MCP Tool bằng C# để can thiệp API Unity Bake Visual thẳng vào Prefab. Không có click tay `Apply Visual Styles`.
+        - **Đầu ra**: Dữ liệu màu, bóng đổ được nạp vào `UIStyleDataSO` và truyền qua API Unity tạo ra thành phẩm.
+        - **Bảo trì**: Tool C# của AI chạy lại tự động "Verify & Repair" không làm hỏng visual.
 
 - **Tiêu chuẩn Đấu nối (Auto-Wiring Suffixes)**:
     - Dự án áp dụng skill **`ui-standardization`** để đảm bảo liên kết bền vững và tự động hóa.
@@ -134,11 +132,11 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
         - `overlay_`: Hiệu ứng phủ/Highlight.
         - `fx_`: Hiệu ứng Glow/Sparkle.
     - **Workflow**: 
-        1. AI phân tích Layout/Mockup. 
-        2. Tạo các Object tiền tố trang trí (không chạm vào object hậu tố chức năng). 
-        3. Tạo file `StyleData.asset` chứa thông tin Sprite/Color/Font.
-        4. Nhấn **Apply Style to Prefab NOW** để nạp visual trực tiếp vào Prefab.
-    - **Lợi ích**: Cho phép đổi Theme cực nhanh chỉ bằng cách hoán đổi file `StyleData.asset` mà không bao giờ làm hỏng code Controller.
+        1. AI dùng `batch_get` để trích xuất file Layout Mockup, đối chiếu tên bằng `docs\document_md`.
+        2. Sinh các Object tiền tố trang trí (không chạm Object Logic). 
+        3. Tạo file `StyleData.asset` chứa hệ điều hành Sprite/Color/Font.
+        4. Gọi API Unity bằng Script C# sinh bằng `unity-skill-create` để nạp Visual.
+    - **Lợi ích**: Workflow Tự Động Kín. Rủi ro lỗi hỏng Reference biến mất hoàn toàn. Cho phép đổi Theme chớp nhoáng (Swap ScriptableObject).
     - **Lợi ích**: Giúp code Editor có thể tự động "dò dây" và gán biến vào Inspector mà không cần kéo thả thủ công.
 
 ### 🛡️ Chiến lược Thiết kế Prefab theo Theme (Variant Strategy)
@@ -239,6 +237,9 @@ Dự án tuân thủ cấu trúc thư mục phẳng và nhất quán trong `Asse
 
 ## 📝 Nhật ký Cập nhật (Change Log)
 
+- **2026-04-07**:
+    - Xác lập Giao thức Đọc File `.pen` khổng lồ bằng Regex (Pencil Server) và tra chéo ID ngầm qua tài liệu `document_md`.
+    - Chuyển quyền Tự Hành Trọn Trình 100% cho AI trong cả 3 Skill UI (Architect, Builder, Stylist) thông qua sức mạnh sinh Tools Editor API của `unity-skill-create`.
 - **2026-04-06**:
     - Ra mắt kĩ năng **`ui-blueprinting`** (Kiến trúc sư) giúp phân tích Mockup và Ảnh chính xác trước khi thực thi.
     - Thiết lập **Kiến trúc UI 2 Lớp**: Tách biệt Functional Layer (logic) và Decorator Layer (visual).

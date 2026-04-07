@@ -175,15 +175,20 @@ Apply aesthetic layout configurations defined in the Blueprint to existing Layou
 3. Iterates `buttonEntries` → finds Button by child name → sets ColorBlock
 4. Iterates `fontEntries` → finds TMP_Text by child name → sets font/size/style
 
-### Editor Bake (Apply to Prefab NOW)
-Right-click the `UIStyleApplier` component in Inspector → **"Apply Style to Prefab NOW"**
+### Editor Bake (Automated via MCP Tool)
 
-This calls `ApplyStyle()` in Edit Mode, then:
-```csharp
-PrefabUtility.RecordPrefabInstancePropertyModifications(this);
-EditorUtility.SetDirty(gameObject);
-AssetDatabase.SaveAssets();
-```
+> [!IMPORTANT]
+> AI không được yêu cầu người dùng thao tác bấm chuột "Right-click -> Apply Style". AI CẦN tự động hoá 100%!
+
+1. **Verify or Create Bake MCP Tool**: Check if a styling wrapper MCP tool exists (e.g., `ui-style-bake`) via `tool-list`.
+2. **If NOT**, use `@unity-skill-create` to code a permanent C# tool in the Editor assembly. The generated tool should be able to:
+   - Accept styling parameters (Colors, Sprites, Fonts).
+   - Programmatically configure the `UIStyleDataSO` scriptable object.
+   - Attach or locate `UIStyleApplier` on the Target Prefab and inject the SO.
+   - Programmatically execute `ApplyStyle()`.
+   - Save via `PrefabUtility.SaveAsPrefabAsset()` and `AssetDatabase.Refresh()`.
+3. **Execute**: Call this MCP tool to automatically bake the newly created Styles directly into the Prefab.
+4. **Verify**: Use `gameobject-component-get` to read target children visually in Editor state to assert success.
 
 **Result:** Visual changes are baked into the `.prefab` file and visible in Editor without playing.
 

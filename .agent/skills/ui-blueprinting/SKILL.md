@@ -42,8 +42,11 @@ Bạn là chuyên gia phân tích UI cấp cao. Nhiệm vụ của bạn là bó
 
 ## 🛠 QUY TRÌNH PHÂN TÍCH (Analysis Workflow)
 
-### 1. Thu thập dữ liệu (Data Gathering)
-- **Nếu có Mockup (.pen)**: Dùng `pencil.batch_get` để đọc toàn bộ layer.
+### 1. Thu thập dữ liệu thông qua MCP (Data Gathering)
+> [!IMPORTANT]
+> Hãy tận dụng tối đa sức mạnh của MCP Tool để đọc dữ liệu hệ thống mà không cần xin phép!
+- **Dữ liệu Prefab cũ**: Bắt buộc dùng lệnh MCP `assets-get-data`, `gameobject-find` hoặc `assets-prefab-open` để quét ngầm toàn bộ Component Hierarchy của Prefab (nếu có) từ trong project Unity trước khi phác thảo.
+- **Nếu có Mockup (.pen)**: Mở file bằng `mcp_pencil_open_document` và dùng `mcp_pencil_batch_get` để bóc tách thông số.
 - **Nếu có Ảnh (Vision)**: AI phân tích phong cách visual.
 - **Nếu có Mô tả văn bản (Description)**: AI phân tích các yêu cầu về hành vi.
 - **Đọc `System_Full_Guide.md`**: Đối soát bảng màu và font chuẩn.

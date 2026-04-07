@@ -156,14 +156,18 @@ Can I rename the child object?
 ```
 ## Part 3: Controller Wiring Workflow
 
-Follow this sequence for every new prefab:
+Follow this sequence for every prefab, **using MCP Automation**:
 
-1. Build hierarchy - Create all child GameObjects with full descriptive suffix names (e.g. `Price_Label`)
-2. Add Controller to root (if needed per Decision Matrix)
-3. Add [SerializeField] for each linkable child in Controller
-4. Wire in code - Use FindNamed<T>() in Awake() OR use PrefabAssembler for Editor-time wiring
-5. Register events - Use button.onClick.AddListener() in code, NOT Inspector drag-drop
-6. Verify - Open prefab in Unity, check Inspector for null references (None fields = fail)
+> [!IMPORTANT]
+> Xóa bỏ cách làm "hướng dẫn người dùng làm tay". AI phải tự động thao tác bằng MCP Tool!
+
+1. **Build hierarchy & Controller**: Create all child GameObjects with suffix names and attach Controller if needed.
+2. **Wire Components (via MCP)**: 
+   - **MANDATORY**: AI must proactively verify if a dedicated C# MCP Tool for standardization (e.g., `mcp-tool: ui-prefab-assemble`) exists via `tool-list`.
+   - **If NOT**, use `@unity-skill-create` to generate a resident C# tool inside Unity Editor that parses Prefab root, renames elements to suffix conventions, and applies SerializeField mappings via `Undo.RecordObject` and `PrefabUtility.SaveAsPrefabAsset()`. 
+   - Once the tool exists, call it to wire the Inspector.
+3. Register code events via `AddListener()` in C#.
+4. **Auto-Verify**: Do NOT ask the user to open Unity to check the Inspector. Use `gameobject-component-get` on the Controller to read the `objectReferenceValue` of its SerializedFields and assert no Null references exist!
 
 ## Part 4: Styling Requirements
 
