@@ -175,22 +175,20 @@ Apply aesthetic layout configurations defined in the Blueprint to existing Layou
 3. Iterates `buttonEntries` → finds Button by child name → sets ColorBlock
 4. Iterates `fontEntries` → finds TMP_Text by child name → sets font/size/style
 
-### Editor Bake (Automated via MCP Tool)
+## Part 5: Applying Styles (Pure MCP)
+
+### Editor Bake (Manual AI Execution)
 
 > [!IMPORTANT]
-> AI không được yêu cầu người dùng thao tác bấm chuột "Right-click -> Apply Style". AI CẦN tự động hoá 100%!
+> Tuyệt đối không cần code tool C# phức tạp. AI thực hiện cấu hình và "Bake" trực tiếp!
 
-1. **Verify or Create Bake MCP Tool**: Check if a styling wrapper MCP tool exists (e.g., `ui-style-bake`) via `tool-list`.
-2. **If NOT**, use `@unity-skill-create` to code a permanent C# tool in the Editor assembly. The generated tool should be able to:
-   - Accept styling parameters (Colors, Sprites, Fonts).
-   - Programmatically configure the `UIStyleDataSO` scriptable object.
-   - Attach or locate `UIStyleApplier` on the Target Prefab and inject the SO.
-   - Programmatically execute `ApplyStyle()`.
-   - Save via `PrefabUtility.SaveAsPrefabAsset()` and `AssetDatabase.Refresh()`.
-3. **Execute**: Call this MCP tool to automatically bake the newly created Styles directly into the Prefab.
-4. **Verify**: Use `gameobject-component-get` to read target children visually in Editor state to assert success.
+1. **Configure Style Data**: Sử dụng `assets-get-data` và `assets-modify` để cập nhật file `_StyleData.asset` (màu sắc, sprites).
+2. **Apply to Prefab**: 
+   - Sử dụng tool `ui-prefab-style` (MCP) để kích hoạt quá trình Apply dữ liệu từ SO vào linh kiện.
+   - Hoặc thủ công dùng `object-modify` gán trực tiếp thuộc tính vào các linh kiện `bg_`, `shadow_`.
+3. **Save**: Gọi `assets-prefab-save` để lưu lại thay đổi.
 
-**Result:** Visual changes are baked into the `.prefab` file and visible in Editor without playing.
+**Result:** Thiết kế visual được lưu cứng (Persistent) trong Prefab.
 
 ---
 
@@ -206,40 +204,14 @@ To add a new theme (e.g., Cartoon):
 
 ---
 
-## Part 7: PrefabAssembler — Create or Verify Rule
-
-When this skill needs to work with PrefabAssembler, enforce this rule:
-
-**If the prefab file already exists → VERIFY mode only:**
-```csharp
-var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-if (existing == null)
-    CreateFromScratch(path);    // First time only
-else
-    VerifyAndRepairLinks(existing, path);  // NEVER rebuild structure
-```
-
-**VerifyAndRepairLinks must:**
-- Check each `[SerializeField]` on the Controller
-- If null → search by exact child name → re-wire → LogWarning
-- If child not found → LogWarning only, do NOT create structure
-- NEVER delete or recreate any existing children (functional OR decorator)
-
----
-
-## Part 8: Safety Verification Checklist
-
-Before calling a prefab "styled":
-
 - [ ] All decorator children use correct prefix (`bg_`, `shadow_`, `border_`, `overlay_`, `fx_`)
 - [ ] Decorator children are in correct render order (bg_ first, overlay_ last)
 - [ ] `UIStyleApplier` component is on the prefab root
 - [ ] `_styleData` field on UIStyleApplier is NOT null
-- [ ] All `_Suffix` Controller links are STILL intact (open prefab, check Inspector = no None fields)
-- [ ] [Apply to Prefab NOW] has been run — visual results visible in Editor without Play
-- [ ] Font is **Dosis** (Check `Assets/_Project/Fonts/Dosis/` for correct asset)
-- [ ] Button ColorBlock has been set (not all white default)
-- [ ] StyleData saved to correct theme folder (`Data/UI/Styles/Default/` or theme subfolder)
+- [ ] All `_Suffix` Controller links are STILL intact
+- [ ] Bake đã được thực hiện và lưu lại (`assets-prefab-save`)
+- [ ] Font là **Dosis** (Check Material Outline tương ứng)
+- [ ] Button ColorBlock đã được set
 
 ---
 

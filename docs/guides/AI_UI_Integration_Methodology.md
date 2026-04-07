@@ -24,16 +24,22 @@ Khi xử lý một file mockup `.pen` chứa toàn bộ các màn hình và vô 
 
 ---
 
-## 3. Hệ thống Hóa - Tự động hóa UI 3 Lớp (UI Automation Tiers)
+## 3. Quy trình 3 Bước Cốt lõi (3-Step Skill Pipeline)
 
-Đó là cách AI thu thập input đầu vào. Còn về phần nhào nặn ra sản phẩm đầu ra (Unity Prefab), hệ thống NTVV tuân theo quy chuẩn tự động hóa 3 lớp (3 UI Skills cốt lõi) được cấp quyền điều khiển MCP:
+Hệ thống NTVV vận hành dựa trên 3 Skill chuyên biệt để đảm bảo tính nhất quán từ thiết kế đến thực tế. Mọi thành viên (AI Agent) phải tuân thủ nghiêm ngặt lộ trình này:
 
-1. **`@ui-blueprinting` (Khảo sát)** 
-   Sử dụng lệnh `assets-prefab-open` hoặc `gameobject-find` để tàng hình quét cấu trúc gốc rễ của Prefab cũ đang ở trong Unity, kết hợp với Mockup .pen mới để vạch ra thiết kế Cấu trúc Node (Blueprint). Không đoán mò.
-2. **`@ui-standardization` (Chuẩn hóa Cấu trúc xương / Controller)**
-   Tuyệt đối không bắt người dùng click nối dây. AI phải gọi công cụ mã C# sẵn có (`mcp-tool: ui-prefab-assemble`) để chẩn đoán hệ thống tên, tự động Set Reference (SerializedField) qua Inspector. (Nếu tool C# chưa tồn tại, AI phải nảy số sử dụng lệnh `unity-skill-create` sinh ra tool đó luôn).
-3. **`@ui-visual-styling` (Baking Visual & Decorator)**
-   Mọi hiệu ứng thị giác (Sprites, Mũi tô màu, Thay đổi Dosis Font) phải được tiêm tự động. Dùng `unity-skill-create` để sinh lệnh Fake-Bake (chuyển các tham số thành `UIStyleDataSO`) và nạp nó vào `UIStyleApplier.ApplyStyle()` và bắt API Unity tự lưu lại Prefab (SaveAsPrefabAsset). 
+1. **Phân tích Blueprint (`@ui-blueprinting`)**:
+   - **Mục tiêu**: Bóc tách layout, màu sắc và font chữ từ Mockup `.pen`.
+   - **Thực thi**: Agent sử dụng `mcp_pencil_batch_get` để lấy thông số kỹ thuật (Hex, Padding, Spacing) và lập bản thiết kế chi tiết (Blueprint).
+
+2. **Chuẩn hoá & Nối dây (`@ui-standardization`)**:
+   - **Mục tiêu**: Xây dựng Hierarchy chuẩn và kết nối linh kiện vào Controller C#.
+   - **Hành động (Pure MCP)**: Agent trực tiếp sử dụng lệnh `gameobject-create` để xây dựng cấu trúc và `object-modify` để nối dây các SerializedField trong Inspector. Tuyệt đối không dùng các script tự động "đoán mò".
+
+3. **Trang trí & Styling (`@ui-visual-styling`)**:
+   - **Mục tiêu**: Áp dụng thẩm mỹ (Skins) lên Prefab mà không làm hỏng logic.
+   - **Dữ liệu**: Sử dụng `UIStyleDataSO.asset` làm nguồn Palette và Font duy nhất.
+   - **Thực thi**: Agent gán nhãn `UIStyleApplier` và thực hiện lệnh "Bake" (gán Material Dosis, Sprite, Color) trực tiếp vào Prefab thông qua các lệnh MCP.
 
 ---
 *(Tài liệu này được tạo ra làm dấu mốc cho việc chuyển giao từ AI "Tư vấn" sang AI "Tự vận hành toàn trình" trong dự án NTVV. Cập nhật lần cuối: 2026-04-07).*

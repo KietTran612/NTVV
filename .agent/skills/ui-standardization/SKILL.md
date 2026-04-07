@@ -24,7 +24,7 @@ Prevent "Dead Prefabs" and broken Inspector links. This skill standardizes how U
 
 **Prerequisite**: Must be executed AFTER **`@ui-blueprinting`** has defined the layout and hierarchy blueprint.
 
-**Core Rule**: This skill and its tool (`PrefabAssembler.cs`) are for **STRUCTURAL ASSEMBLY** and **WIRING** only.
+**Core Rule**: This skill is for **STRUCTURAL ASSEMBLY** and **WIRING** only, executed through **Pure MCP Tools** (`gameobject-create`, `gameobject-find`, `object-modify`).
 - DO NOT set Padding, Spacing, or Colors here.
 - DO NOT apply Sprites or Fonts (except for basic Dosis assignment).
 - These aesthetic properties are the domain of **`@ui-visual-styling`**.
@@ -93,22 +93,10 @@ void Awake()
 // _priceLabel = FindBySuffix<TMP_Text>("_Label"); // finds FIRST _Label, not Price_Label
 ```
 
-In Editor Tools (PrefabAssembler pattern):
+In Pure MCP Workflow (Manual Assignment):
 
-```csharp
-private static T FindInHierarchy<T>(Transform root, string exactName) where T : Component
-{
-    foreach (Transform child in root.GetComponentsInChildren<Transform>(true))
-        if (child.name == exactName)
-            return child.GetComponent<T>();
-    return null;
-}
-
-// Usage inside UpgradePrefab<T>()
-so.FindProperty("_priceLabel").objectReferenceValue =
-    FindInHierarchy<TMP_Text>(instance.transform, "Price_Label");
-so.ApplyModifiedProperties(); // NEVER forget this line
-```
+1. **Find component**: Use `gameobject-find` to locate the child object (e.g., `Price_Label`).
+2. **Assign to Controller**: Use `object-modify` on the Controller component to set the field's `objectReferenceValue` to the child's instance.
 
 
 ## Part 2b: Component Resolution Strategy (3-Tier)
@@ -154,20 +142,19 @@ Can I rename the child object?
               YES → Use Tier 2 (GetComponentInChildren)
               NO  → Use Tier 3 (hard-coded path + LEGACY comment)
 ```
-## Part 3: Controller Wiring Workflow
+## Part 3: Controller Wiring Workflow (Pure MCP)
 
-Follow this sequence for every prefab, **using MCP Automation**:
+Follow this sequence for every prefab, **using MCP Commands**:
 
 > [!IMPORTANT]
-> Xóa bỏ cách làm "hướng dẫn người dùng làm tay". AI phải tự động thao tác bằng MCP Tool!
+> Tuyệt đối không dùng Tool tự động hoá "đoán mò". AI thực hiện nối dây trực tiếp qua MCP!
 
-1. **Build hierarchy & Controller**: Create all child GameObjects with suffix names and attach Controller if needed.
+1. **Build hierarchy & Controller**: Create all child GameObjects with suffix names.
 2. **Wire Components (via MCP)**: 
-   - **MANDATORY**: AI must proactively verify if a dedicated C# MCP Tool for standardization (e.g., `mcp-tool: ui-prefab-assemble`) exists via `tool-list`.
-   - **If NOT**, use `@unity-skill-create` to generate a resident C# tool inside Unity Editor that parses Prefab root, renames elements to suffix conventions, and applies SerializeField mappings via `Undo.RecordObject` and `PrefabUtility.SaveAsPrefabAsset()`. 
-   - Once the tool exists, call it to wire the Inspector.
+   - Sử dụng `gameobject-find` để lấy thông tin các linh kiện.
+   - Sử dụng `object-modify` để gán linh kiện vào các SerializedField của Controller.
 3. Register code events via `AddListener()` in C#.
-4. **Auto-Verify**: Do NOT ask the user to open Unity to check the Inspector. Use `gameobject-component-get` on the Controller to read the `objectReferenceValue` of its SerializedFields and assert no Null references exist!
+4. **Auto-Verify**: Sử dụng `gameobject-component-get` trên Controller để kiểm tra xem các field đã được gán đầy đủ chưa (không còn Null).
 
 ## Part 4: Styling Requirements
 
@@ -194,11 +181,10 @@ Before calling any prefab "done":
 
 - [ ] Root has correct Controller (or none if decorative)
 - [ ] All data/interaction children use full descriptive suffix naming (e.g. Price_Label)
-- [ ] No None references in Inspector
+- [ ] No None references in Inspector (Verified via MCP)
 - [ ] onClick listeners registered in code, not Inspector
 - [ ] Font is **Dosis** (Check `Assets/_Project/Fonts/Dosis/` for correct asset)
-- [ ] ApplyModifiedProperties() called after SerializedObject changes in Editor code
-- [ ] PrefabUtility.SaveAsPrefabAsset() called after editing in Editor tool
+- [ ] Prefab saved via MCP (`assets-prefab-save`)
 
 ## Common Mistakes
 

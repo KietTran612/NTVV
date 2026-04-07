@@ -4,21 +4,17 @@ Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi b
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
 - **Phiên 07/04/2026 (Hiện tại)**:
-    - Nâng cấp **Toàn diện Hệ thống Tự Động Hóa UI bằng MCP**: Ép buộc hệ thống sử dụng thư viện MCP `unity-skill-create` để sinh ra Script hoạt động ngầm. Chấm dứt kỷ nguyên "AI bảo lập trình viên bấm tay".
-    - Ra mắt **Phương pháp luận tích hợp mới**: Công bố cẩm nang định vị chéo dữ liệu UI đồ họa khổng lồ thông qua `pencil.batch_get` regex và tham chiếu doc gốc.
-- **Phiên 06/04/2026**: 
-    - Hoàn thiện **Automated Semantic Labeling** trên PrefabAssembler.
-    - Ra mắt quy trình UI 1-Click thủ công và Kiến trúc UI 2 lớp (Functional/Decorator).
+    - **Xác lập Quy trình UI Pure MCP**: Chấm dứt kỷ nguyên tự động hoá "đoán mò" (`PrefabAssembler`). Agent chuyển sang tự tay xây dựng GameObjects và nối dây Reference qua MCP.
+    - **Thanh lọc Hệ thống**: Xoá bỏ hoàn toàn các Editor Tools cũ, giữ lại `UIStyleDataSO` làm trung tâm quản lý Theme.
+- **Phiên 06/04/2026**: Hoàn thiện quy trình UI 1-Click cũ (Legacy).
 - **Phiên 03/04/2026**: Hoàn tất quy hoạch lại cấu trúc dữ liệu (**Centralized Data Architecture**). Triển khai cơ chế **Self-Healing** giúp hệ thống tự động kết nối dữ liệu cấu hình.
 
 ## 🗺 Bản đồ Hệ thống (System Map)
 Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầu não" mới:
 1.  **Dữ liệu Tập trung & Cấu hình**: `GameDataRegistry.asset` và thư mục `Assets/_Project/Data/Configs/`.
-2.  **Tiêu chuẩn Tự động hóa UI (Architect, Builder, Stylist) qua MCP**:
-    - `docs/guides/AI_UI_Integration_Methodology.md`: Kim chỉ nam bắt buộc về chiến lược tìm kiếm và tích hợp UI.
-    - `.agent/skills/ui-blueprinting/SKILL.md`: Kiến trúc sư - Dùng `mcp_pencil_batch_get` thu thập dữ liệu và quét Prefab.
-    - `.agent/skills/ui-standardization/SKILL.md`: Thợ xây - Gọi `unity-skill-create` bọc PrefabAssembler tạo Cấu trúc & Nối dây hoàn toàn AI.
-    - `.agent/skills/ui-visual-styling/SKILL.md`: Thợ sơn - Dùng script-execute đổ Visual qua mã nguồn (Bake tự động).
+2.  **Quy chuẩn UI Pure MCP (Manual AI Execution)**:
+    - `docs/guides/AI_UI_Integration_Methodology.md`: Kim chỉ nam mới về chiến lược gán nhãn và styling thủ công.
+    - `Assets/_Project/Data/UI/Styles/UIStyleDataSO.asset`: Nguồn sự thật duy nhất về màu sắc/font.
 3.  **Hướng dẫn cài đặt máy mới**: `docs/guides/New_Machine_Setup.md` (Chú ý MCP `ai-game-developer` và `pencil`).
 
 ## 🎯 Trạng thái hiện tại & Bước tiếp theo

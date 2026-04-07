@@ -64,6 +64,7 @@ GameObject:
   - component: {fileID: 3107676616808951270}
   - component: {fileID: 3246642935216008830}
   - component: {fileID: 8998544626980733582}
+  - component: {fileID: 450333592253993756}
   m_Layer: 0
   m_Name: Empty_Message
   m_TagString: Untagged
@@ -190,3 +191,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &450333592253993756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001962396590289449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fcd107770f8b64886804f35ada830f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NTVV.UI.Styling.UIStyleApplier
+  _styleType: 6
+  _applyColor: 1
+  _applyFont: 1
+  _applySprite: 1
+  _applyLayout: 1
+  _targetImage: {fileID: 0}
+  _targetText: {fileID: 0}
+  _targetLayout: {fileID: 0}

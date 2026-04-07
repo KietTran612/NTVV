@@ -8,10 +8,9 @@
 
 Hãy dùng công cụ `view_file` để đọc các file này theo đúng thứ tự để nắm bắt kiến trúc:
 
-1.  **`docs/guides/AI_UI_Integration_Methodology.md`**: Cẩm nang thiết yếu dạy bạn cách giao tiếp hệ thống Pencil MCP và docs chéo để tìm dữ liệu thiết kế từ file đồ hoạ khổng lồ.
-2.  **Bộ 3 Skills tự động hóa MCP**: `.agent/skills/ui-blueprinting/SKILL.md`, `ui-standardization/SKILL.md`, `ui-visual-styling/SKILL.md`. Hiện tại chúng yêu cầu bạn phải tự sinh ra Unity C# Tool để thao tác chứ tuyệt đối không bảo lập trình viên làm thay.
-3.  **`docs/plans/2026-04-06-ui-visual-styling-design.md`**: Bản thiết kế chi tiết về hệ thống Styling v2 và cơ chế an toàn của `PrefabAssembler`.
-4.  **`docs/HANDOVER.md`**: Để biết trạng thái chính xác của các Epic và Context của dự án.
+1.  **`docs/guides/AI_UI_Integration_Methodology.md`**: Cẩm nang thiết yếu về quy trình Manual MCP Styling.
+2.  **`Assets/_Project/Data/UI/Styles/UIStyleDataSO.asset`**: Nguồn sự thật duy nhất về Theme (Màu, Font, Sprite).
+3.  **`docs/HANDOVER.md`**: Để biết trạng thái chính xác của các Epic và Context của dự án.
 
 ---
 
@@ -71,9 +70,10 @@ Dự án đã có khung xương và hệ thống dán nhãn tự động cực m
 2.  **Mở rộng Popup**: Hoàn thiện chi tiết Visual cho `QuestDetailPanel` và `AnimalDetailPanel`.
 3.  **Hệ thống Icon động**: Tự động đổi Icon Resource (Gold, Gem) dựa trên dữ liệu thật thay vì Placeholder.
 
-**Luồng làm việc (Workflow) chuẩn tự hành tự động hóa MCP:**
-1.  **Bước 1**: Nhận mockups, dùng `mcp_pencil_batch_get` dò mã định danh UI.
-2.  **Bước 2**: Thực thi Blueprint, Standardization và Styling thông qua tính năng tạo C# Auto Tool (`unity-skill-create`) thay vì bảo người kiểm tra Inspector. Mọi thứ phải kết thúc bằng báo cáo Log màu xanh.
+**Luồng làm việc (Workflow) chuẩn Pure MCP:**
+1.  **Bước 1**: Nhận mockup, dùng `mcp_pencil_batch_get` dò mã định danh UI.
+2.  **Bước 2**: Tự tay xây dựng Hierarchy qua MCP (`gameobject-create`).
+3.  **Bước 3**: Gán nhãn `UIStyleApplier` và thực hiện Bake từ `UIStyleDataSO` thông qua các lệnh `component-modify`.
 
 ---
 

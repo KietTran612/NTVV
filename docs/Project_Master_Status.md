@@ -9,7 +9,7 @@ Tài liệu này tổng hợp toàn bộ tiến độ dự án, kết nối các
 | Epic | Tên Epic | Trạng thái | Tài liệu Kế hoạch |
 | :--- | :--- | :--- | :--- |
 | **Epic 1** | Core Framework & Time System | ✅ Hoàn thành | [Core Implementation](file:///d:/soflware/Unity/Source/NTVV/docs/plans/2026-04-02-core-framework-implementation.md) |
-| **Epic 2** | UI System (Architect, Builder, Stylist) | ✅ Hoàn thành | [UI Styling Design](file:///d:/soflware/Unity/Source/NTVV/docs/plans/2026-04-06-ui-visual-styling-design.md) |
+| **Epic 2** | UI System (Architect, Manual Builder, Stylist) | ✅ Hoàn thành | [Pure MCP Workflow](file:///C:/Users/Hoang.H/.gemini/antigravity/brain/c3f03e90-b044-4185-9073-dd5a521a0f43/implementation_plan.md) |
 | **Epic 3** | Shop, Economy & Animal Pen | ✅ Hoàn thành | [Economic Implementation](file:///d:/soflware/Unity/Source/NTVV/docs/plans/2026-04-02-Epic4-Shop-Economy-Implementation.md) |
 | **Epic 4** | Quest System & Editor Tools | ✅ Hoàn thành | [Quest Task Tracker](file:///d:/soflware/Unity/Source/NTVV/docs/plans/task_quest_system.md) |
 | **Epic 5** | Persistence & Sync | ✅ Hoàn thành | [Persistence Design](file:///d:/soflware/Unity/Source/NTVV/docs/plans/2026-04-02-enhanced-persistence-test-design.md) |
@@ -45,16 +45,15 @@ Tài liệu này tổng hợp toàn bộ tiến độ dự án, kết nối các
 - **Repair Tool**: Tự động sửa lỗi liên kết các config bị thiếu/mất.
 - **Data Manager**: Chỉnh sửa tập trung cho Crops, Animals, Quests, Themes.
 
-### 7. Kiến trúc UI 3 Bước Tự Hành AI (Architect, Builder, Stylist)
-- **Quy trình 3 Giai đoạn MCP Tự Động Hóa 100%**:
-    1.  **Stage 1: Architect (`ui-blueprinting`)**: AI tự quét file .pen qua `batch_get`, tìm kiếm Prefab qua mã nguồn Unity để vẽ Blueprint.
-    2.  **Stage 2: Builder (`ui-standardization`)**: AI tận dụng `unity-skill-create` tạo Script C# tự lắp ráp khung sương Functional, đánh `Semantic Labeling` tự động mà không bắt con người Click chuột.
-    3.  **Stage 3: Stylist (`ui-visual-styling`)**: AI tự động tạo mã Bake thông qua Tool C# nạp ScriptableObject, đổ dữ liệu tự động thẳng qua API `Object.ApplyStyle`.
-- **Sức mạnh của PrefabAssembler (v2.1)**: 
-    - Cơ chế **"Create or Verify"**: Bảo vệ 100% thiết kế visual khi chạy lại tool để cập nhật code logic. Tự động sửa lỗi (Repair) các liên kết bị đứt gãy.
-    - **Self-Repair**: Tự động thêm `CanvasRenderer` cho UI.
-- **Tiêu chuẩn Typography**: Sử dụng bộ font **Dosis** (Bold/ExtraBold). Asset Font Type 3.
-- **Kết quả**: Hệ thống tách biệt Decorator và Logic, quy trình từ Mockup vào Game được AI thao tác kín vòng lặp (Closed-Loop).
+### 7. Kiến trúc UI Pure MCP (Architect, Manual Builder, Stylist)
+- **Quy trình Thực thi 100% bằng Agent thông qua MCP Skills**:
+    1.  **Phase 1: Architect (Blueprinting)**: AI quét thiết kế qua `pencil.batch_get`, tìm kiếm ID linh kiện và vạch ra cấu trúc Transform/Layout chuẩn.
+    2.  **Phase 2: Manual Builder**: Agent trực tiếp xây dựng Hierarchy trong Unity bằng `gameobject-create`, `component-add`. Tự động nối dây Reference thông qua định danh chính xác (Manual Wiring).
+    3.  **Phase 3: Centralized Stylist**: Sử dụng `UIStyleDataSO` làm nguồn cấu hình thẩm mỹ duy nhất. AI gán trực tiếp Material, Sprite và Color vào Prefab qua MCP.
+- **Tiêu chuẩn Typography**: 
+    - Sử dụng bộ font **Dosis-ExtraBold SDF.asset**.
+    - Hệ thống Preset Material Outline (Blue, Green, Red, Yellow) được gán trực tiếp qua đường dẫn Art Assets.
+- **Kết quả**: Loại bỏ hoàn toàn sự phụ thuộc vào các công cụ tự động hóa cồng kềnh, giúp dự án "Sạch" và linh hoạt hơn 100%.
 
 ### 8. Tự động hóa Scene (Scene Automation)
 - Công cụ **Setup Full Game Scene** 1-Click tạo scene gameplay hoàn chỉnh.

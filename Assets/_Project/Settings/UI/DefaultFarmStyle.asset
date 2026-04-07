@@ -19,9 +19,10 @@ MonoBehaviour:
   GoldColor: {r: 1, g: 0.84, b: 0, a: 1}
   PanelHeaderColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   BackgroundDimColor: {r: 0, g: 0, b: 0, a: 0.5}
+  MainFont: {fileID: 11400000, guid: 452c63e094a208745841fe3a5aeb7642, type: 2}
   HeaderFontSize: 36
   BodyFontSize: 24
-  ButtonBackground: {fileID: 21300000, guid: 9e23abf3c00864291b38eebf3a5dc927, type: 3}
+  ButtonBackground: {fileID: 21300000, guid: 7ac492d69945842dcb349876f1bfb046, type: 3}
   PanelBackground: {fileID: 0}
   ItemFrame: {fileID: 0}
   ChipLayout:

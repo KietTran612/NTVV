@@ -96,21 +96,17 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
     - Toàn bộ UI thiết kế trên **Canvas uGUI**.
     - Độ phân giải chuẩn: **1920x1080**.
     - Sử dụng `UIStyleApplier` để đồng bộ bộ font **Dosis** và bảng màu.
-- **Kiến trúc UI 3 Bước (3-Step Workflow)**:
-    Dự án áp dụng quy trình 3 giai đoạn để đảm bảo 100% độ chính xác và tính Responsive:
-    1.  **Giai đoạn 1: Blueprinting (Kiến trúc)**: 
-        - **Skill**: `@ui-blueprinting`.
-        - **Cách dùng**: Cung cấp file `.pen`, ảnh screenshot. AI dùng `pencil.batch_get` và tên reference từ `docs\document_md` để bắt chéo dữ liệu Layout (Grid/Vertical), Constraints, Màu, Font Dosis.
-        - **Đầu ra**: Bản thiết kế chi tiết (Blueprint) kèm Node ID chính xác.
-    2.  **Giai đoạn 2: Standardization (Xây dựng - Builder)**: 
-        - **Skill**: `@ui-standardization`.
-        - **Công cụ**: YÊU CẦU AI SỬ DỤNG `unity-skill-create` (Nếu chưa có tool). Tool đó sinh mã C# để xây hierarchy chuẩn, nối dây reference và đánh `Semantic Labeling` ngay trong Inspector.
-        - **Đầu ra**: Prefab hoàn thiện liên kết Logic (Functional Layer) mà không cần người dùng click nút "Assemble".
-    3.  **Giai đoạn 3: Visual Styling (Trang trí - Stylist)**: 
-        - **Skill**: `@ui-visual-styling`.
-        - **Công cụ**: YÊU CẦU AI SỬ DỤNG MCP Tool bằng C# để can thiệp API Unity Bake Visual thẳng vào Prefab. Không có click tay `Apply Visual Styles`.
-        - **Đầu ra**: Dữ liệu màu, bóng đổ được nạp vào `UIStyleDataSO` và truyền qua API Unity tạo ra thành phẩm.
-        - **Bảo trì**: Tool C# của AI chạy lại tự động "Verify & Repair" không làm hỏng visual.
+- **Kiến trúc UI 3 Bước (3-Step Skill Pipeline)**:
+    Dự án áp dụng quy trình 3 giai đoạn được Agent thực thi 100% qua tập lệnh MCP:
+    1.  **Giai đoạn 1: Blueprinting (`@ui-blueprinting`)**: 
+        - **Hành động**: Khảo sát `.pen` qua `pencil.batch_get`.
+        - **Đầu ra**: Xác định chính xác Layout (Grid/Horizontal/Vertical), thông số Padding, Spacing và ID linh kiện.
+    2.  **Giai đoạn 2: Standardization (`@ui-standardization`)**: 
+        - **Hành động (Pure MCP)**: Agent tự tay xây dựng Hierarchy trong Unity bằng `gameobject-create`. Tự thực hiện gán Reference (Manual Wiring) qua `object-modify`.
+        - **Đầu ra**: Prefab "sạch", linh hoạt và không có các script tự động hoá dư thừa.
+    3.  **Giai đoạn 3: Visual Styling (`@ui-visual-styling`)**: 
+        - **Dữ liệu**: Lấy palette từ `UIStyleDataSO.asset`.
+        - **Thực thi**: Agent gán nhãn `UIStyleApplier` và thực hiện Bake từ `UIStyleDataSO` thông qua các lệnh `object-modify` (Gán Material Dosis, Sprite, Color).
 
 - **Tiêu chuẩn Đấu nối (Auto-Wiring Suffixes)**:
     - Dự án áp dụng skill **`ui-standardization`** để đảm bảo liên kết bền vững và tự động hóa.
@@ -165,11 +161,10 @@ Khi tạo một bản hiển thị (Visual) mới cho Theme:
 
 ## 🛠 Công cụ Editor & Tự động hóa (Automation Tools)
 
-### 1. PrefabAssembler (Công cụ lắp ráp Prefab)
-- **Cơ chế "Create or Verify"**: 
-    - Nếu Prefab chưa có: Tự động xây dựng hierarchy chuẩn và nối dây Controller.
-    - Nếu Prefab đã có: Chỉ kiểm tra và sửa lỗi các liên kết (Verify/Repair), tuyệt đối **không xóa** hoặc ghi đè các lớp trang trí (`bg_`, `shadow_`) mà bạn đã dày công thiết kế.
-- **Lợi ích**: Cho phép bạn chạy lại Tool để cập nhật script logic mà không làm "bay màu" thiết kế UI visual.
+### 1. Game Data Manager (Trung tâm Quản lý)
+- **Vị trí**: Menu `NTVV > Game Data Manager`.
+- **Chức năng**: Quản lý Crops, Animals, Quests, Themes tập trung.
+- **Tự động hóa**: Nút **Sync from JSON** để cập nhật toàn bộ database từ file nguồn.
 
 ### 2. Game Data Manager (Trung tâm Quản lý)
 - **Vị trí**: Menu `NTVV > Game Data Manager`.
