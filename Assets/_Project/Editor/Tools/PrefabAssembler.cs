@@ -431,6 +431,15 @@ namespace NTVV.Editor.Tools
                         img.color = Color.white;
                         _hierarchyChanged = true;
                     }
+                    var le = t.GetComponent<LayoutElement>();
+                    if (le == null) {
+                        le = t.gameObject.AddComponent<LayoutElement>();
+                        le.preferredWidth = 40;
+                        le.preferredHeight = 40;
+                        le.minWidth = 32;
+                        le.minHeight = 32;
+                        _hierarchyChanged = true;
+                    }
                 } else {
                     if (img.sprite == null && img.color == Color.white) {
                         img.color = new Color(0.2f, 0.2f, 0.2f, 0.5f);
