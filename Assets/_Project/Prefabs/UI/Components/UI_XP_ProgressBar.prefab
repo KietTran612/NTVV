@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 1497947712283246712}
   - component: {fileID: 1192335011820980778}
   - component: {fileID: 1906958212820852754}
+  - component: {fileID: 5624127053238584183}
   m_Layer: 0
   m_Name: XP_Fill
   m_TagString: Untagged
@@ -179,6 +180,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5624127053238584183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4799175396620323728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fcd107770f8b64886804f35ada830f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NTVV.UI.Styling.UIStyleApplier
+  _styleType: 1
+  _applyColor: 1
+  _applyFont: 1
+  _applySprite: 1
+  _applyLayout: 1
+  _targetImage: {fileID: 0}
+  _targetText: {fileID: 0}
+  _targetLayout: {fileID: 0}
 --- !u!1 &7817363721205499357
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +211,7 @@ GameObject:
   - component: {fileID: 5738267857772750368}
   - component: {fileID: 4807414594997268412}
   - component: {fileID: 3046753920334871235}
+  - component: {fileID: 8663683893513070801}
   m_Layer: 0
   m_Name: Level_Label
   m_TagString: Untagged
@@ -316,3 +338,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8663683893513070801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7817363721205499357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fcd107770f8b64886804f35ada830f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NTVV.UI.Styling.UIStyleApplier
+  _styleType: 6
+  _applyColor: 1
+  _applyFont: 1
+  _applySprite: 1
+  _applyLayout: 1
+  _targetImage: {fileID: 0}
+  _targetText: {fileID: 0}
+  _targetLayout: {fileID: 0}
