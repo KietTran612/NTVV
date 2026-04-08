@@ -5,6 +5,7 @@ Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi b
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
 - **Phiên 08/04/2026 (Hiện tại)**:
     - **Visual Standardization (PPU Multiplier)**: Thiết lập tiêu chuẩn độ phân giải visual đồng nhất (Buttons/Chips: 5, Banners: 2.5, Panels: 1.5, Icons: 1).
+    - **Structural Rebirth [UI_ATOMIC_STAGE]**: Tái cấu trúc Root Hierarchy sang hệ thống mới: `[UI_CAMERA]` và `[UI_ATOMIC_STAGE]/[SAFE_AREA]`.
     - **Prompt Library Establishment**: Chính thức đóng gói [Atomic_HUD_Prompt_Library.md](file:///d:/soflware/Unity/Source/NTVV/docs/guides/Atomic_HUD_Prompt_Library.md) làm thư viện Prompt chuẩn.
     - **Transparent Asset Success**: Sản xuất thành công bộ 5 item đầu tiên (Buttons, Coin, Lightning, Parchment).
 

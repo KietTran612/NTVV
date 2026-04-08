@@ -52,6 +52,14 @@ All asset generation MUST strictly adhere to this structure to ensure consistenc
   *Target Filename: `icon_Sprout_Atomic.png`*
   `Pure 3D green sprout icon for farm crops, 3D Isometric View, Kawaii natural aesthetic, Vibrant green soft plastic with dew drop highlights, Transparent background, No pots or soil / no flat lighting, Sharp 4K texture, --ar 1:1`
 
+- **Red Apple**:
+  *Target Filename: `icon_Apple_Atomic.png`*
+  `Pure 3D red apple icon for farm crops, 1:1 aspect ratio, 3D Isometric View (30-degree angle), Charming Kawaii game style, Vibrant ruby red satin finish with a bright green leaf glint, Transparent background, No backgrounds or borders / no flat surfaces, High detail volume and depth, --ar 1:1`
+
+- **Golden Wheat**:
+  *Target Filename: `icon_Wheat_Atomic.png`*
+  `Pure 3D golden wheat stalk icon for farm crops, 1:1 aspect ratio, 3D Isometric View, Charming Kawaii game style, Warm golden-yellow thick plastic with soft highlights, Transparent background, No soil or pots / no flat lighting, Vibrant 3D volume and sharp texture, --ar 1:1`
+
 ---
 
 ## 3. Mandatory Production Guidelines

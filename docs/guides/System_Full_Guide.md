@@ -132,6 +132,10 @@ Mọi yêu cầu tạo ảnh cho HUD NTVV PHẢI tuân thủ cấu trúc sau:
 
 - **Tiêu chuẩn Đấu nối (Auto-Wiring Suffixes)**:
     - Dự án áp dụng skill **`ui-standardization`** để đảm bảo liên kết bền vững và tự động hóa.
+- **Cấu trúc Root UI [UI_CAMERA][UI_ATOMIC_STAGE]**: Tiêu chuẩn hóa Root Hierarchy trong `SCN_Gameplay`:
+    - `[UI_CAMERA]`: Camera render riêng cho UI.
+    - `[UI_ATOMIC_STAGE]`: Canvas chứa toàn bộ UI HUD/Popups của giai đoạn Atomic.
+    - `[SAFE_AREA]`: GameObject con trung gian đảm bảo UI không bị che bởi Notch.
     - **Các chức năng chính của Skill**:
         1. **Ma trận Quyết định**: Tự động đánh giá nhu cầu sử dụng Controller cho từng Prefab.
         2. **Chuẩn Hậu tố (Suffixes)**: Ép buộc đặt tên `_Label`, `_Icon`, `_Button`, `_Fill`, `_Content`.
