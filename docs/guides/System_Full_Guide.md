@@ -128,6 +128,7 @@ Mọi yêu cầu tạo ảnh cho HUD NTVV PHẢI tuân thủ cấu trúc sau:
 1.  **Generate**: Dùng Prompt Structure để tạo ảnh thô.
 2.  **Alpha Processing**: Viết/Dùng Script C# (hoặc tool ngoài) để tẩy trắng hoặc khử màu Chroma Key sang Alpha 0.
 3.  **Import & Metadata**: Nạp vào Unity, cài đặt `Sprite Mode: Single`, gán `Mesh Type: Full Rect` để tối ưu hóa 9-slicing.
+4.  **Visual Scaling (PPU)**: Ép buộc thiết lập **Pixels Per Unit Multiplier** theo chuẩn: Buttons=5, Banners=2.5, Panels=1.5, Icons=1.
 
 - **Tiêu chuẩn Đấu nối (Auto-Wiring Suffixes)**:
     - Dự án áp dụng skill **`ui-standardization`** để đảm bảo liên kết bền vững và tự động hóa.
@@ -253,6 +254,10 @@ Dự án tuân thủ cấu trúc thư mục phẳng và nhất quán trong `Asse
 
 ## 📝 Nhật ký Cập nhật (Change Log)
 
+- **2026-04-08**:
+    - **Visual Standardization (PPU Multiplier)**: Thiết lập tiêu chuẩn độ phân giải cho các thành phần HUD (5, 2.5, 1.5, 1).
+    - **Prompt Library Establishment**: Ra mắt thư viện [Atomic_HUD_Prompt_Library.md](file:///d:/soflware/Unity/Source/NTVV/docs/guides/Atomic_HUD_Prompt_Library.md).
+    - **Transparent Asset Production**: Sản xuất thành công bộ Asset HUD đầu tiên không cần tách nền thủ công.
 - **2026-04-07**:
     - Xác lập Giao thức Đọc File `.pen` khổng lồ bằng Regex (Pencil Server) và tra chéo ID ngầm qua tài liệu `document_md`.
     - Chuyển quyền Tự Hành Trọn Trình 100% cho AI trong cả 3 Skill UI (Architect, Builder, Stylist) thông qua sức mạnh sinh Tools Editor API của `unity-skill-create`.

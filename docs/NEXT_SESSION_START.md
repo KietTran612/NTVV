@@ -66,9 +66,9 @@ Chúng ta đang vận hành hệ thống UI theo mô hình tách biệt hoàn to
 ## 3. 🎯 Mục tiêu của Phiên làm việc mới
 
 Dự án đã có khung xương và hệ thống dán nhãn tự động cực mạnh. Phiên sau sẽ tập trung vào:
-1.  **Sản xuất Asset HUD (Atomic)**: Tiếp tục "đúc" bộ Asset (Blue button, Yellow Circle, Scroll, Icons) theo cấu trúc **Structural Prompting** (Dùng `generate_image`).
-2.  **Xử lý Hậu kỳ (Post-Processing)**: Viết script C# tự động xử lý Transparent cho các ảnh nền Magenta/Cyan.
-3.  **Lắp ráp HUD Rebirth**: Hoàn thiện chi tiết Visual cho bộ khung HUD mới sử dụng các Asset Nguyên tử vừa tạo.
+1.  **Sản xuất Asset HUD (Atomic)**: Tiếp tục "đúc" bộ Asset Icon còn thiếu (Sprout, Apple, Wheat) theo chuẩn **Structural Prompting** (Dùng `generate_image`) và PPU standard = 1.
+2.  **Lắp ráp & Thẩm định HUD**: Hoàn thiện lắp ráp HUD mới, thay thế 100% placeholder. Thực hiện thẩm định trực quan (Visual Audit) để đảm bảo các thông số PPU Multiplier (5, 2.5, 1.5, 1) hiển thị sắc nét trên mọi độ phân giải.
+3.  **Hệ thống UI Style Applier**: Đồng bộ hóa việc nạp Sprite Atomic vào `UIStyleDataSO` và kiểm tra cơ chế "Bake" tự động.
 
 **Luồng làm việc (Workflow) chuẩn Pure MCP:**
 1.  **Bước 1**: Nhận mockup, dùng `mcp_pencil_batch_get` dò mã định danh UI.

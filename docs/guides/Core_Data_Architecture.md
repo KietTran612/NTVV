@@ -58,6 +58,11 @@ Dữ liệu tĩnh của Game (Static Data) được lưu trữ dưới dạng **
     -   `Texture Type: Sprite (2D and UI)`.
     -   `Mesh Type: Full Rect` (Yêu cầu bắt buộc để 9-slicing hoạt động chính xác trên các góc bo tròn AI).
     -   `Alpha Source: Input Texture Alpha` (Nếu đã tách nền).
+-   **Visual Scaling (Pixels Per Unit Multiplier)**:
+    -   **Buttons/Chips**: `5` (Mặc định cho các nút nhỏ, sắc nét).
+    -   **Banners**: `2.5` (Dành cho dải tiêu đề ngang).
+    -   **Panels**: `1.5` (Dành cho bảng thông báo lớn).
+    -   **Icons**: `1` (Giữ nguyên tỉ lệ pixel gốc).
 
 ---
 
