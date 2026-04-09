@@ -32,7 +32,8 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
     2. Chọn hạt giống -> Giảm vật phẩm trong kho -> Trồng.
     3. Cây lớn dần theo Tick. Khi chín (Ripe) -> Nhấn để thu hoạch.
 - **Dữ liệu**: Định nghĩa trong `CropDataSO`.
-- **Thư mục**: `Assets/_Project/Data/Crops/`
+- **Atomic Assets**: Bộ **Cà rốt** đã hoàn thiện 100% (Hạt giống -> Mầm -> Trưởng thành -> Thu hoạch).
+- **Thư mục**: `Assets/_Project/Art/Sprites/UI/Icons/Crops/Carrot/`
 - **Cách Test**:
     - Trồng cây -> Chờ lớn -> Thu hoạch -> Kiểm tra XP và Kho tăng lên.
     - Test khi kho đầy có cho thu hoạch không.
@@ -64,6 +65,8 @@ Tài liệu này cung cấp cái nhìn tổng quan về các hệ thống cốt 
 
 - **Vận hành**: Mua thú -> Thú xuất hiện trong chuồng (`AnimalPenView`). 
 - **Chu kỳ**: Thú đói -> Hiện icon đói -> Người chơi Cho ăn (tốn cỏ/sâu) -> Thú lớn/Sản xuất sản phẩm.
+- **Atomic Assets**: Bộ **Gà** đã hoàn thiện 100% (Gà con -> Gà nhỡ -> Gà mái -> Trứng & Sâu).
+- **Thư mục**: `Assets/_Project/Art/Sprites/UI/Icons/Animals/Chicken/`
 - **Nâng cấp Chuồng**: Tăng sức chứa tối đa của chuồng, cấu hình được nạp tự động từ Registry.
 - **Cách Test**:
     - Để thú đói lâu -> Thú có thể chết (Dead Stage).
@@ -258,6 +261,10 @@ Dự án tuân thủ cấu trúc thư mục phẳng và nhất quán trong `Asse
 
 ## 📝 Nhật ký Cập nhật (Change Log)
 
+- **2026-04-09**:
+    - **100% Atomic Asset Milestone**: Hoàn tất sản xuất, xử lý hậu kỳ và đồng bộ hóa thư viện cho toàn bộ bộ khởi động (28 Assets).
+    - **Asset Sets Completed**: Cà rốt (5 giai đoạn), Gà (6 giai đoạn), Core HUD (Bảng biểu, Nút bấm).
+    - **Documentation Sync**: Cập nhật toàn bộ hệ thống tài liệu hướng dẫn, kiến trúc và quy trình tích hợp cho người dùng mới.
 - **2026-04-08**:
     - **Visual Standardization (PPU Multiplier)**: Thiết lập tiêu chuẩn độ phân giải cho các thành phần HUD (5, 2.5, 1.5, 1).
     - **Prompt Library Establishment**: Ra mắt thư viện [Atomic_HUD_Prompt_Library.md](file:///d:/soflware/Unity/Source/NTVV/docs/guides/Atomic_HUD_Prompt_Library.md).

@@ -64,7 +64,7 @@ namespace NTVV.Editor.UI
                 style.PrimaryActionColor = new Color(1f, 0.65f, 0f); // Orange #FFA500
                 style.CaringActionColor = new Color(0.3f, 0.7f, 0.3f); // Green #4CAF50
                 style.WarningColor = new Color(0.9f, 0.2f, 0.2f); // Red
-                style.GoldColor = new Color(1f, 0.84f, 0f); // Sun Yellow
+
 
                 AssetDatabase.CreateAsset(style, stylePath);
                 Debug.Log($"[UIInitializer] Created Default Style Asset at: {stylePath}");

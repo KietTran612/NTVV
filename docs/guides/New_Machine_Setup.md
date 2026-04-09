@@ -42,3 +42,17 @@ Nếu AI trả lời chi tiết, bạn đã hoàn tất quá trình setup!
 - **AI không tìm thấy Skill**: Chắc chắn rằng các file `.agent/skills/[skill-name]/SKILL.md` tồn tại trong thư mục dự án.
 - **Lỗi Pencil MCP**: Nếu AI không thể đọc file `.pen`, hãy kiểm tra lại cài đặt MCP Server trong phần Settings.
 - **Lỗi Font**: Đồ hoạ yêu cầu Font Dosis. Hãy đảm bảo TMPro Font Asset `Dosis-ExtraBold SDF` đã được cài đặt đúng.
+
+---
+
+## 5. Kiểm tra Tài nguyên Art (Atomic Assets)
+
+Toàn bộ tài nguyên UI "Nguyên tử" đã được sản xuất và phân loại tại:
+
+- **Path**: `Assets/_Project/Art/Sprites/UI/`
+  - `Backgrounds/`: Nền nút, bảng, banner.
+  - `Icons/Common/`: Tài nguyên hệ thống (Gold, Gem, XP...).
+  - `Icons/Crops/`: Hạt giống và quá trình mọc cây.
+  - `Icons/Animals/`: Thức ăn và vòng đời vật nuôi.
+
+> **Lưu ý**: Đảm bảo các thông số PPU Multiplier được cấu hình đúng trong `UIStyleDataSO.asset` sau khi Re-import.

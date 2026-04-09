@@ -16,15 +16,96 @@ MonoBehaviour:
   PrimaryActionColor: {r: 1, g: 0.65, b: 0, a: 1}
   CaringActionColor: {r: 0.3, g: 0.7, b: 0.3, a: 1}
   WarningColor: {r: 0.9, g: 0.2, b: 0.2, a: 1}
-  GoldColor: {r: 1, g: 0.84, b: 0, a: 1}
+  PrimaryButtonColors:
+    Normal: {r: 1, g: 1, b: 1, a: 1}
+    Hover: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    Pressed: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+    Disabled: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+  SecondaryButtonColors:
+    Normal: {r: 1, g: 1, b: 1, a: 1}
+    Hover: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    Pressed: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+    Disabled: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+  CloseButtonColors:
+    Normal: {r: 1, g: 1, b: 1, a: 1}
+    Hover: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    Pressed: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+    Disabled: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+  TitleStyle:
+    Font: {fileID: 11400000, guid: 452c63e094a208745841fe3a5aeb7642, type: 2}
+    FontSize: 36
+    Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    Style: 1
+    Alignment: 514
+  BodyStyle:
+    Font: {fileID: 11400000, guid: 452c63e094a208745841fe3a5aeb7642, type: 2}
+    FontSize: 24
+    Color: {r: 0.3, g: 0.3, b: 0.3, a: 1}
+    Style: 0
+    Alignment: 513
+  AmountStyle:
+    Font: {fileID: 11400000, guid: 452c63e094a208745841fe3a5aeb7642, type: 2}
+    FontSize: 24
+    Color: {r: 1, g: 0.6509804, b: 0, a: 1}
+    Style: 1
+    Alignment: 514
+  ButtonTextStyle:
+    Font: {fileID: 11400000, guid: 452c63e094a208745841fe3a5aeb7642, type: 2}
+    FontSize: 26
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Style: 1
+    Alignment: 514
+  ButtonBackground:
+    Sprite: {fileID: 21300000, guid: f70ae2d74b9a88141ab82f68984ca8d6, type: 3}
+    ImageType: 1
+    PixelsPerUnitMultiplier: 5
+    PreserveAspect: 0
+  PanelBackground:
+    Sprite: {fileID: 21300000, guid: d3669ff9132cb75469076839eabc706a, type: 3}
+    ImageType: 1
+    PixelsPerUnitMultiplier: 1.5
+    PreserveAspect: 0
+  BannerPopup:
+    Sprite: {fileID: 21300000, guid: ba1b8f2d985396541a73dbad528e9a07, type: 3}
+    ImageType: 1
+    PixelsPerUnitMultiplier: 2.5
+    PreserveAspect: 0
+  ItemFrame:
+    Sprite: {fileID: 21300000, guid: f8cdd3989d0a4ef4abe0b9d8e1975180, type: 3}
+    ImageType: 1
+    PixelsPerUnitMultiplier: 5
+    PreserveAspect: 0
+  GoldIcon:
+    Sprite: {fileID: 21300000, guid: c2ef8e7330891a349a7db6b5553d9e8b, type: 3}
+    ImageType: 0
+    PixelsPerUnitMultiplier: 1
+    PreserveAspect: 1
+  EnergyIcon:
+    Sprite: {fileID: 21300000, guid: 43893fc80372a6449928ad33a770689f, type: 3}
+    ImageType: 0
+    PixelsPerUnitMultiplier: 1
+    PreserveAspect: 1
+  StorageIcon:
+    Sprite: {fileID: 21300000, guid: 793937936356d48a286710c8eae6adda, type: 3}
+    ImageType: 0
+    PixelsPerUnitMultiplier: 1
+    PreserveAspect: 1
+  XPIcon:
+    Sprite: {fileID: 21300000, guid: 3ecbcc1e50da3ad4ba2364b20d65bb6f, type: 3}
+    ImageType: 0
+    PixelsPerUnitMultiplier: 1
+    PreserveAspect: 1
+  LevelIcon:
+    Sprite: {fileID: 21300000, guid: 4ebf63a4d7a364f249010cd674c2e6c7, type: 3}
+    ImageType: 0
+    PixelsPerUnitMultiplier: 1
+    PreserveAspect: 1
   PanelHeaderColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   BackgroundDimColor: {r: 0, g: 0, b: 0, a: 0.5}
-  MainFont: {fileID: 11400000, guid: 452c63e094a208745841fe3a5aeb7642, type: 2}
-  HeaderFontSize: 36
-  BodyFontSize: 24
-  ButtonBackground: {fileID: 21300000, guid: 7ac492d69945842dcb349876f1bfb046, type: 3}
-  PanelBackground: {fileID: 0}
-  ItemFrame: {fileID: 0}
   ChipLayout:
     Padding: {x: 16, y: 16, z: 8, w: 8}
     Spacing: 8
+  ChipIconSize: 40
+  ChipHeight: 60
+  WorldNameplateColor: {r: 1, g: 1, b: 1, a: 1}
+  WorldLabelScale: 0.1

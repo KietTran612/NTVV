@@ -30,6 +30,14 @@ All asset generation MUST strictly adhere to this structure to ensure consistenc
   *Target Filename: `bg_Panel_Main_Atomic.png`*
   `Blank rounded rectangular UI panel background, 2:1 width-to-height aspect ratio, Straight Front View (Orthographic), Kawaii professional game UI, Satin cream soft-touch plastic, Gentle internal ambient occlusion shadows, Very thin consistent outer border, Transparent background, No text or icons / no perspective tilt, Clean 9-sliceable edges, --ar 2:1`
 
+- **Warning Button (Red)**:
+  *Target Filename: `bg_Button_Red_Atomic.png`*
+  `Blank capsule-shaped UI button background, 2:1 aspect ratio, Straight Front View (Orthographic), Kawaii aesthetic 3D soft-touch style, Vibrant candy red satin plastic, Rich internal volume with subtle diffused highlights and soft ambient shadows, Transparent background, No icons or text, --ar 2:1`
+
+- **Caring/Soft Button (Purple)**:
+  *Target Filename: `bg_Button_Purple_Atomic.png`*
+  `Blank capsule-shaped UI button background, 2:1 aspect ratio, Straight Front View (Orthographic), Kawaii aesthetic 3D soft-touch style, Gentle lavender-purple satin plastic, Smooth internal volume with soft diffused lighting, Transparent background, No icons or text, --ar 2:1`
+
 ### B. Content Layers (Data Displays)
 *Purpose: These assets provide neutral backgrounds for resource counters and informational chips. Must be flat and non-interactive.*
 
@@ -52,13 +60,69 @@ All asset generation MUST strictly adhere to this structure to ensure consistenc
   *Target Filename: `icon_Sprout_Atomic.png`*
   `Pure 3D green sprout icon for farm crops, 3D Isometric View, Kawaii natural aesthetic, Vibrant green soft plastic with dew drop highlights, Transparent background, No pots or soil / no flat lighting, Sharp 4K texture, --ar 1:1`
 
-- **Red Apple**:
-  *Target Filename: `icon_Apple_Atomic.png`*
-  `Pure 3D red apple icon for farm crops, 1:1 aspect ratio, 3D Isometric View (30-degree angle), Charming Kawaii game style, Vibrant ruby red satin finish with a bright green leaf glint, Transparent background, No backgrounds or borders / no flat surfaces, High detail volume and depth, --ar 1:1`
+- **Experience Star (XP)**:
+  *Target Filename: `icon_XP_Atomic.png`*
+  `Pure 3D stylized star icon for experience points, 3D Isometric View, Kawaii magic aesthetic, Vibrant purple and magenta glossy thick plastic with internal glow, smooth polished surface, soft diffused highlights, Transparent background, --ar 1:1`
 
-- **Golden Wheat**:
-  *Target Filename: `icon_Wheat_Atomic.png`*
-  `Pure 3D golden wheat stalk icon for farm crops, 1:1 aspect ratio, 3D Isometric View, Charming Kawaii game style, Warm golden-yellow thick plastic with soft highlights, Transparent background, No soil or pots / no flat lighting, Vibrant 3D volume and sharp texture, --ar 1:1`
+- **Storage Chest**:
+  *Target Filename: `icon_Storage_Atomic.png`*
+  `Pure 3D stylized wooden chest icon for inventory, 3D Isometric View, Kawaii farm aesthetic, Smooth polished wood with friendly rounded corners and golden metallic bands, satin finish lighting, Transparent background, --ar 1:1`
+
+- **Gem (Premium Currency)**:
+  *Target Filename: `icon_Gem_Atomic.png`*
+  `Pure 3D faceted gem icon, 3D Isometric View, Kawaii aesthetic, Sparkling cyan glossy thick plastic material with internal refractions, soft diffused highlights, Transparent background, --ar 1:1`
+
+- **Carrot (Crop)**:
+  *Target Filename: `icon_Carrot_Atomic.png`*
+  `Pure 3D stylized carrot icon, 3D Isometric View, Kawaii vegetable aesthetic, Vibrant orange soft-touch material with bright green leaves, Transparent background, --ar 1:1`
+
+- **Watering Can (Tool)**:
+  *Target Filename: `icon_WateringCan_Atomic.png`*
+  `Pure 3D stylized watering can, 3D Isometric View, Kawaii garden tool aesthetic, Bright sky blue glossy plastic, soft rounded handle, Transparent background, --ar 1:1`
+
+#### C. Crop Specialized: Carrot (crop_01) - `[ĐÃ SẢN XUẤT & KIỂM CHỨNG]`
+- **Storage**: `Assets/_Project/Art/Sprites/UI/Icons/Crops/Carrot/`
+- **Carrot Seed Packet**:
+  *Target Filename: `icon_Seeds_Carrot_Atomic.png`*
+  `Pure 3D cute paper seed packet for carrots, 3D Isometric View, Kawaii farm aesthetic, Soft-touch matte paper material with a cartoon carrot illustration, bright colors, Transparent background, --ar 1:1`
+
+- **Carrot Stage 0 (Newly Planted)**:
+  *Target Filename: `icon_Carrot_Stage0_Atomic.png`*
+  `Pure 3D newly planted carrot seeds in soil, 3D Isometric View, Kawaii farm aesthetic, A small mound of soft brown soil with a tiny green tip barely visible, glossy plastic finish, Transparent background, --ar 1:1`
+
+- **Carrot Stage 1 (Sprout)**:
+  *Target Filename: `icon_Carrot_Stage1_Atomic.png`*
+  `Pure 3D small green carrot sprout, 3D Isometric View, Kawaii farm aesthetic, Two tiny vibrant green leaves poking out of soft brown soil, glossy soft plastic finish, Transparent background, --ar 1:1`
+
+- **Carrot Stage 2 (Mid-Growth)**:
+  *Target Filename: `icon_Carrot_Stage2_Atomic.png`*
+  `Pure 3D growing carrot plant, 3D Isometric View, Kawaii farm aesthetic, Lush green leaves, a hint of vibrant orange carrot crown visible above soft brown soil, glossy plastic finish, Transparent background, --ar 1:1`
+
+- **Carrot Stage 3 (Harvest)**:
+  *Target Filename: `icon_Carrot_Stage3_Atomic.png`*
+  `Pure 3D whole vibrant orange carrot with leaves, 3D Isometric View, Kawaii vegetable aesthetic, Smooth polished surface, bright green lush tops, glossy soft-touch plastic, Transparent background, --ar 1:1`
+
+#### D. Animal Specialized: Chicken (animal_01) - `[ĐÃ SẢN XUẤT & KIỂM CHỨNG]`
+- **Storage**: `Assets/_Project/Art/Sprites/UI/Icons/Animals/Chicken/`
+- **Baby Chick (Stage 1)**:
+  *Target Filename: `icon_Chicken_Stage1_Atomic.png`*
+  `Pure 3D round fluffy baby chick, 3D Isometric View, Kawaii animal aesthetic, Soft yellow vibrant plastic, small orange beak, tiny feet, friendly eyes, glossy finish, Transparent background, --ar 1:1`
+
+- **Juvenile Chicken (Stage 2)**:
+  *Target Filename: `icon_Chicken_Stage2_Atomic.png`*
+  `Pure 3D young growing chicken, 3D Isometric View, Kawaii animal aesthetic, Half-grown size between chick and hen, soft white and yellow glossy plastic, developing small red comb, friendly rounded shape, Transparent background, --ar 1:1`
+
+- **Adult Chicken (Stage 3)**:
+  *Target Filename: `icon_Chicken_Stage3_Atomic.png`*
+  `Pure 3D mature hen chicken, 3D Isometric View, Kawaii animal aesthetic, Soft white and pale yellow glossy plastic, small red comb, rounded friendly volume, Transparent background, --ar 1:1`
+
+- **Egg (Product)**:
+  *Target Filename: `icon_Egg_Atomic.png`*
+  `Pure 3D smooth oval bird egg, 3D Isometric View, Kawaii aesthetic, Pale pinkish-white glossy plastic material, gentle highlights, Transparent background, --ar 1:1`
+
+- **Worm (Feed)**:
+  *Target Filename: `icon_Feed_Worm_Atomic.png`*
+  `Pure 3D stylized green worm, 3D Isometric View, Kawaii aesthetic, Vibrant lime green glossy soft plastic, friendly rounded segments, Transparent background, --ar 1:1`
 
 ---
 

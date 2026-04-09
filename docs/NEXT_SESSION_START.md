@@ -49,11 +49,12 @@ Chúng ta đang vận hành hệ thống UI theo mô hình tách biệt hoàn to
 
 ### 4. Art & Artistic Assets (Tài nguyên Hình ảnh)
 - **Mockups (Pencil Files)**: `Design/*.pen` (Sử dụng công cụ `pencil` để đọc các file này).
-- **UI Sprites (Icons/Panels)**:
-  - `Assets/_Project/Art/Sprites/`
-  - `Assets/_Project/Textures/UI/`
-  - `Assets/_Project/UI/System/` (Các icon hệ thống).
-- **UI Textures**: `Assets/_Project/Textures/`
+- **Kho Art chuẩn Atomic (SPRITES)**: `Assets/_Project/Art/Sprites/UI/`
+  - `Backgrounds/`: Các tấm nền Panel, Banner, Button (Orthographic).
+  - `Icons/Common/`: Icon tài nguyên hệ thống (Gold, Gem, XP...).
+  - `Icons/Crops/`: Icon giai đoạn mọc cây (Ví dụ: `Carrot/Stage0-3`).
+  - `Icons/Animals/`: Icon vòng đời thú (Ví dụ: `Chicken/Stage1-3`).
+- **Texture Resources**: `Assets/_Project/Textures/`
 
 ### 5. Typography (Phông chữ)
 - **Master Font**: **Dosis** (Bold/ExtraBold).
@@ -65,10 +66,16 @@ Chúng ta đang vận hành hệ thống UI theo mô hình tách biệt hoàn to
 
 ## 3. 🎯 Mục tiêu của Phiên làm việc mới
 
-Dự án đã có khung xương và hệ thống dán nhãn tự động cực mạnh. Phiên sau sẽ tập trung vào:
-1.  **Sản xuất Asset HUD (Atomic)**: Tiếp tục "đúc" bộ Asset Icon còn thiếu (Sprout, Apple, Wheat) theo chuẩn **Structural Prompting** (Dùng `generate_image`) và PPU standard = 1.
-2.  **Lắp ráp & Thẩm định HUD**: Hoàn thiện lắp ráp HUD mới, thay thế 100% placeholder. Thực hiện thẩm định trực quan (Visual Audit) để đảm bảo các thông số PPU Multiplier (5, 2.5, 1.5, 1) hiển thị sắc nét trên mọi độ phân giải.
-3.  **Hệ thống UI Style Applier**: Đồng bộ hóa việc nạp Sprite Atomic vào `UIStyleDataSO` và kiểm tra cơ chế "Bake" tự động.
+Chúng ta đã sở hữu bộ "Lego" 28 Assets Atomic. Phiên tới sẽ tập trung vào sự sống động:
+1.  **Logic Wiring (Đấu nối dữ liệu)**:
+    - Gán Atomic Sprites vào `CropDataSO` và `AnimalDataSO` thông qua `GameDataRegistry`.
+    - Thay thế toàn bộ placeholder cũ bằng bộ Stage 0-3 (Cây) và Stage 1-3 (Thú).
+2.  **UI Prototype Assembly**:
+    - Lắp ráp HUD Gameplay chính sử dụng `bg_Panel_Main_Atomic` và `bg_Chip_Resource_Atomic`.
+    - Thiết lập Hierarchy Popup thông tin vật phẩm với phong cách "Glossy 3D Kawaii".
+3.  **Visual Validation & Baking**:
+    - Chạy `ui-prefab-style` để kiểm tra khả năng tự động nạp Sprite vào `UIStyleApplier`.
+    - Thẩm định độ sắc nét (Visual Audit) của 9-slicing trên các tấm nền lớn.
 
 **Luồng làm việc (Workflow) chuẩn Pure MCP:**
 1.  **Bước 1**: Nhận mockup, dùng `mcp_pencil_batch_get` dò mã định danh UI.

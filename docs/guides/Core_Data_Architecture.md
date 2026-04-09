@@ -50,14 +50,11 @@ Dữ liệu tĩnh của Game (Static Data) được lưu trữ dưới dạng **
 
 ### 📂 UI Assets & Metadata Standards
 Để hỗ trợ hệ thống Atomic HUD, mọi UI Sprite nạp vào Unity phải tuân thủ:
--   **Naming**: Hậu tố `_Atomic` cho các layer thô (ví dụ: `bg_Button_Green_Atomic`).
+-   **Storage Path**: `Assets/_Project/Art/Sprites/UI/` (Phân loại theo `Backgrounds/`, `Icons/Common/`, `Icons/Crops/`, `Icons/Animals/`).
+-   **Naming**: Hậu tố `_Atomic` cho các layer thô (ví dụ: `bg_Button_Green_Atomic`, `icon_Carrot_Stage3_Atomic`).
 -   **Góc nhìn (Perspective)**: 
     -   Nền (Background): **Frontal Orthographic** (Không biến dạng phối cảnh).
     -   Icons: **Isometric** (Góc 45 độ top-down).
--   **Import Settings**: 
-    -   `Texture Type: Sprite (2D and UI)`.
-    -   `Mesh Type: Full Rect` (Yêu cầu bắt buộc để 9-slicing hoạt động chính xác trên các góc bo tròn AI).
-    -   `Alpha Source: Input Texture Alpha` (Nếu đã tách nền).
 -   **Visual Scaling (Pixels Per Unit Multiplier)**:
     -   **Buttons/Chips**: `5` (Mặc định cho các nút nhỏ, sắc nét).
     -   **Banners**: `2.5` (Dành cho dải tiêu đề ngang).
@@ -102,6 +99,22 @@ Khi lập trình các tính năng mới, bạn sẽ thường xuyên tương tá
 | **Kho** | `StorageSystem.Instance` | `AddItem(string id, int count)`, `HasItem(string id)` |
 | **Nhiệm vụ** | `QuestEvents` | `OnQuestProgress?.Invoke(type, id, amount)` |
 | **Cấu hình** | `GameManager.Instance.DataRegistry` | Truy cập trực tiếp danh sách `crops`, `animals`. |
+
+---
+
+## 🏗 6. Ánh xạ Art & UI Asset (Atomic Standard)
+
+Để hệ thống `UIStyleApplier` và Registry hoạt động đồng bộ, toàn bộ Art Asset phải tuân thủ lộ trình:
+
+- **Base Path**: `Assets/_Project/Art/Sprites/UI/`
+- **Naming Convention**: `[Type]_[Name]_[Stage]_Atomic.png`
+  - `bg_`: Background (Panels, Buttons, Banners).
+  - `icon_`: Foreground (Resources, Crops, Animals).
+- **Folder Structure**:
+  - `Backgrounds/`: `bg_Button_Green_Atomic`, `bg_Panel_Main_Atomic`.
+  - `Icons/Common/`: `icon_Gold_Atomic`, `icon_XP_Atomic`.
+  - `Icons/Crops/[CropName]/`: `icon_Carrot_Stage0_Atomic`.
+  - `Icons/Animals/[AnimalName]/`: `icon_Chicken_Stage1_Atomic`.
 
 > [!TIP]
 > **Quy tắc vàng**: Đừng bao giờ kéo thả trực tiếp `CropDataSO` vào một Script trong Scene. Hãy bắt đầu từ `GameDataRegistry` để đảm bảo game luôn chạy đúng dữ liệu mới nhất được Sync từ JSON.

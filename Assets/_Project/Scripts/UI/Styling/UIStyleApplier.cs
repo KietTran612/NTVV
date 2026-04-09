@@ -12,14 +12,19 @@ namespace NTVV.UI.Styling
     {
         public enum StyleType
         {
-            PrimaryAction,    // Orange
-            CaringAction,     // Green
-            Warning,          // Red
-            Gold,             // Yellow
+            ResourceChip,
+            Gold,
+            Energy,
+            Storage,
+            XP,
+            Level,
+            PrimaryAction,
+            CaringAction,
+            Warning,
             Header,
             BackgroundDim,
             BodyText,
-            ResourceChip      // NEW: Specific type for Chips
+            BannerPopup
         }
 
         [Header("Style Strategy")]
@@ -27,7 +32,7 @@ namespace NTVV.UI.Styling
         [SerializeField] private bool _applyColor = true;
         [SerializeField] private bool _applyFont = true;
         [SerializeField] private bool _applySprite = true;
-        [SerializeField] private bool _applyLayout = true; // NEW: Control layout application
+        [SerializeField] private bool _applyLayout = true;
 
         [Header("Optional Internal References")]
         [SerializeField] private Image _targetImage;
@@ -49,9 +54,19 @@ namespace NTVV.UI.Styling
             if (_targetImage != null)
             {
                 if (_applyColor) _targetImage.color = GetColor(style);
-                if (_applySprite) {
-                    Sprite s = GetSprite(style);
-                    if (s != null) _targetImage.sprite = s;
+                
+                if (_applySprite) 
+                {
+                    SpriteConfig config = GetSpriteConfig(style);
+                    if (config.Sprite != null) 
+                    {
+                        _targetImage.sprite = config.Sprite;
+                        
+                        // Apply advanced configuration from SpriteConfig
+                        _targetImage.type = config.ImageType;
+                        _targetImage.pixelsPerUnitMultiplier = config.PixelsPerUnitMultiplier;
+                        _targetImage.preserveAspect = config.PreserveAspect;
+                    }
                 }
             }
 
@@ -60,12 +75,14 @@ namespace NTVV.UI.Styling
                 if (_applyColor) _targetText.color = GetColor(style);
                 if (_applyFont)
                 {
-                    _targetText.font = style.MainFont;
-                    _targetText.fontSize = (_styleType == StyleType.Header) ? style.HeaderFontSize : style.BodyFontSize;
+                    TextStyleConfig config = GetTextStyleConfig(style);
+                    _targetText.font = config.Font;
+                    _targetText.fontSize = config.FontSize;
+                    _targetText.fontStyle = config.Style;
                 }
             }
 
-            // Apply Layout (NEW)
+            // Apply Layout
             if (_applyLayout && _targetLayout != null)
             {
                 ApplyLayoutSettings(style);
@@ -98,27 +115,60 @@ namespace NTVV.UI.Styling
                 case StyleType.PrimaryAction: return style.PrimaryActionColor;
                 case StyleType.CaringAction: return style.CaringActionColor;
                 case StyleType.Warning: return style.WarningColor;
-                case StyleType.Gold: 
-                case StyleType.ResourceChip: return style.GoldColor;
+                case StyleType.Gold:
+                case StyleType.Energy:
+                case StyleType.XP:
+                case StyleType.Storage:
+                case StyleType.Level:
+                case StyleType.ResourceChip: return Color.white;
                 case StyleType.Header: return style.PanelHeaderColor;
+                case StyleType.BannerPopup: return Color.white;
                 case StyleType.BackgroundDim: return style.BackgroundDimColor;
                 default: return Color.white;
             }
         }
 
-        private Sprite GetSprite(UIStyleDataSO style)
+        private SpriteConfig GetSpriteConfig(UIStyleDataSO style)
         {
             switch (_styleType)
             {
                 case StyleType.PrimaryAction:
                 case StyleType.CaringAction:
                 case StyleType.Gold:
-                case StyleType.ResourceChip:
                     return style.ButtonBackground;
+                case StyleType.ResourceChip:
+                    return style.ItemFrame;
+                case StyleType.Energy: return style.EnergyIcon;
+                case StyleType.XP: return style.XPIcon;
+                case StyleType.Storage: return style.StorageIcon;
+                case StyleType.Level: return style.LevelIcon;
                 case StyleType.Header:
                 case StyleType.BodyText:
                     return style.PanelBackground;
-                default: return null;
+                case StyleType.BannerPopup:
+                    return style.BannerPopup;
+                default: return default;
+            }
+        }
+
+        private TextStyleConfig GetTextStyleConfig(UIStyleDataSO style)
+        {
+            switch (_styleType)
+            {
+                case StyleType.Header:
+                case StyleType.BannerPopup:
+                    return style.TitleStyle;
+                case StyleType.Gold:
+                case StyleType.Energy:
+                case StyleType.XP:
+                case StyleType.Level:
+                    return style.AmountStyle;
+                case StyleType.PrimaryAction:
+                case StyleType.CaringAction:
+                case StyleType.Warning:
+                    return style.ButtonTextStyle;
+                default:
+                    return style.BodyStyle;
             }
         }
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using NTVV.Data;
@@ -215,6 +216,12 @@ namespace NTVV.Editor.Tools
             EditorGUILayout.EndScrollView();
         }
 
+        private List<GameObject> _manualTargets = new List<GameObject>();
+        private bool _showManualGroup = true;
+        private bool _showThemePrefabsGroup = true;
+        private bool _showStyleProperties = true;
+        private List<GameObject> _themePrefabs = new List<GameObject>();
+
         private void DrawUIStyleDetails(UIStyleDataSO style)
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -232,10 +239,214 @@ namespace NTVV.Editor.Tools
             }
             EditorGUILayout.EndHorizontal();
             
+            EditorGUILayout.Space(10);
+            DrawTargetedApplicationPanel(style);
+            
             EditorGUILayout.EndVertical();
             EditorGUILayout.Space(10);
             
-            DrawGenericEditor();
+            _showStyleProperties = EditorGUILayout.BeginFoldoutHeaderGroup(_showStyleProperties, "3. Style Properties (Master Config)");
+            if (_showStyleProperties)
+            {
+                DrawGenericEditor();
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+        }
+
+        private void DrawTargetedApplicationPanel(UIStyleDataSO style)
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            
+            // --- 1. Manual Targets Group ---
+            _showManualGroup = EditorGUILayout.BeginFoldoutHeaderGroup(_showManualGroup, "1. Manual Scene Objects / Prefabs (UI Canvas)");
+            if (_showManualGroup)
+            {
+                Rect dropArea = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                HandleManualDragAndDrop(dropArea);
+                
+                if (_manualTargets.Count == 0)
+                {
+                    EditorGUILayout.HelpBox("Danh sách trống. Kéo thả GameObject hoặc Prefab vào đây.", MessageType.Info);
+                }
+
+                for (int i = 0; i < _manualTargets.Count; i++)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    
+                    // Object Field
+                    _manualTargets[i] = (GameObject)EditorGUILayout.ObjectField(_manualTargets[i], typeof(GameObject), true);
+                    
+                    // Apply Button
+                    GUI.enabled = _manualTargets[i] != null;
+                    if (GUILayout.Button("Apply", GUILayout.Width(50)))
+                    {
+                        ApplyStyleToSingleTarget(style, _manualTargets[i]);
+                    }
+                    
+                    // Ping Button
+                    if (GUILayout.Button("🔍", GUILayout.Width(30)))
+                    {
+                        EditorGUIUtility.PingObject(_manualTargets[i]);
+                    }
+                    
+                    // Remove Button
+                    GUI.enabled = true;
+                    GUI.backgroundColor = new Color(1f, 0.7f, 0.7f);
+                    if (GUILayout.Button("X", GUILayout.Width(25)))
+                    {
+                        _manualTargets.RemoveAt(i);
+                        i--; // Adjust index
+                    }
+                    GUI.backgroundColor = Color.white;
+                    
+                    EditorGUILayout.EndHorizontal();
+                }
+
+                EditorGUILayout.Space(5);
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("＋ Add New Slot", GUILayout.Height(20)))
+                {
+                    _manualTargets.Add(null);
+                }
+                if (GUILayout.Button("Clear Nulls", GUILayout.Width(80)))
+                {
+                    _manualTargets.RemoveAll(x => x == null);
+                }
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.Space(5);
+                GUI.backgroundColor = new Color(0.7f, 1f, 0.7f);
+                if (GUILayout.Button("Apply Style to ALL Manual Targets", GUILayout.Height(30)))
+                {
+                    foreach (var target in _manualTargets)
+                    {
+                        if (target != null) ApplyStyleToSingleTarget(style, target);
+                    }
+                    EditorUtility.DisplayDialog("Success", "Applied style to all valid manual targets.", "OK");
+                }
+                GUI.backgroundColor = Color.white;
+                
+                EditorGUILayout.EndVertical();
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            EditorGUILayout.Space(5);
+
+            // --- 2. Theme Prefabs Group ---
+            _showThemePrefabsGroup = EditorGUILayout.BeginFoldoutHeaderGroup(_showThemePrefabsGroup, "2. Related Theme Prefabs (UI World)");
+            if (_showThemePrefabsGroup)
+            {
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                RefreshThemePrefabs(style);
+                
+                if (_themePrefabs.Count == 0)
+                {
+                    EditorGUILayout.HelpBox("Không tìm thấy Prefab nào trong thư mục Theme.", MessageType.None);
+                }
+                else
+                {
+                    foreach (var pf in _themePrefabs)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField(pf.name, EditorStyles.wordWrappedLabel);
+                        
+                        GUILayout.FlexibleSpace();
+
+                        if (GUILayout.Button("Apply", GUILayout.Width(60)))
+                        {
+                            ApplyStyleToPrefab(style, pf);
+                        }
+
+                        if (GUILayout.Button("🔍", GUILayout.Width(30)))
+                        {
+                            EditorGUIUtility.PingObject(pf);
+                        }
+                        
+                        EditorGUILayout.EndHorizontal();
+                    }
+
+                    EditorGUILayout.Space(5);
+                    GUI.backgroundColor = new Color(0.7f, 1.0f, 0.8f);
+                    if (GUILayout.Button("Apply Style to ALL Theme Prefabs", GUILayout.Height(30)))
+                    {
+                        foreach (var pf in _themePrefabs) ApplyStyleToPrefab(style, pf);
+                        EditorUtility.DisplayDialog("Success", "Applied style to all prefabs in theme folder.", "OK");
+                    }
+                    GUI.backgroundColor = Color.white;
+                }
+                EditorGUILayout.EndVertical();
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            EditorGUILayout.EndVertical();
+        }
+
+        private void RefreshThemePrefabs(UIStyleDataSO style)
+        {
+            if (Event.current.type != EventType.Layout) return;
+            
+            _themePrefabs.Clear();
+            string themePath = $"Assets/_Project/Resources/UI/{style.themeFolderName}";
+            if (AssetDatabase.IsValidFolder(themePath))
+            {
+                string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { themePath });
+                foreach (var guid in guids)
+                {
+                    GameObject pf = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid));
+                    if (pf != null) _themePrefabs.Add(pf);
+                }
+            }
+        }
+
+        private void ApplyStyleToSingleTarget(UIStyleDataSO style, GameObject target)
+        {
+            if (target == null) return;
+
+            UIStyleProcessor.ApplyStyle(target, style);
+            EditorUtility.SetDirty(target);
+            Debug.Log($"[UIStyle] Applied style to {target.name}");
+        }
+
+        private void HandleManualDragAndDrop(Rect dropArea)
+        {
+            Event evt = Event.current;
+            if (!dropArea.Contains(evt.mousePosition)) return;
+
+            switch (evt.type)
+            {
+                case EventType.DragUpdated:
+                case EventType.DragPerform:
+                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+
+                    if (evt.type == EventType.DragPerform)
+                    {
+                        DragAndDrop.AcceptDrag();
+                        foreach (var obj in DragAndDrop.objectReferences)
+                        {
+                            if (obj is GameObject go)
+                            {
+                                if (!_manualTargets.Contains(go))
+                                    _manualTargets.Add(go);
+                            }
+                        }
+                        evt.Use();
+                    }
+                    break;
+            }
+        }
+
+        private void ApplyStyleToPrefab(UIStyleDataSO style, GameObject prefab)
+        {
+            // For prefabs, we need to open them, edit, and save
+            string path = AssetDatabase.GetAssetPath(prefab);
+            GameObject instance = PrefabUtility.LoadPrefabContents(path);
+            
+            UIStyleProcessor.ApplyStyle(instance, style);
+            
+            PrefabUtility.SaveAsPrefabAsset(instance, path);
+            PrefabUtility.UnloadPrefabContents(instance);
+            
+            Debug.Log($"[UIStyle] Applied style to Prefab: {prefab.name}");
         }
 
         private void DrawGenericEditor()
