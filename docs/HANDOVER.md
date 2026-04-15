@@ -9,6 +9,7 @@ Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi b
     - **Simplified Infrastructure**: `ResourcesUIProvider` giờ load thẳng từ `UI/Default/{key}` không qua theme fallback. `PopupManager` không còn inject style vào popup khi spawn.
     - **Data Manager Cleanup**: Tab "UI/Themes" đã bị xóa khỏi `GameDataManagerWindow`. Chỉ còn: Crops, Animals, Quests, Settings.
     - **MCP Unity Connect**: Kết nối UnityMCP cho project NTVV qua `.mcp.json` (bundled Python tại `Assets/StreamingAssets/realvirtual-MCP/`).
+    - **SCN_Main UI Spec hoàn thành**: Đã tạo Kiro Spec đầy đủ tại `.kiro/specs/scn-main-ui-rebuild/` gồm `requirements.md`, `design.md`, `tasks.md`. Spec bao gồm 11 tasks để build toàn bộ UI mới qua Pure MCP — 4 canvas, 7 UI components, wire scripts, extract prefabs. **Chưa execute — sẵn sàng để implement.**
 - **Phiên 09/04/2026**:
     - **100% Atomic Asset Success**: Hoàn tất sản xuất và làm sạch bộ 21 icons mới (Cà rốt, Gà, Tài nguyên, Bổ sung nút bấm). Tổng cộng 28 assets đạt chuẩn.
     - **Hyper-Granular Asset Organization**: Triển khai cấu trúc thư mục UI Art chuyên sâu tại `Assets/_Project/Art/Sprites/UI/` (Backgrounds, Icons/Common, Icons/Crops, Icons/Animals).
@@ -30,13 +31,27 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - `docs/guides/Atomic_HUD_Prompt_Library.md`: Thư viện Prompt chuẩn cho sản xuất asset.
 
 ## 🎯 Trạng thái hiện tại & Bước tiếp theo
-- **Đã xong**: Sản xuất 100% Asset bộ khởi động (Carrot, Chicken, UI Backgrounds, Resource Icons). Quy hoạch thư mục Art khoa học.
+- **Đã xong**: 
+    - Sản xuất 100% Asset bộ khởi động (Carrot, Chicken, UI Backgrounds, Resource Icons).
+    - Quy hoạch thư mục Art khoa học.
+    - **Kiro Spec `scn-main-ui-rebuild` hoàn chỉnh** — requirements, design, 11 tasks sẵn sàng execute.
 - **Cần làm ngay**: 
-    1. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
-    2. **UI Prototype Assembly**: Lắp ráp màn hình Gameplay HUD thực tế sử dụng Asset chuẩn — gán sprite trực tiếp qua MCP, không qua UIStyleApplier.
-    3. **Prefab Wiring**: Kiểm tra các prefab trong `Resources/UI/Default/` còn reference nào đến UIStyleApplier component không, nếu có thì xóa.
+    1. **Execute SCN_Main UI Spec**: Mở `.kiro/specs/scn-main-ui-rebuild/tasks.md` và execute từng task qua Kiro. Bắt đầu từ Task 1 (Scene + Systems setup).
+    2. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry (có thể làm song song sau Task 2).
+    3. **Prefab Wiring**: Kiểm tra các prefab trong `Resources/UI/Default/` còn reference nào đến UIStyleApplier component không, nếu có thì xóa (Task 9 trong spec sẽ override các prefab này).
+
+## 🗂 Kiro Spec đang active
+- **Spec**: `scn-main-ui-rebuild`
+- **Path**: `.kiro/specs/scn-main-ui-rebuild/`
+- **Status**: Chưa execute — Task 1-11 đều `[ ]`
+- **Approach**: Pure MCP, Hybrid (giữ scripts, build UI mới trong SCN_Main)
+- **Key design decisions**:
+    - 4 canvas: HUD(10), Popup(20), System(30) + WorldRoot
+    - `[SYSTEMS]` group chứa: GameManager, EconomySystem, StorageSystem, LevelSystem, SaveLoadManager, PopupManager
+    - Popups load từ `Resources/UI/Default/` qua `PopupManager.ShowScreen(name)`
+    - `AnimalDetailPanelController` fields: `_animalName`, `_growthText`, `_feedButton` (GO), `_sellButton` (GO)
 
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. Đọc `docs/guides/Atomic_HUD_Prompt_Library.md` cho quy trình sản xuất asset."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. Spec UI mới đã sẵn sàng tại `.kiro/specs/scn-main-ui-rebuild/` — đọc `design.md` để hiểu architecture trước khi execute tasks."
