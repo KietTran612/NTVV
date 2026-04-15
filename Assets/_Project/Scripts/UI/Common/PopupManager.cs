@@ -5,7 +5,6 @@ namespace NTVV.UI.Common
     using NTVV.UI.Panels;
     using NTVV.Core;
     using NTVV.UI.Infrastructure;
-    using NTVV.UI.Styling;
 
     /// <summary>
     /// Singleton manager for screen stack and modal popups.
@@ -22,17 +21,13 @@ namespace NTVV.UI.Common
         [SerializeField] private Vector3 _contextOffset = new Vector3(0, 100, 0);
         private CropActionPanelController _cropActionPanel;
 
-        [Header("Design & Theme")]
-        [SerializeField] private UIStyleDataSO _activeStyle;
-
         private IUIAssetProvider _provider;
         private GameObject _activeModal;
 
         protected override void OnInitialize()
         {
             _isPersistent = true;
-            // Initialize provider with the selected style
-            _provider = new ResourcesUIProvider(_activeStyle);
+            _provider = new ResourcesUIProvider();
         }
 
         #region Action Panels
@@ -52,7 +47,6 @@ namespace NTVV.UI.Common
                 {
                     GameObject instance = Instantiate(prefab, _hudParent);
                     _cropActionPanel = instance.GetComponent<CropActionPanelController>();
-                    ApplyGlobalStyle(instance);
                     instance.gameObject.SetActive(false);
                 }
             }
@@ -131,8 +125,6 @@ namespace NTVV.UI.Common
                 if (prefab != null && _modalParent != null)
                 {
                     _activeModal = Instantiate(prefab, _modalParent);
-                    // Apply global style to all StyleAppliers in the spawned popup
-                    ApplyGlobalStyle(_activeModal);
                 }
             }
         }
@@ -148,16 +140,6 @@ namespace NTVV.UI.Common
             }
         }
 
-        private void ApplyGlobalStyle(GameObject root)
-        {
-            if (_provider == null || _provider.CurrentStyle == null) return;
-            
-            var appliers = root.GetComponentsInChildren<UIStyleApplier>(true);
-            foreach (var applier in appliers)
-            {
-                applier.ApplyStyle(_provider.CurrentStyle);
-            }
-        }
         #endregion
     }
 }

@@ -4,7 +4,6 @@ namespace NTVV.UI.Panels
     using UnityEngine.UI;
     using TMPro;
     using NTVV.World.Views;
-    using NTVV.UI.Styling;
     using NTVV.UI.Common;
     using NTVV.Data.ScriptableObjects;
     using NTVV.Gameplay.Economy;
@@ -33,9 +32,6 @@ namespace NTVV.UI.Panels
         [SerializeField] private Button _cureButton;
         [SerializeField] private Button _weedButton;
 
-        [Header("Theme Source")]
-        [SerializeField] private UIStyleDataSO _fallbackStyle;
-
         [Header("Data (Required for Plant)")]
         [SerializeField] private GameDataRegistrySO _registry;
 
@@ -60,8 +56,6 @@ namespace NTVV.UI.Panels
             _waterButton?.onClick.AddListener(() => { _targetTile?.WaterPlant(); RefreshUI(); });
             _cureButton?.onClick.AddListener(() => { _targetTile?.ClearPests(); RefreshUI(); });
             _weedButton?.onClick.AddListener(() => { _targetTile?.ClearWeeds(); RefreshUI(); });
-
-            ApplyThemeToButtons();
         }
 
         /// <summary>
@@ -126,35 +120,6 @@ namespace NTVV.UI.Panels
                 _collectButton.gameObject.SetActive(_targetAnimal.IsReadyToProduce);
                 _sellButton.gameObject.SetActive(true);
             }
-        }
-
-        private void ApplyThemeToButtons()
-        {
-            // Primary actions (Orange)
-            ApplyStyle(_plantButton, UIStyleApplier.StyleType.PrimaryAction);
-            ApplyStyle(_harvestButton, UIStyleApplier.StyleType.PrimaryAction);
-            ApplyStyle(_buyButton, UIStyleApplier.StyleType.PrimaryAction);
-            ApplyStyle(_feedButton, UIStyleApplier.StyleType.PrimaryAction);
-            ApplyStyle(_collectButton, UIStyleApplier.StyleType.PrimaryAction);
-
-            // Caring actions (Green)
-            ApplyStyle(_waterButton, UIStyleApplier.StyleType.CaringAction);
-            ApplyStyle(_cureButton, UIStyleApplier.StyleType.CaringAction);
-            ApplyStyle(_weedButton, UIStyleApplier.StyleType.CaringAction);
-
-            // Special actions
-            ApplyStyle(_sellButton, UIStyleApplier.StyleType.Warning);
-            ApplyStyle(_resetButton, UIStyleApplier.StyleType.Warning);
-        }
-
-        private void ApplyStyle(Button btn, UIStyleApplier.StyleType type)
-        {
-            if (btn == null) return;
-            var applier = btn.GetComponent<UIStyleApplier>();
-            if (applier == null) applier = btn.gameObject.AddComponent<UIStyleApplier>();
-            
-            // Set style and apply
-            applier.ChangeStyle(type, _fallbackStyle);
         }
 
         private void SetAllButtonsActive(bool val)

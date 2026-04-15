@@ -29,6 +29,7 @@ MonoBehaviour:
     baseYieldUnits: 3
     sellPriceGold: 4
     xpReward: 4
+    seedIcon: {fileID: 21300000, guid: a2c36e1c67dce6346b1bc22686883ff6, type: 3}
     weedChancePct: 0.1
     bugChancePct: 0.08
     waterChancePct: 0.1

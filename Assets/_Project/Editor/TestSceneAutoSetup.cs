@@ -15,7 +15,7 @@ namespace NTVV.Editor
     /// </summary>
     public static class TestSceneAutoSetup
     {
-        [MenuItem("Tools/NTVV/Create Test Core Scene")]
+        [MenuItem("NTVV/Setup/Create Test Core Scene")]
         public static void CreateTestScene()
         {
             // 1. Tạo Scene mới

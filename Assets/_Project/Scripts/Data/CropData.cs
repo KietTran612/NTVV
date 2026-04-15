@@ -26,6 +26,9 @@ namespace NTVV.Data
         public int sellPriceGold;
         public int xpReward;
 
+        [Header("Shop Display")]
+        public Sprite seedIcon;
+
         [Header("Caring Events (Chance 0-1)")]
         public float weedChancePct;
         public float bugChancePct;

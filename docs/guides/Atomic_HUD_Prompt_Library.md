@@ -145,7 +145,43 @@ All asset generation MUST strictly adhere to this structure to ensure consistenc
 
 ---
 
-## 4. Quality Control Checklist
+---
+
+## 5. Seed Shop HUD Assets (Visual Refinement)
+
+### A. Decorative Elements (Frontal Orthographic)
+*Purpose: These assets provide the primary branding and interactive frames for the Shop Popup.*
+
+- **Wooden Title Plaque**:
+  *Target Filename: `bg_Plaque_Wooden_Atomic.png`*
+  `Blank decorative wooden plaque sign for popup headers, horizontal 4:1 width-to-height aspect ratio, Straight Front View (Orthographic), Stylized Kawaii farm game UI, Carved honey-oak wood texture with soft beveled edges and subtle side notches, Polished satin finish with warm ambient lighting, Transparent background, No text or icons / no perspective distortion, High resolution, --ar 4:1`
+
+- **Close Button (Circle Red)**:
+  *Target Filename: `btn_Close_Circle_Atomic.png`*
+  `Pure 3D circular red UI button with a bold white 'X' mark, Straight Front View (Orthographic), Kawaii professional game UI style, Vibrant candy red satin plastic, Soft internal bevel and ambient occlusion in the 'X' cutout, Transparent background, --ar 1:1`
+
+### B. Functional Icons (3D Isometric)
+*Purpose: Icons used on tabs, buttons, or as decorative accents.*
+
+- **Sprout (Header Decor)**:
+  *Target Filename: `icon_SproutTile_Atomic.png`*
+  `Pure 3D green sprout seedling in a small round mound of soft brown soil, 3D Isometric View (30-degree angle), Kawaii game aesthetic, Vibrant green soft plastic leaves with glossy finish, Rich internal volume, Transparent background, No pots or backgrounds, --ar 1:1`
+
+- **Leaf (Seeds Tab Icon)**:
+  *Target Filename: `icon_Tab_Leaf_Atomic.png`*
+  `Pure 3D stylized organic leaf icon for UI tabs, 3D Isometric View, Kawaii nature aesthetic, Vibrant yellow and lime green glossy plastic, Thick volume with soft rounded edges, Transparent background, No frames or buttons, --ar 1:1`
+
+- **Star (Special Tab Icon)**:
+  *Target Filename: `icon_Tab_Star_Atomic.png`*
+  `Pure 3D stylized star icon for special category, 3D Isometric View, Kawaii magic aesthetic, Warm yellow and orange glossy thick plastic, Polished satin finish with soft-touch depth, Transparent background, No icons or frames, --ar 1:1`
+
+- **Refresh (Action Icon)**:
+  *Target Filename: `icon_Refresh_Atomic.png`*
+  `Pure 3D circular arrow icon for refresh action, 3D Isometric View, Kawaii modern game aesthetic, Vibrant lime green glossy plastic with thick rounded segments, Satin finish soft-touch volume, Transparent background, --ar 1:1`
+
+---
+
+## 6. Quality Control Checklist
 - [ ] **Perspective**: Is it 0-degree frontal (panels) or 45-degree isometric (icons)?
 - [ ] **Material**: Does it have the signature "Glossy/Candy" highlights?
 - [ ] **Background**: Is the chroma key color clearly separated from the asset color?

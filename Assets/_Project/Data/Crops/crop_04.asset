@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3aa1b5e28733ef41ad80cc50c6fa516, type: 3}
+  m_Name: crop_04
+  m_EditorClassIdentifier: Assembly-CSharp::NTVV.Data.ScriptableObjects.CropDataSO
+  itemId: 
+  itemName: 
+  unlockLevel: 1
+  icon: {fileID: 0}
+  worldPrefab: {fileID: 0}
+  data:
+    cropId: crop_04
+    cropName: "L\xFAa m\xEC"
+    unlockLevel: 1
+    seedCostGold: 5
+    growTimeMin: 2
+    phase1Pct: 0.25
+    phase2Pct: 0.35
+    phase3Pct: 0.4
+    baseYieldUnits: 0
+    sellPriceGold: 0
+    xpReward: 0
+    seedIcon: {fileID: 0}
+    weedChancePct: 0
+    bugChancePct: 0
+    waterChancePct: 0
+    maxCareEvents: 0
+    perfectWindowMin: 0
+    postRipeLifeMin: 0
+    notes: 
+  growthStageSprites: []
+  deadSprite: {fileID: 0}
+  seedIcon: {fileID: 0}
+  cropIcon: {fileID: 0}
+  plantSfx: {fileID: 0}
+  harvestSfx: {fileID: 0}

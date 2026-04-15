@@ -16,6 +16,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5dfd97a7d1ed73949ab748caac027e79, type: 2}
   - {fileID: 11400000, guid: 26aabd4e599ddf748901316fa0d0ffe2, type: 2}
   - {fileID: 11400000, guid: 612caa84ec1a2164ca6e1df37c254c2e, type: 2}
+  - {fileID: 11400000, guid: d677b1eda6587a544b97c37554b066ef, type: 2}
+  - {fileID: 11400000, guid: aebfc1cfb1d48e243bab1c90bf71f5c8, type: 2}
+  - {fileID: 11400000, guid: 7d7b7c954b9999b4b9ae4ebb63efea95, type: 2}
+  - {fileID: 11400000, guid: 7be755ac244f8af48b93bfcf9f73967a, type: 2}
   animals:
   - {fileID: 11400000, guid: 9fdf02460b216fe4cac95395b03d1444, type: 2}
   - {fileID: 11400000, guid: 6be0b9e46e5630b4a8fbe8f1e43fc8eb, type: 2}

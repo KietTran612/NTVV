@@ -1,7 +1,12 @@
-| Task ID | Step | Status | Description |
-| :--- | :--- | :--- | :--- |
-| T1 | Folder Creation | [x] | Tạo cấu trúc thư mục Backgrounds, Icons, Common, Legacy |
-| T2 | Move Root Assets | [x] | Di chuyển BG và Icons chung từ thư mục gốc |
-| T3 | Specialized Icons | [x] | Di chuyển và gom nhóm Gà, Cà rốt vào bộ Icons |
-| T4 | Data Validation | [ ] | Đang chờ... (Sẽ thực hiện ở Phase Wiring) |
-| T5 | Cleanup | [x] | Xóa các thư mục cũ đã rỗng |
+# Seed Shop UI — Task Tracker
+
+| # | Task | Status |
+|---|---|---|
+| 1 | Update `ShopEntryController.cs` — Stepper support | ✅ done |
+| 2 | Update `ShopPanelController.cs` — Qty + Special tab | ✅ done |
+| 3 | Rebuild `ShopEntry_Seed.prefab` | ✅ done |
+| 4 | Generate missing seed icons | ✅ done |
+| 5 | Build `Shop_Popup` hierarchy in scene | ✅ done |
+| 6 | Apply visual styling | ✅ done |
+| 7 | Screenshot verification | ✅ done |
+| 8 | Smoke test Play Mode | ✅ done |

@@ -29,6 +29,7 @@ MonoBehaviour:
     baseYieldUnits: 4
     sellPriceGold: 6
     xpReward: 7
+    seedIcon: {fileID: 0}
     weedChancePct: 0.14
     bugChancePct: 0.12
     waterChancePct: 0.14

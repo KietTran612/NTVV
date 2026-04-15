@@ -12,6 +12,7 @@ namespace NTVV.UI.Panels
     {
         [Header("UI Standardized Components")]
         [SerializeField] private Image _item_Icon;
+        [SerializeField] private TMP_Text _name_Label;
         [SerializeField] private TMP_Text _quantity_Label;
         [SerializeField] private Button _sell_Button;
 
@@ -21,9 +22,10 @@ namespace NTVV.UI.Panels
         private void Awake()
         {
             // Recursive Auto-Wiring (Tier 1) - Self-Healing Pattern
-            if (_item_Icon == null) _item_Icon = FindNamed<Image>("Item_Icon");
+            if (_item_Icon      == null) _item_Icon      = FindNamed<Image>("Item_Icon");
+            if (_name_Label     == null) _name_Label     = FindNamed<TMP_Text>("Name_Label");
             if (_quantity_Label == null) _quantity_Label = FindNamed<TMP_Text>("Quantity_Label");
-            if (_sell_Button == null) _sell_Button = FindNamed<Button>("Sell_Button");
+            if (_sell_Button    == null) _sell_Button    = FindNamed<Button>("Sell_Button");
 
             if (_sell_Button != null)
             {
@@ -31,15 +33,16 @@ namespace NTVV.UI.Panels
             }
         }
 
-        public void Initialize(string id, int quantity, Sprite icon, System.Action<string> onSell)
+        public void Initialize(string id, string displayName, int quantity, Sprite icon, System.Action<string> onSell)
         {
-            _itemId = id;
+            _itemId        = id;
             _onSellClicked = onSell;
 
-            if (_item_Icon != null) _item_Icon.sprite = icon;
-            if (_quantity_Label != null) 
+            if (_item_Icon  != null) _item_Icon.sprite = icon;
+            if (_name_Label != null) _name_Label.text  = displayName;
+            if (_quantity_Label != null)
             {
-                _quantity_Label.text = quantity > 1 ? $"x{quantity}" : "";
+                _quantity_Label.text    = quantity > 1 ? $"×{quantity}" : "";
                 _quantity_Label.enabled = quantity > 0;
             }
         }
