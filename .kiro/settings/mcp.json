@@ -1,0 +1,52 @@
+{
+  "mcpServers": {
+    "unity-mcp": {
+      "command": "D:\\soflware\\Unity\\Source\\NTVV\\Assets\\StreamingAssets\\realvirtual-MCP\\python\\python.exe",
+      "args": [
+        "D:\\soflware\\Unity\\Source\\NTVV\\Assets\\StreamingAssets\\realvirtual-MCP\\unity_mcp_server.py",
+        "--mode",
+        "stdio"
+      ],
+      "env": {
+        "PYTHONPATH": "D:\\soflware\\Unity\\Source\\NTVV\\Assets\\StreamingAssets\\realvirtual-MCP\\Lib"
+      },
+      "autoApprove": [
+        "unity_status",
+        "unity_reconnect",
+        "editor_get_status",
+        "scene_new",
+        "game_object_create",
+        "component_add",
+        "scene_list",
+        "editor_open_scene",
+        "scene_hierarchy",
+        "scene_get_components",
+        "component_set",
+        "component_get",
+        "component_get_all",
+        "editor_invoke_method",
+        "component_set_all",
+        "game_object_get_info",
+        "editor_wait_ready",
+        "editor_execute_menu",
+        "editor_read_log",
+        "editor_read_log",
+        "transform_set_parent",
+        "game_object_set_active",
+        "scene_find",
+        "scene_find",
+        "editor_recompile",
+        "editor_save_scene",
+        "screenshot_scene",
+        "screenshot_editor"
+      ]
+    },
+    "pencil": {
+      "command": "C:\\Users\\Hoang.H\\.pencil\\mcp\\antigravity\\out\\mcp-server-windows-x64.exe",
+      "args": [
+        "--app",
+        "antigravity"
+      ]
+    }
+  }
+}

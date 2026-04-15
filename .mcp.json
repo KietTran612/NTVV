@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "ai-game-developer": {
+      "type": "http",
+      "url": "http://localhost:21750"
+    },
+    "UnityMCP": {
+      "command": "D:/soflware/Unity/Source/NTVV/Assets/StreamingAssets/realvirtual-MCP/python/python.exe",
+      "args": [
+        "D:/soflware/Unity/Source/NTVV/Assets/StreamingAssets/realvirtual-MCP/unity_mcp_server.py"
+      ]
+    }
+  }
+}
