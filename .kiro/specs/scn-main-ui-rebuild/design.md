@@ -30,10 +30,10 @@ SCN_Main
 │   └── BottomNav            (BottomNavController)
 │
 ├── [POPUP_CANVAS]           (Canvas SO=20, CanvasScaler 1920×1080)
-│   ├── ModalParent          (RectTransform stretch-stretch)
-│   ├── HUDParent            (RectTransform stretch-stretch)
+│   ├── HUDParent            (RectTransform stretch-stretch)        ← index 0: thấp nhất
 │   │   └── ContextActionPanel  (CropActionPanelController, disabled)
-│   └── DimOverlay           (Image black alpha=0.5, disabled)
+│   ├── DimOverlay           (Image black alpha=0.5, disabled)      ← index 1: dim HUD, không che popup
+│   └── ModalParent          (RectTransform stretch-stretch)        ← index 2: cao nhất, popup luôn on top
 │
 └── [SYSTEM_CANVAS]          (Canvas SO=30, CanvasScaler 1920×1080)
     ├── LoadingOverlay       (disabled)

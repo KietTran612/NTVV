@@ -60,3 +60,9 @@ Thumbs.db
 /Assets/Assets.meta
 /Assets/Packages
 /Assets/Packages.meta
+
+# Kiro settings (local secrets)
+.kiro/settings/mcp.json
+
+# External package path
+c:\1.SOURCE\Unity\Source\NTVV\Packages\io.realvirtual.mcp

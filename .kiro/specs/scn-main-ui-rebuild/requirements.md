@@ -199,6 +199,9 @@ Dùng sprites đã có trong `Assets/_Project/Art/Sprites/UI/`:
 
 **User Story:** As a player, I want to see my animal's status and take action (feed/sell) from a side panel, so that I can manage animals without losing sight of the farm.
 
+> **Trigger:** AnimalDetailPanel mở từ **Barn tab** (BottomNav → Barn → tap animal trong danh sách). Đây là full detail view.
+> KHÔNG nhầm với **ContextActionPanel** (Requirement 4) — ContextActionPanel là quick-action panel khi tap trực tiếp animal tile trên farm world, không phải từ Barn tab.
+
 #### Acceptance Criteria
 
 1. `AnimalDetailPanel` SHALL được mở khi tap animal trong Barn area
