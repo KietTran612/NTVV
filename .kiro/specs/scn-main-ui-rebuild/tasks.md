@@ -39,7 +39,7 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
   - Verify: `screenshot_scene` — thấy đủ root objects trong hierarchy
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
 
-- [ ] 1b. Resource Check — toàn bộ spec
+- [x] 1b. Resource Check — toàn bộ spec
   - Scan tất cả sprites/icons được reference trong tasks 2-8:
     - `icon_Gold_Atomic` (tasks 2, 6)
     - `icon_Storage_Atomic` (tasks 2, 3, 7)
@@ -53,57 +53,57 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
   - Với mỗi asset thiếu → generate prompts (DALL-E / SD / ComfyUI) → lưu `docs/asset-prompts/2026-04-16-scn-main-ui-rebuild-missing-assets.md`
   - NON-BLOCKING: proceed regardless
 
-- [ ] 2. Build TopHUDBar
-  - [ ] 2.0 · Resource Check
+- [x] 2. Build TopHUDBar
+  - [x] 2.0 · Resource Check
     - Scan: `icon_Gold_Atomic`, `icon_Storage_Atomic`
     - Check `Assets/_Project/Sprites/` (hoặc path tương ứng)
     - Nếu thiếu → append vào `docs/asset-prompts/2026-04-16-scn-main-ui-rebuild-missing-assets.md`
     - NON-BLOCKING
-  - [ ] 2.1 Tạo TopHUDBar container
+  - [x] 2.1 Tạo TopHUDBar container
     - Trong `[HUD_CANVAS]`, tạo `TopHUDBar` GameObject
     - Add `UnityEngine.UI.Image`, color=#FFF7E8
     - Add `HorizontalLayoutGroup`: padding L=16 R=16 T=8 B=8, spacing=12, childAlignment=MiddleLeft, childControlHeight=true, childForceExpandHeight=true
     - Set RectTransform: anchorMin=(0,1) anchorMax=(1,1) pivot=(0.5,1), height=80, offsetMin.x=0, offsetMax.x=0
     - `editor_save_scene`
     - _Requirements: 2.1_
-  - [ ] 2.2 Tạo Avatar_Icon và LevelChip
+  - [x] 2.2 Tạo Avatar_Icon và LevelChip
     - Tạo child `Avatar_Icon` trong TopHUDBar: Image 48×48, raycastTarget=false
     - Tạo child `LevelChip`: Image color=#4FA63A, HorizontalLayoutGroup spacing=6 padding=6, ContentSizeFitter
     - Trong LevelChip: tạo `Level_Label` (TMP "Level 1" Dosis-Bold 20pt white) và `XP_Fill` (Image #8ED8FF fillMethod=Horizontal fillAmount=0.3 raycastTarget=false width=80 height=12)
     - `editor_save_scene`
     - _Requirements: 2.2, 2.8_
-  - [ ] 2.3 Tạo GoldChip và StorageChip
+  - [x] 2.3 Tạo GoldChip và StorageChip
     - Tạo child `GoldChip` trong TopHUDBar: Image #FFF7E8, HorizontalLayoutGroup spacing=6 padding=4, ContentSizeFitter
     - Trong GoldChip: `Gold_Icon` (Image sprite=icon_Gold_Atomic 28×28 raycastTarget=false), `Gold_Label` (TMP "0" Dosis-Bold 24pt #FFD75E)
     - Tạo child `StorageChip`: Image #FFF7E8, HorizontalLayoutGroup spacing=6 padding=4, ContentSizeFitter
     - Trong StorageChip: `Storage_Icon` (Image sprite=icon_Storage_Atomic 28×28 raycastTarget=false), `Storage_Label` (TMP "0/50" Dosis-Bold 20pt #B97A4A)
     - `editor_save_scene`
     - _Requirements: 2.2, 2.9_
-  - [ ] 2.4 Tạo Settings_Button và wire HUDTopBarController
+  - [x] 2.4 Tạo Settings_Button và wire HUDTopBarController
     - Tạo child `Settings_Button` trong TopHUDBar: Button + Image, width=44 height=44
     - Add `HUDTopBarController` vào `TopHUDBar`
     - Wire: `_gold_Label`→TopHUDBar/GoldChip/Gold_Label, `_level_Label`→TopHUDBar/LevelChip/Level_Label, `_storage_Label`→TopHUDBar/StorageChip/Storage_Label, `_xp_Fill`→TopHUDBar/LevelChip/XP_Fill
     - `editor_save_scene`
     - _Requirements: 2.3, 2.4, 2.5, 2.6_
-  - [ ] 2.✓ · Quick Test
+  - [x] 2.✓ · Quick Test
     - `editor_read_log` filter=Error → 0 errors liên quan TopHUDBar
     - `component_get` HUDTopBarController → `_gold_Label`, `_level_Label`, `_storage_Label`, `_xp_Fill` không null
     - `screenshot_scene` → lưu `docs/screenshots/2026-04-16-scn-main-ui-rebuild-task2.png`
     - Nếu FAIL → fix trong task 2, KHÔNG sang task 3
 
-- [ ] 3. Build BottomNav
-  - [ ] 3.0 · Resource Check
+- [x] 3. Build BottomNav
+  - [x] 3.0 · Resource Check
     - Scan: `icon_Storage_Atomic`, `icon_Sprout_Header_Atomic`, `icon_Tab_Star_Atomic`
     - Nếu thiếu → append vào `docs/asset-prompts/2026-04-16-scn-main-ui-rebuild-missing-assets.md`
     - NON-BLOCKING
-  - [ ] 3.1 Tạo BottomNav container
+  - [x] 3.1 Tạo BottomNav container
     - Trong `[HUD_CANVAS]`, tạo `BottomNav` GameObject
     - Add `UnityEngine.UI.Image`, color=#FFF7E8
     - Add `HorizontalLayoutGroup`: childForceExpandWidth=true, childForceExpandHeight=true, spacing=0
     - Set RectTransform: anchorMin=(0,0) anchorMax=(1,0) pivot=(0.5,0), height=80, pos Y=0
     - `editor_save_scene`
     - _Requirements: 3.1_
-  - [ ] 3.2 Tạo 5 NavButtons (Farm, Storage, Shop, Barn, Event)
+  - [x] 3.2 Tạo 5 NavButtons (Farm, Storage, Shop, Barn, Event)
     - Tạo `NavBtn_Farm` [Button + Image #FFF7E8, VerticalLayoutGroup childAlignment=MiddleCenter spacing=4]: child `NavIcon_Farm` [Image 32×32 raycastTarget=false], child `NavLabel_Farm` [TMP "Farm" Dosis-Bold 16pt #B97A4A]
     - Tạo `NavBtn_Storage`: child `NavIcon_Storage` [Image sprite=icon_Storage_Atomic 32×32], child `NavLabel_Storage` [TMP "Kho" Dosis-Bold 16pt #B97A4A]
     - Tạo `NavBtn_Shop`: child `NavIcon_Shop` [Image sprite=icon_Sprout_Header_Atomic 32×32], child `NavLabel_Shop` [TMP "Shop" Dosis-Bold 16pt #B97A4A]
@@ -111,41 +111,41 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
     - Tạo `NavBtn_Event`: child `NavIcon_Event` [Image sprite=icon_Tab_Star_Atomic 32×32], child `NavLabel_Event` [TMP "Event" Dosis-Bold 16pt #B97A4A]
     - `editor_save_scene`
     - _Requirements: 3.2, 3.7_
-  - [ ] 3.3 Wire BottomNavController
+  - [x] 3.3 Wire BottomNavController
     - Add `BottomNavController` vào `BottomNav`
     - Wire: `_btnFarm`→NavBtn_Farm, `_btnStorage`→NavBtn_Storage, `_btnShop`→NavBtn_Shop, `_btnBarn`→NavBtn_Barn, `_btnEvent`→NavBtn_Event
     - `editor_save_scene`
     - _Requirements: 3.3, 3.4, 3.5, 3.6_
-  - [ ] 3.✓ · Quick Test
+  - [x] 3.✓ · Quick Test
     - `editor_read_log` filter=Error → 0 errors liên quan BottomNav
     - `component_get` BottomNavController → tất cả 5 button references không null
     - `screenshot_scene` → lưu `docs/screenshots/2026-04-16-scn-main-ui-rebuild-task3.png`
     - Nếu FAIL → fix trong task 3, KHÔNG sang task 4
 
-- [ ] 4. Wire PopupManager
-  - [ ] 4.0 · Resource Check
+- [x] 4. Wire PopupManager
+  - [x] 4.0 · Resource Check
     - Không có sprite asset mới trong task này — SKIP scan
     - NON-BLOCKING
-  - [ ] 4.1 Wire PopupManager canvas references
+  - [x] 4.1 Wire PopupManager canvas references
     - Tìm `PopupManager` GameObject trong `[SYSTEMS]`
     - `component_set` trên `PopupManager`: `_mainOverlayCanvas`→`[POPUP_CANVAS]`, `_modalParent`→`[POPUP_CANVAS]/ModalParent`, `_hudParent`→`[POPUP_CANVAS]/HUDParent`
     - `editor_save_scene`
     - _Requirements: 1.5, 1.6_
-  - [ ] 4.2 Smoke test PopupManager
+  - [x] 4.2 Smoke test PopupManager
     - `sim_play` → `editor_wait_ready`
     - `editor_read_log` filter=Error → không có NullRef từ PopupManager
     - `sim_stop`
     - _Requirements: 1.6_
-  - [ ] 4.✓ · Quick Test
+  - [x] 4.✓ · Quick Test
     - `component_get` PopupManager → `_modalParent`, `_hudParent` không null
     - `editor_read_log` filter=Error → 0 errors liên quan PopupManager
     - Nếu FAIL → fix trong task 4, KHÔNG sang task 5
 
-- [ ] 5. Build ContextActionPanel
-  - [ ] 5.0 · Resource Check
+- [x] 5. Build ContextActionPanel
+  - [x] 5.0 · Resource Check
     - Không có sprite asset mới trong task này — SKIP scan
     - NON-BLOCKING
-  - [ ] 5.1 Tạo ContextActionPanel container
+  - [x] 5.1 Tạo ContextActionPanel container
     - Trong `[POPUP_CANVAS]/HUDParent`, tạo `ContextActionPanel`
     - Add `UnityEngine.UI.Image` color=#FFF7E8
     - Add `VerticalLayoutGroup`: padding=12, spacing=8, childForceExpandWidth=true, childControlHeight=false
@@ -154,7 +154,7 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
     - SetActive=false
     - `editor_save_scene`
     - _Requirements: 4.1_
-  - [ ] 5.2 Tạo Header và action buttons (Plant→Water)
+  - [x] 5.2 Tạo Header và action buttons (Plant→Water)
     - Tạo child `Header` [HorizontalLayoutGroup spacing=8]: `CropIcon_Icon` [Image 40×40], `Header_Label` [TMP "Mảnh Đất" Dosis-Bold 22pt #4FA63A]
     - Tạo `Plant_Button` [Image #69C34D h=44] → child TMP "Gieo Hạt" white Dosis-Bold 20pt
     - Tạo `Harvest_Button` [Image #69C34D h=44] → child TMP "Thu Hoạch" white Dosis-Bold 20pt
@@ -162,7 +162,7 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
     - Tạo `Water_Button` [Image #67DCC8 h=44] → child TMP "Tưới Nước" white Dosis-Bold 20pt
     - `editor_save_scene`
     - _Requirements: 4.2, 4.3, 4.4, 4.6_
-  - [ ] 5.3 Tạo action buttons (Cure→Collect) và Close
+  - [x] 5.3 Tạo action buttons (Cure→Collect) và Close
     - Tạo `Cure_Button` [Image #FFB547 h=44] → child TMP "Bắt Sâu" white Dosis-Bold 20pt
     - Tạo `Weed_Button` [Image #FFB547 h=44] → child TMP "Cắt Cỏ" white Dosis-Bold 20pt
     - Tạo `Buy_Button` [Image #69C34D h=44] → child TMP "Mua Giống" white Dosis-Bold 20pt
@@ -172,25 +172,25 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
     - Tạo `Close_Button` [Image #B97A4A 44×44] → child TMP "✕" white Dosis-Bold 20pt
     - `editor_save_scene`
     - _Requirements: 4.5, 4.7, 4.8, 4.9, 4.10_
-  - [ ] 5.4 Wire CropActionPanelController
+  - [x] 5.4 Wire CropActionPanelController
     - Add `CropActionPanelController` vào `ContextActionPanel`
     - Wire tất cả button references và `_headerText`→Header/Header_Label
     - Wire `_registry` → `GameDataRegistry.asset`
     - `editor_save_scene`
     - _Requirements: 4.2_
-  - [ ] 5.✓ · Quick Test
+  - [x] 5.✓ · Quick Test
     - `editor_read_log` filter=Error → 0 errors liên quan ContextActionPanel
     - `component_get` CropActionPanelController → `_headerText`, `_registry` không null
     - `screenshot_scene` → lưu `docs/screenshots/2026-04-16-scn-main-ui-rebuild-task5.png`
     - Nếu FAIL → fix trong task 5, KHÔNG sang task 6
 
-- [ ] 6. Build ShopPopup
-  - [ ] 6.0 · Resource Check
+- [x] 6. Build ShopPopup
+  - [x] 6.0 · Resource Check
     - Scan: `bg_Plaque_Wooden_Atomic`, `icon_Sprout_Header_Atomic`, `btn_Close_Circle_Atomic`, `icon_Tab_Leaf_Atomic`, `icon_Tab_Star_Atomic`, `icon_Gold_Atomic`
     - Scan prefab: `Assets/_Project/Prefabs/UI/Components/ShopEntry_Seed.prefab`
     - Nếu thiếu → append vào `docs/asset-prompts/2026-04-16-scn-main-ui-rebuild-missing-assets.md`
     - NON-BLOCKING
-  - [ ] 6.1 Tạo ShopPopup container + Header
+  - [x] 6.1 Tạo ShopPopup container + Header
     - Trong `[POPUP_CANVAS]/ModalParent`, tạo `ShopPopup` [Image #FFF7E8, VerticalLayoutGroup]
     - Set RectTransform: anchor center, width=800 height=600, SetActive=false
     - Tạo child `Header` [Image sprite=bg_Plaque_Wooden_Atomic, HorizontalLayoutGroup padding=12 spacing=8, height=60]:
@@ -199,7 +199,7 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
       - `Close_Button` [Button Image sprite=btn_Close_Circle_Atomic 40×40]
     - `editor_save_scene`
     - _Requirements: 5.2, 5.10_
-  - [ ] 6.2 Tạo TabBar và ScrollView
+  - [x] 6.2 Tạo TabBar và ScrollView
     - Tạo child `TabBar` [HorizontalLayoutGroup spacing=4 padding=8, height=44]:
       - `Tab_Seeds_Button` [Button Image #69C34D, LayoutElement flexibleWidth=1]: child `TabSeeds_Icon` [Image sprite=icon_Tab_Leaf_Atomic 24×24], child TMP "Hạt Giống" Dosis-Bold 18pt white
       - `Tab_Special_Button` [Button Image #AAAAAA interactable=false, LayoutElement flexibleWidth=1]: child `TabSpecial_Icon` [Image sprite=icon_Tab_Star_Atomic 24×24], child TMP "Đặc Biệt" Dosis-Bold 18pt #888888
@@ -208,7 +208,7 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
         - Child `Content` [GridLayoutGroup: cellSize=180×220, spacing=12×12, constraint=FixedColumnCount, constraintCount=4, padding=12]
     - `editor_save_scene`
     - _Requirements: 5.3, 5.4_
-  - [ ] 6.3 Tạo Footer và wire ShopPanelController
+  - [x] 6.3 Tạo Footer và wire ShopPanelController
     - Tạo child `Footer` [Image #F5EDD8, HorizontalLayoutGroup padding=12 spacing=8, height=50]:
       - `GoldChip` [Image #B97A4A, HorizontalLayoutGroup padding=8 spacing=6, ContentSizeFitter]:
         - `GoldIcon_Icon` [Image sprite=icon_Gold_Atomic 24×24]
@@ -218,19 +218,19 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
     - Wire `_shopItemPrefab` → `Assets/_Project/Prefabs/UI/Components/ShopEntry_Seed.prefab`
     - `editor_save_scene`
     - _Requirements: 5.7, 5.8, 5.9_
-  - [ ] 6.✓ · Quick Test
+  - [x] 6.✓ · Quick Test
     - `editor_read_log` filter=Error → 0 errors liên quan ShopPopup
     - `component_get` ShopPanelController → `_goldBalanceLabel`, `_shopContentContainer`, `_shopItemPrefab` không null
     - `screenshot_scene` → lưu `docs/screenshots/2026-04-16-scn-main-ui-rebuild-task6.png`
     - Nếu FAIL → fix trong task 6, KHÔNG sang task 7
 
-- [ ] 7. Build StoragePopup
-  - [ ] 7.0 · Resource Check
+- [x] 7. Build StoragePopup
+  - [x] 7.0 · Resource Check
     - Scan: `bg_Plaque_Wooden_Atomic`, `icon_Storage_Atomic`, `btn_Close_Circle_Atomic`
     - Scan prefab: `Assets/_Project/Prefabs/UI/Components/InventorySlot.prefab` (hoặc tên tương đương)
     - Nếu thiếu → append vào `docs/asset-prompts/2026-04-16-scn-main-ui-rebuild-missing-assets.md`
     - NON-BLOCKING
-  - [ ] 7.1 Tạo StoragePopup container + Header
+  - [x] 7.1 Tạo StoragePopup container + Header
     - Trong `[POPUP_CANVAS]/ModalParent`, tạo `StoragePopup` [Image #FFF7E8, VerticalLayoutGroup]
     - Set RectTransform: anchor center, width=900 height=650, SetActive=false
     - Tạo child `Header` [Image sprite=bg_Plaque_Wooden_Atomic, HorizontalLayoutGroup padding=12 spacing=8, height=60]:
@@ -240,7 +240,7 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
       - `Close_Button` [Button Image sprite=btn_Close_Circle_Atomic 40×40]
     - `editor_save_scene`
     - _Requirements: 6.2, 6.3_
-  - [ ] 7.2 Tạo TabBar và MainArea/ScrollView
+  - [x] 7.2 Tạo TabBar và MainArea/ScrollView
     - Tạo child `TabBar` [HorizontalLayoutGroup spacing=4 padding=8, height=44]:
       - `Tab_All_Button` [Button Image #69C34D, TMP "Tất Cả" Dosis-Bold 18pt white, flexibleWidth=1]
       - `Tab_Crops_Button` [Button Image #FFF7E8, TMP "Nông Sản" Dosis-Bold 18pt #B97A4A, flexibleWidth=1]
@@ -249,7 +249,7 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
       - `ScrollView` [ScrollRect, LayoutElement flexibleWidth=1]: Viewport [Image RectMask2D] → Content [GridLayoutGroup cellSize=160×200 spacing=10×10 constraint=FixedColumnCount constraintCount=5 padding=10]
     - `editor_save_scene`
     - _Requirements: 6.4, 6.5_
-  - [ ] 7.3 Tạo SellSubPanel và Footer
+  - [x] 7.3 Tạo SellSubPanel và Footer
     - Trong `MainArea`, tạo `SellSubPanel` [Image #F5EDD8, VerticalLayoutGroup padding=12 spacing=8, width=220, SetActive=false]:
       - `SelectedItem_Label` [TMP "Chọn vật phẩm" Dosis-Bold 20pt #4FA63A]
       - `Stepper` [HorizontalLayoutGroup spacing=8 h=44]: `Minus_Button` [Button Image #B97A4A TMP "−" 40×40], `Quantity_Label` [TMP "1" Dosis-Bold 22pt center flexibleWidth=1], `Plus_Button` [Button Image #69C34D TMP "+" 40×40]
@@ -260,31 +260,31 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
       - `Upgrade_Button` [Button Image #69C34D VerticalLayoutGroup flexibleWidth=1 h=40]: TMP "Nâng Cấp Kho" white 16pt, `UpgradeCost_Label` [TMP "500g" #FFD75E 14pt]
     - `editor_save_scene`
     - _Requirements: 6.6, 6.7, 6.8_
-  - [ ] 7.4 Wire StoragePanelController
+  - [x] 7.4 Wire StoragePanelController
     - Add `StoragePanelController` vào `StoragePopup`
     - Wire: `_capacityText`→Header/Capacity_Label, `_storageContentContainer`→MainArea/ScrollView/Viewport/Content, `_btnClose`→Header/Close_Button, `_tabAll`→TabBar/Tab_All_Button, `_tabCrops`→TabBar/Tab_Crops_Button, `_tabAnimals`→TabBar/Tab_Animals_Button
     - Wire sell sub-panel fields: `_selectedItemLabel`→SellSubPanel/SelectedItem_Label, `_quantityLabel`→SellSubPanel/Stepper/Quantity_Label, `_totalPriceLabel`→SellSubPanel/TotalPrice_Label, `_btnSellNow`→SellSubPanel/SellNow_Button, `_btnSellAll`→Footer/SellAll_Button
     - Wire `_itemCardPrefab` → InventorySlot prefab trong `Assets/_Project/Prefabs/UI/Components/`
     - `editor_save_scene`
     - _Requirements: 6.9_
-  - [ ] 7.✓ · Quick Test
+  - [x] 7.✓ · Quick Test
     - `editor_read_log` filter=Error → 0 errors liên quan StoragePopup
     - `component_get` StoragePanelController → `_capacityText`, `_storageContentContainer`, `_itemCardPrefab` không null
     - `screenshot_scene` → lưu `docs/screenshots/2026-04-16-scn-main-ui-rebuild-task7.png`
     - Nếu FAIL → fix trong task 7, KHÔNG sang task 8
 
-- [ ] 8. Build AnimalDetailPanel
-  - [ ] 8.0 · Resource Check
+- [x] 8. Build AnimalDetailPanel
+  - [x] 8.0 · Resource Check
     - Không có sprite asset mới trong task này — SKIP scan
     - NON-BLOCKING
-  - [ ] 8.1 Tạo AnimalDetailPanel container + Header
+  - [x] 8.1 Tạo AnimalDetailPanel container + Header
     - Trong `[POPUP_CANVAS]/ModalParent`, tạo `AnimalDetailPanel` [Image #FFF7E8, VerticalLayoutGroup]
     - Set RectTransform: anchorMin=(1,0) anchorMax=(1,1) pivot=(1,0.5), width=400, SetActive=false
     - Tạo child `Header` [Image #4FA63A, VerticalLayoutGroup padding=16, height=80]:
       - `AnimalName` [TMP "Gà" Dosis-Bold 26pt white]
     - `editor_save_scene`
     - _Requirements: 7.2, 7.3_
-  - [ ] 8.2 Tạo StatusBlock, ActionFooter và wire controller
+  - [x] 8.2 Tạo StatusBlock, ActionFooter và wire controller
     - Tạo child `StatusBlock` [VerticalLayoutGroup padding=16 spacing=8]:
       - `GrowthInfo` [TMP "GĐ: 1" Dosis-Bold 16pt #B97A4A]
     - Tạo child `ActionFooter` [VerticalLayoutGroup padding=16 spacing=8]:
@@ -294,42 +294,42 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
     - Wire: `_animalName`→Header/AnimalName, `_growthText`→StatusBlock/GrowthInfo, `_feedButton`→ActionFooter/FeedButtonGO, `_sellButton`→ActionFooter/SellButtonGO
     - `editor_save_scene`
     - _Requirements: 7.3, 7.4, 7.5, 7.8_
-  - [ ] 8.✓ · Quick Test
+  - [x] 8.✓ · Quick Test
     - `editor_read_log` filter=Error → 0 errors liên quan AnimalDetailPanel
     - `component_get` AnimalDetailPanelController → `_animalName`, `_growthText`, `_feedButton`, `_sellButton` không null
     - `screenshot_scene` → lưu `docs/screenshots/2026-04-16-scn-main-ui-rebuild-task8.png`
     - Nếu FAIL → fix trong task 8, KHÔNG sang task 9
 
-- [ ] 9. Extract Prefabs
-  - [ ] 9.1 Extract ShopPopup và StoragePopup prefabs
+- [x] 9. Extract Prefabs
+  - [x] 9.1 Extract ShopPopup và StoragePopup prefabs
     - `assets_prefab_create`: `[POPUP_CANVAS]/ModalParent/ShopPopup` → `Assets/_Project/Resources/UI/Default/ShopPopup.prefab`
     - `assets_prefab_create`: `[POPUP_CANVAS]/ModalParent/StoragePopup` → `Assets/_Project/Resources/UI/Default/StoragePopup.prefab`
     - `editor_refresh_assets`
     - _Requirements: 8.1, 8.2_
-  - [ ] 9.2 Extract AnimalDetailPanel và ContextActionPanel prefabs
+  - [x] 9.2 Extract AnimalDetailPanel và ContextActionPanel prefabs
     - `assets_prefab_create`: `[POPUP_CANVAS]/ModalParent/AnimalDetailPanel` → `Assets/_Project/Resources/UI/Default/AnimalDetailPopup.prefab`
     - `assets_prefab_create`: `[POPUP_CANVAS]/HUDParent/ContextActionPanel` → `Assets/_Project/Resources/UI/Default/ContextActionPanel.prefab`
     - `editor_refresh_assets`
     - _Requirements: 8.3, 8.4_
-  - [ ] 9.3 Xóa instances và verify prefabs
+  - [x] 9.3 Xóa instances và verify prefabs
     - `game_object_destroy` các instances: ShopPopup, StoragePopup, AnimalDetailPanel, ContextActionPanel
     - `assets_find` từng prefab — tất cả 4 phải tồn tại
     - `editor_read_log` filter=Error — không có missing script references
     - `editor_save_scene`
     - _Requirements: 8.5, 8.6_
-  - [ ] 9.✓ · Quick Test
+  - [x] 9.✓ · Quick Test
     - `assets_find`: ShopPopup.prefab, StoragePopup.prefab, AnimalDetailPopup.prefab, ContextActionPanel.prefab → tất cả 4 tồn tại
     - `editor_read_log` filter=Error → 0 missing script/prefab errors
     - Nếu FAIL → fix trong task 9, KHÔNG sang task 10
 
-- [ ] 10. Integration Smoke Test
-  - [ ] 10.1 Play Mode basic check
+- [x] 10. Integration Smoke Test
+  - [x] 10.1 Play Mode basic check
     - `sim_play` → `editor_wait_ready`
     - `editor_read_log` filter=Error — 0 errors NullRef/Missing Component/Failed to load prefab
     - `component_get` PopupManager — `_modalParent` và `_hudParent` không null
     - `sim_stop`
     - _Requirements: 9.1, 9.2, 9.3, 9.5_
-  - [ ] 10.2 HUD và BottomNav check
+  - [x] 10.2 HUD và BottomNav check
     - `sim_play` → `editor_wait_ready`
     - `component_get` HUDTopBarController — tất cả references không null
     - `component_invoke` NavBtn_Shop Button → verify ShopPopup spawn trong ModalParent
@@ -337,7 +337,7 @@ Build toàn bộ UI cho SCN_Main qua Pure MCP. Giữ scripts logic, build hierar
     - `sim_stop` → `editor_save_scene`
     - _Requirements: 9.4, 9.6_
 
-- [ ] 11. Update HANDOVER.md
+- [x] 11. Update HANDOVER.md
   - Mở `docs/HANDOVER.md`, cập nhật section "Phiên 15/04/2026":
     - SCN_Main đã tạo với 4 canvas (HUD=10, Popup=20, System=30)
     - 7 UI components đã build: TopHUDBar, BottomNav, ContextActionPanel, ShopPopup, StoragePopup, AnimalDetailPanel + PopupManager wiring

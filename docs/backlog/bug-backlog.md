@@ -81,3 +81,74 @@
 | `EconomySystem.OnGoldChanged` | ✅ OK |
 | `StorageSystem.OnStorageChanged` | ✅ OK |
 | `LevelSystem.OnXPChanged` | ✅ OK |
+
+---
+
+## 🔴 HIGH — Phát hiện ngày 16/04/2026 (scn-main-world-setup review)
+
+### BUG-08: `CropData.postRipeLifeMin = 0` → cây chết ngay khi chín
+- **File:** `Assets/_Project/Scripts/Data/CropData.cs`, `Assets/_Project/Scripts/World/Views/CropTileView.cs`
+- **Vấn đề:** `LifeAfterRipeInSeconds = postRipeLifeMin * 60f`. Nếu `postRipeLifeMin = 0` thì `LifeAfterRipeInSeconds = 0`. Trong `HandleTick()`:
+  ```csharp
+  if (_timeSinceRipe > _currentCropData.LifeAfterRipeInSeconds) _currentState = TileState.Dead;
+  // → _timeSinceRipe > 0 → true ngay frame đầu tiên sau khi chín
+  ```
+  Cây chuyển sang `Dead` ngay lập tức, không thu hoạch được.
+- **Reproduce:** Tạo CropDataSO với `postRipeLifeMin = 0`, trồng và chờ cây chín → chết ngay.
+- **Fix:** Enforce `postRipeLifeMin > 0` trong Inspector (Range attribute) hoặc validate trong `GameDataRegistrySO.Initialize()`.
+- **Workaround hiện tại:** Set `postRipeLifeMin = 5` trong CropDataSO (Task 7 của scn-main-world-setup).
+
+### BUG-09: `CropTileView._tileId` private, không có setter → SaveLoad dùng fallback
+- **File:** `Assets/_Project/Scripts/World/Views/CropTileView.cs`
+- **Vấn đề:** `_tileId` là `[SerializeField] private string _tileId` với chỉ getter `TileId => _tileId`. Không thể set từ code bên ngoài mà không dùng reflection. `CropGridSpawner` không thể wire trực tiếp.
+- **Behavior hiện tại:** `GameManager.CaptureCurrentState()` dùng fallback:
+  ```csharp
+  tileId = string.IsNullOrEmpty(tile.TileId) ? tile.gameObject.name : tile.TileId
+  ```
+  `RestoreWorldState()` match bằng `gameObject.name`. → SaveLoad hoạt động nếu GO tên đúng `"tile_r{r}_c{c}"`.
+- **Fix dài hạn:** Thêm `public void SetTileId(string id) { _tileId = id; }` hoặc dùng `SerializedObject` trong Editor script.
+- **Workaround hiện tại:** `CropGridSpawner` đặt tên GO = `"tile_r{row}_c{col}"`, SaveLoad dùng tên này.
+
+---
+
+## ⚠️ NOTES — Kiến trúc cần verify trước khi ship
+
+### NOTE-01: FarmCameraController dùng Old Input System
+- **File:** `Assets/_Project/Scripts/World/Camera/FarmCameraController.cs`
+- **Vấn đề:** Dùng `Input.GetMouseButtonDown(0)` (Old Input System). `WorldObjectPicker` dùng New Input System (`PlayerInput`). Cả hai cùng fire khi tap — camera bắt đầu drag VÀ world interaction trigger đồng thời.
+- **Impact:** UX lạ ở prototype (camera drag 1 frame khi tap tile). Chấp nhận được cho prototype.
+- **Fix dài hạn:** Migrate `FarmCameraController` sang New Input System, hoặc add `isInteracting` flag để camera không drag khi WorldObjectPicker đang handle.
+
+### NOTE-02: PlayerInput phải cùng GO với WorldObjectPicker
+- **File:** `Assets/_Project/Scripts/World/WorldObjectPicker.cs`
+- **Vấn đề:** `OnTap(InputValue value)` nhận message từ `PlayerInput` qua "Send Messages". Send Messages chỉ dispatch đến cùng GameObject — không sang sibling hoặc object khác trong hierarchy.
+- **Yêu cầu bắt buộc:** `PlayerInput` và `WorldObjectPicker` PHẢI trên cùng 1 GameObject.
+- **Consequence nếu sai:** Tap không có phản ứng, không có error log → silent fail, khó debug.
+
+### NOTE-03: `EconomySystem.CanAfford()` cần gold > 0 để plant
+- **File:** `Assets/_Project/Scripts/World/Views/CropTileView.cs` line ~61
+- **Vấn đề:** `Plant()` chỉ chạy nếu `EconomySystem.Instance.CanAfford(data.seedCostGold)`. Player bắt đầu với 0 gold → không thể plant ngay. `CropActionPanelController.TryAutoPlant()` sẽ fallback mở Shop.
+- **Cần verify:** Integration test plant flow cần set gold ban đầu > 0 (hoặc set `seedCostGold = 0` cho test).
+- **Không phải bug** — đây là intended design, nhưng cần nhớ khi test.
+
+
+---
+
+## 🟡 MEDIUM — Phát hiện ngày 16/04/2026 (scn-main-ui-rebuild Task 6)
+
+### NOTE-04: `ShopPopup.Refresh_Button` được thêm ngoài spec
+- **File:** Scene `SCN_Main`, GameObject `[POPUP_CANVAS]/ModalParent/ShopPopup/Footer/Refresh_Button`
+- **Vấn đề:** `ShopPanelController` có field `_btnRefresh` nhưng task spec 6.3 không yêu cầu tạo button này. Button được thêm thủ công để tránh null reference.
+- **Cần verify:**
+  - UI/UX: Refresh_Button có nên hiển thị trong Footer không? Hay ẩn đi cho v1?
+  - Cost display: Button cần label hiển thị "Làm mới (50g)" để player biết giá
+  - Hiện tại button chỉ có Image màu xanh #69C34D, không có label text
+- **Fix đề xuất:** Thêm TMP label "Làm mới" + cost label vào Refresh_Button, hoặc SetActive=false nếu feature chưa cần cho v1.
+
+### NOTE-05: `ShopPopup.GemsBalance_Label` được thêm ngoài spec — Gems system là dead code
+- **File:** Scene `SCN_Main`, GameObject `[POPUP_CANVAS]/ModalParent/ShopPopup/Footer/GemsBalance_Label`
+- **Vấn đề:** `ShopPanelController` có field `_gemsBalanceLabel` nhưng task spec 6.3 không yêu cầu. Label được thêm để tránh null reference. Liên quan đến **FEAT-07** (Gems system là dead code).
+- **Cần verify:**
+  - Gems có được dùng trong v1 không? Nếu không → có thể SetActive=false hoặc xóa label
+  - Hiện tại label hiển thị "0" màu tím (#9966FF) trong Footer, không có icon gem đi kèm
+- **Fix đề xuất:** Nếu Gems không dùng cho v1, SetActive=false trên GemsBalance_Label. Nếu dùng, thêm GemIcon đi kèm tương tự GoldChip.
