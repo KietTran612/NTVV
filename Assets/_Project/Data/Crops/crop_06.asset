@@ -26,17 +26,17 @@ MonoBehaviour:
     phase1Pct: 0.25
     phase2Pct: 0.35
     phase3Pct: 0.4
-    baseYieldUnits: 0
-    sellPriceGold: 0
-    xpReward: 0
+    baseYieldUnits: 5
+    sellPriceGold: 10
+    xpReward: 10
     seedIcon: {fileID: 0}
-    weedChancePct: 0
-    bugChancePct: 0
-    waterChancePct: 0
-    maxCareEvents: 0
-    perfectWindowMin: 0
-    postRipeLifeMin: 0
-    notes: 
+    weedChancePct: 0.15
+    bugChancePct: 0.12
+    waterChancePct: 0.15
+    maxCareEvents: 2
+    perfectWindowMin: 2
+    postRipeLifeMin: 5
+    notes: "Dau tay placeholder - fixed baseYieldUnits and postRipeLifeMin"
   growthStageSprites: []
   deadSprite: {fileID: 0}
   seedIcon: {fileID: 0}

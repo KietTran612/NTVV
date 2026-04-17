@@ -26,17 +26,17 @@ MonoBehaviour:
     phase1Pct: 0.25
     phase2Pct: 0.35
     phase3Pct: 0.4
-    baseYieldUnits: 0
-    sellPriceGold: 0
-    xpReward: 0
+    baseYieldUnits: 6
+    sellPriceGold: 15
+    xpReward: 15
     seedIcon: {fileID: 0}
-    weedChancePct: 0
-    bugChancePct: 0
-    waterChancePct: 0
-    maxCareEvents: 0
-    perfectWindowMin: 0
-    postRipeLifeMin: 0
-    notes: 
+    weedChancePct: 0.18
+    bugChancePct: 0.15
+    waterChancePct: 0.18
+    maxCareEvents: 2
+    perfectWindowMin: 3
+    postRipeLifeMin: 6
+    notes: "Bi do placeholder - fixed baseYieldUnits and postRipeLifeMin"
   growthStageSprites: []
   deadSprite: {fileID: 0}
   seedIcon: {fileID: 0}

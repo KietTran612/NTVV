@@ -3,6 +3,17 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
+- **Phiên 17/04/2026 (Hiện tại) — scn-main-world-setup HOÀN THÀNH**:
+    - **`scn-main-world-setup` spec DONE**: Tất cả 9 tasks đã execute xong qua Pure MCP.
+    - **6 CropTile placed** trong CropArea (2×3 grid): `tile_r0_c0` → `tile_r1_c2`, layer=Interactable, CropTileView wired, `_registry` không null.
+    - **WorldObjectPicker + PlayerInput** wired trên cùng GO trong `[SYSTEMS]`. PlayerInputActions.inputactions tạo mới tại `Assets/_Project/Input/`.
+    - **FarmCameraController** attached lên Main Camera: `_panSpeed=1.0`, `_boundX=(-5,5)`, `_boundY=(-3,3)`, `_zoomSpeed=4`, `_minOrtho=3`, `_maxOrtho=8`.
+    - **TimeManager + QuestManager** tạo mới trong `[SYSTEMS]`, `_tickRate=1.0`.
+    - **GameDataRegistrySO** verified: 7 crops hợp lệ, tất cả `postRipeLifeMin > 0` (BUG-08 prevented).
+    - **Integration test PASSED**: Play Mode 0 errors, `[GameManager] Boot sequence complete.` confirmed.
+    - **Known Issue (non-blocking)**: FarmCameraController (Old Input) + WorldObjectPicker (New Input) cùng fire khi tap — acceptable ở prototype.
+    - **Cleanup cần làm thủ công**: Stray `CropTile` GO ở root scene (leftover từ Task 2 prefab creation) — xóa trong Unity Editor.
+    - **Placeholders pending**: soil_empty, weed_overlay, bug_overlay, water_needed, crop phase sprites — prompts tại `docs/asset-prompts/2026-04-16-scn-main-world-setup-missing-assets.md`.
 - **Phiên 16/04/2026 (Hiện tại) — SCN_Main UI Rebuild HOÀN THÀNH**:
     - **`scn-main-ui-rebuild` spec DONE**: Tất cả 11 tasks đã execute xong qua Pure MCP.
     - **SCN_Main đã có**: 4 canvas (HUD=10, Popup=20, System=30, World), TopHUDBar, BottomNav (5 buttons), PopupManager wired, ContextActionPanel, ShopPopup, StoragePopup, AnimalDetailPanel.
@@ -49,9 +60,11 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - **✅ `scn-main-ui-rebuild` DONE** — SCN_Main có đầy đủ UI: TopHUDBar, BottomNav, 4 popups, PopupManager wired, prefabs extracted.
 - **Cần làm ngay**: 
     1. **~~Execute SCN_Main UI Spec~~** ✅ DONE
-    2. **Execute `scn-main-world-setup`**: Mở `.kiro/specs/scn-main-world-setup/tasks.md` và execute. Setup CropArea, BarnArea, WorldObjectPicker, PlayerInput.
-    3. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
-    4. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md).
+    2. **~~Execute `scn-main-world-setup`~~** ✅ DONE — World Setup (M2) hoàn thành
+    3. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
+    4. **M3: Crop Care + Storage + Sell Flow** — Tạo spec mới cho M3 milestone
+    5. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
+    6. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md).
 
 ## 🗂 Kiro Specs đang active
 
@@ -66,19 +79,23 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - Prefabs: ShopPopup, StoragePopup, AnimalDetailPopup, ContextActionPanel → `Resources/UI/Default/`
     - Integration test: 0 errors, data binding hoạt động
 
-### Spec 2: `scn-main-world-setup` ← EXECUTE TIẾP THEO
+### Spec 2: `scn-main-world-setup` ✅ DONE
 - **Path**: `.kiro/specs/scn-main-world-setup/`
-- **Status**: Chưa execute — Task 0-9 đều `[ ]`
-- **Approach**: Pure MCP + 1 Editor Script mới (`CropGridSpawner.cs`)
-- **Prerequisite**: scn-main-ui-rebuild Task 1-5 phải xong trước Integration Test
-- **Key design decisions**:
-    - 6 CropTile (2×3 grid) trong CropArea, tên `"tile_r{r}_c{c}"` cho SaveLoad
-    - WorldObjectPicker + PlayerInput trên **cùng GO** (Send Messages requirement)
-    - BoxCollider 3D (không phải 2D) — WorldObjectPicker dùng Physics.Raycast 3D
-    - Main Camera cần tag `"MainCamera"` cho Camera.main
-    - `postRipeLifeMin > 0` là CRITICAL — xem BUG-08 trong bug-backlog.md
+- **Status**: **TẤT CẢ 9 TASKS HOÀN THÀNH** (17/04/2026)
+- **Kết quả**:
+    - 6 CropTile (2×3 grid) trong CropArea, tên `"tile_r{r}_c{c}"`, layer=Interactable, CropTileView wired
+    - WorldObjectPicker + PlayerInput trên cùng GO trong `[SYSTEMS]`
+    - FarmCameraController trên Main Camera với bounds (-5,5) / (-3,3)
+    - TimeManager (`_tickRate=1.0`) + QuestManager trong `[SYSTEMS]`
+    - GameDataRegistrySO: 7 crops valid, postRipeLifeMin > 0 trên tất cả
+    - Integration test: 0 errors, GameManager boot confirmed
+
+### Spec 3: M3 Crop Care + Storage + Sell Flow ← EXECUTE TIẾP THEO
+- **Path**: `.kiro/specs/m3a-crop-care-harvest/` và `.kiro/specs/m3b-storage-sell-flow/`
+- **Status**: Chưa tạo spec — cần brainstorm và tạo requirements/design/tasks
+- **Scope**: Crop care events (weed/bug/water), harvest flow, storage UI integration, sell flow
 
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. Spec UI mới đã sẵn sàng tại `.kiro/specs/scn-main-ui-rebuild/` — đọc `design.md` để hiểu architecture trước khi execute tasks."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. Bước tiếp theo là M3: crop care + storage + sell flow."
