@@ -7,7 +7,7 @@ Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi b
     - **`m3a-crop-care-harvest` spec DONE**: Tất cả 6 tasks đã execute xong qua Pure MCP.
     - **9 bugs fixed** trong `CropTileView.cs` và `CropActionPanelController.cs`:
         - BUG-A1: `ClearWeeds()` gọi `RefreshVisuals()` ngay lập tức
-        - BUG-A2: `ClearPests()` gọi `RefreshVisuals()` + null-safe `StorageSystem.Instance?`
+        - BUG-A2: `ClearPets()` gọi `RefreshVisuals()` + null-safe `StorageSystem.Instance?`
         - BUG-A3: `HandleTick()` reset `NeedsCare → Growing` khi drainRate = 0
         - BUG-A4: Close/Harvest/Reset buttons gọi `CloseContextAction()` + `TriggerSave()`
         - BUG-A5: `Harvest()` log warning khi storage đầy, tile không reset
@@ -56,6 +56,16 @@ Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi b
 - **Phiên 08/04/2026**:
     - **Visual Standardization (PPU Multiplier)**: Thiết lập tiêu chuẩn độ phân giải visual đồng nhất (Buttons/Chips: 5, Banners: 2.5, Panels: 1.5, Icons: 1).
     - **Structural Rebirth [UI_ATOMIC_STAGE]**: Tái cấu trúc Root Hierarchy sang hệ thống mới: `[UI_CAMERA]` và `[UI_ATOMIC_STAGE]/[SAFE_AREA]`.
+- **Phiên 17/04/2026 (Hiện tại) — M5 Quest Flow Spec Written**:
+    - **`m5-quest-flow` spec WRITTEN**: Tất cả 3 files (design, requirements, tasks) đã tạo qua Pure MCP.
+    - **Scope**: Fix 4 bugs trong Quest runtime flow (BUG-Q1..Q4) — prerequisite enforcement, UI refresh, HandleUnlock runtime, integration test.
+    - **Chưa execute** — sẵn sàng để implement khi cần.
+- **Phiên 17/04/2026 (Hiện tại) — Asset Inventory Completed**:
+    - **Full sprite inventory** tại `docs/asset-prompts/2026-04-17-asset-inventory-all.md` — 100 total sprites: 44 exist, 40 missing, 2 placeholders, 16 reuse.
+    - **Prompt docs created** for missing sprites (prioritized):
+        - `docs/asset-prompts/2026-04-17-animal-sprites-missing.md` — Chicken dead + Duck all stages (6 sprites)
+        - `docs/asset-prompts/2026-04-17-items-nav-sprites-missing.md` — Grass, Shop, Event icons (3 sprites)
+        - `docs/asset-prompts/2026-04-17-crop-sprites-missing.md` — Carrot dead + 6 crops × 5 stages (31 sprites) — NON-BLOCKING (fallback available)
 
 ## 🗺 Bản đồ Hệ thống (System Map)
 Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầu não" mới:
@@ -76,14 +86,15 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - **✅ `scn-main-ui-rebuild` DONE** — SCN_Main có đầy đủ UI: TopHUDBar, BottomNav, 4 popups, PopupManager wired, prefabs extracted.
     - **✅ `scn-main-world-setup` DONE** — World Setup (M2) hoàn thành
     - **✅ `m3a-crop-care-harvest` DONE** — 9 bugs fixed, full crop cycle hoạt động
+    - **✍️ `m5-quest-flow` SPEC WRITTEN** — design, requirements, tasks completed (4 quest bugs identified)
+    - **📋 Asset Inventory Completed** — full sprite list and prompt docs for missing sprites (priority: Duck/animal, items/nav, crops)
 - **Cần làm ngay**: 
-    1. **~~Execute SCN_Main UI Spec~~** ✅ DONE
-    2. **~~Execute `scn-main-world-setup`~~** ✅ DONE — World Setup (M2) hoàn thành
-    3. **~~Execute `m3a-crop-care-harvest`~~** ✅ DONE — Crop care + harvest bugs fixed
-    4. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
-    5. **M3b: Storage + Sell Flow** — Tạo spec mới cho storage UI integration và sell flow
-    6. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
-    7. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md).
+    1. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
+    2. **M3b: Storage + Sell Flow** — Tạo spec mới cho storage UI integration và sell flow
+    3. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
+    4. **Execute `m5-quest-flow`** — khi cần sửa quest bugs (BUG-Q1..Q4)
+    5. **Generate missing sprites** — sử dụng prompt docs tại `docs/asset-prompts/` (bắt đầu với animal sprites để hỗ trợ M4 integration test)
+    6. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md).
 
 ## 🗂 Kiro Specs đang active
 
@@ -118,7 +129,14 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - Full cycle: plant → grow → ailment → care → ripe → harvest → StorageSystem
     - Integration test: 0 errors, save/load cycle hoạt động
 
-### Spec 4: `m3b-storage-sell-flow` ← EXECUTE TIẾP THEO
+### Spec 4: `m5-quest-flow` ✍️ SPEC WRITTEN (Chưa execute)
+- **Path**: `.kiro/specs/m5-quest-flow/`
+- **Status**: **Design, Requirements, Tasks completed** (17/04/2026) — **Chưa execute**
+- **Kết quả**:
+    - 4 quest bugs identified: BUG-Q1 (UI refresh), BUG-Q2 (prerequisite enforcement), BUG-Q3 (HandleUnlock runtime), BUG-Q4 (feedback clarity)
+    - Chuẩn bị sẵn để implement khi cần
+
+### Spec 5: `m3b-storage-sell-flow` ← EXECUTE TIẾP THEO
 - **Path**: `.kiro/specs/m3b-storage-sell-flow/`
 - **Status**: Chưa execute — cần tạo/review requirements/design/tasks
 - **Scope**: Storage UI integration, sell flow, economy feedback
@@ -126,4 +144,4 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. Bước tiếp theo là M3b: Storage + Sell flow."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M5 Quest Flow spec đã WRITTEN** — 4 bugs identified, sẵn sàng để implement. Bước tiếp theo là M3b: Storage + Sell flow và tạo ra các sprite còn thiếu theo prompts đã có."
