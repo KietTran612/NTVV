@@ -3,6 +3,15 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
+- **Phiên 17/04/2026 (Hiện tại) — m3b-storage-sell-flow HOÀN THÀNH**:
+    - **`m3b-storage-sell-flow` spec DONE**: Tất cả 5 tasks đã execute xong qua Pure MCP.
+    - **3 bugs fixed**:
+        - BUG-B1: `OnSellAllClick()` — thêm `if (price <= 0) continue` để skip byproducts (item_grass, item_worm) có sellPrice = 0. Thêm `if (totalGold == 0)` guard trước `AddGold`.
+        - BUG-B2: `TryBuySeed()` — thêm `CanAddItem()` check TRƯỚC `CanAfford()` để gold không bị trừ khi storage đầy.
+    - **`FindObjectsOfTypeAll<GameDataRegistrySO>()` đã xóa** khỏi cả 2 controllers — thay bằng `[SerializeField] private GameDataRegistrySO _registry` pattern.
+    - **WIRE-01**: `StoragePopup.prefab` — `StoragePanelController._registry` wired với `GameDataRegistry.asset`.
+    - **WIRE-02**: `ShopPopup.prefab` — `ShopPanelController._registry` wired với `GameDataRegistry.asset`.
+    - **Integration test**: Play Mode 0 errors, boot confirmed, StorageSystem (cap=70) + EconomySystem (gold=45) running. Button interaction cần manual verify trong Editor.
 - **Phiên 17/04/2026 (Hiện tại) — m3a-crop-care-harvest HOÀN THÀNH**:
     - **`m3a-crop-care-harvest` spec DONE**: Tất cả 6 tasks đã execute xong qua Pure MCP.
     - **9 bugs fixed** trong `CropTileView.cs` và `CropActionPanelController.cs`:
@@ -60,12 +69,20 @@ Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi b
     - **`m5-quest-flow` spec WRITTEN**: Tất cả 3 files (design, requirements, tasks) đã tạo qua Pure MCP.
     - **Scope**: Fix 4 bugs trong Quest runtime flow (BUG-Q1..Q4) — prerequisite enforcement, UI refresh, HandleUnlock runtime, integration test.
     - **Chưa execute** — sẵn sàng để implement khi cần.
-- **Phiên 17/04/2026 (Hiện tại) — Asset Inventory Completed**:
+- **Phiên 17/04/2026 (Hiện tại) — Asset Inventory & Prompt Rework Completed**:
     - **Full sprite inventory** tại `docs/asset-prompts/2026-04-17-asset-inventory-all.md` — 100 total sprites: 44 exist, 40 missing, 2 placeholders, 16 reuse.
-    - **Prompt docs created** for missing sprites (prioritized):
-        - `docs/asset-prompts/2026-04-17-animal-sprites-missing.md` — Chicken dead + Duck all stages (6 sprites)
-        - `docs/asset-prompts/2026-04-17-items-nav-sprites-missing.md` — Grass, Shop, Event icons (3 sprites)
-        - `docs/asset-prompts/2026-04-17-crop-sprites-missing.md` — Carrot dead + 6 crops × 5 stages (31 sprites) — NON-BLOCKING (fallback available)
+    - **Prompt system reworked** vào folder mới: `docs/asset-prompts/2026-04-17-rework/`
+        - `master-index.md` — index + global rules
+        - `world-overlays.md` — world tile/overlay prompts
+        - `entities-crops.md` — full 31 missing crop assets
+        - `entities-animals.md` — full 6 missing animal assets
+        - `ui.md` — full 3 missing UI assets
+    - **Old prompt files removed** để tránh nhầm lẫn với bộ mới:
+        - `docs/asset-prompts/2026-04-16-scn-main-ui-rebuild-missing-assets.md`
+        - `docs/asset-prompts/2026-04-16-scn-main-world-setup-missing-assets.md`
+        - `docs/asset-prompts/2026-04-17-animal-sprites-missing.md`
+        - `docs/asset-prompts/2026-04-17-items-nav-sprites-missing.md`
+    - Rework rules: English-only naming/prompt/setup, stage `Stage00..Stage03`, no `_v01`, one sprite per file, click by footprint collider.
 
 ## 🗺 Bản đồ Hệ thống (System Map)
 Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầu não" mới:
@@ -86,15 +103,17 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - **✅ `scn-main-ui-rebuild` DONE** — SCN_Main có đầy đủ UI: TopHUDBar, BottomNav, 4 popups, PopupManager wired, prefabs extracted.
     - **✅ `scn-main-world-setup` DONE** — World Setup (M2) hoàn thành
     - **✅ `m3a-crop-care-harvest` DONE** — 9 bugs fixed, full crop cycle hoạt động
+    - **✅ `m3b-storage-sell-flow` DONE** — 3 bugs fixed (BUG-B1, BUG-B2), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired
     - **✍️ `m5-quest-flow` SPEC WRITTEN** — design, requirements, tasks completed (4 quest bugs identified)
     - **📋 Asset Inventory Completed** — full sprite list and prompt docs for missing sprites (priority: Duck/animal, items/nav, crops)
 - **Cần làm ngay**: 
     1. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
-    2. **M3b: Storage + Sell Flow** — Tạo spec mới cho storage UI integration và sell flow
-    3. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
-    4. **Execute `m5-quest-flow`** — khi cần sửa quest bugs (BUG-Q1..Q4)
-    5. **Generate missing sprites** — sử dụng prompt docs tại `docs/asset-prompts/` (bắt đầu với animal sprites để hỗ trợ M4 integration test)
-    6. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md).
+    2. **Manual UI test**: Verify Storage sell flow + Shop buy flow trong Play Mode (button interaction cần manual)
+    3. **M4: Animal Care** — milestone tiếp theo
+    4. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
+    5. **Execute `m5-quest-flow`** — khi cần sửa quest bugs (BUG-Q1..Q4)
+    6. **Generate missing sprites** — sử dụng bộ rework tại `docs/asset-prompts/2026-04-17-rework/` (bắt đầu với `entities-animals.md` để hỗ trợ M4 integration test)
+    7. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md).
 
 ## 🗂 Kiro Specs đang active
 
@@ -136,12 +155,20 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - 4 quest bugs identified: BUG-Q1 (UI refresh), BUG-Q2 (prerequisite enforcement), BUG-Q3 (HandleUnlock runtime), BUG-Q4 (feedback clarity)
     - Chuẩn bị sẵn để implement khi cần
 
-### Spec 5: `m3b-storage-sell-flow` ← EXECUTE TIẾP THEO
+### Spec 5: `m3b-storage-sell-flow` ✅ DONE
 - **Path**: `.kiro/specs/m3b-storage-sell-flow/`
-- **Status**: Chưa execute — cần tạo/review requirements/design/tasks
-- **Scope**: Storage UI integration, sell flow, economy feedback
+- **Status**: **TẤT CẢ 5 TASKS HOÀN THÀNH** (17/04/2026)
+- **Kết quả**:
+    - BUG-B1 fixed: `StoragePanelController.OnSellAllClick()` — filter `price <= 0`, guard `totalGold == 0`
+    - BUG-B2 fixed: `ShopPanelController.TryBuySeed()` — `CanAddItem()` check trước `CanAfford()`
+    - `FindObjectsOfTypeAll<GameDataRegistrySO>()` xóa khỏi `StoragePanelController` và `ShopPanelController`
+    - `StoragePopup.prefab`: `_registry` → `GameDataRegistry.asset` wired
+    - `ShopPopup.prefab`: `_registry` → `GameDataRegistry.asset` wired
+    - Integration test: 0 errors, systems running
+
+### Spec 6: `m4-animal-care` ← EXECUTE TIẾP THEO
 
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M5 Quest Flow spec đã WRITTEN** — 4 bugs identified, sẵn sàng để implement. Bước tiếp theo là M3b: Storage + Sell flow và tạo ra các sprite còn thiếu theo prompts đã có."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M5 Quest Flow spec đã WRITTEN** — 4 bugs identified, sẵn sàng để implement. Bước tiếp theo là M4: Animal Care."
