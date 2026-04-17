@@ -50,20 +50,30 @@ Fix 3 bugs trong Storage/Shop flow + wire 2 prefabs. Không viết script mới 
       ```csharp
       if (cropSO != null) price = cropSO.data.sellPriceGold;
       }
-      
+
       if (price <= 0) continue; // ADD: skip items with no sell value
-      
+
       totalGold += item.Value * price;
       ```
-    - **Xóa `using System.Linq;`** nếu `FirstOrDefault()` không còn dùng ở chỗ nào khác
-      - Verify: search file cho `.FirstOrDefault()`, `.Any()`, `.ToList()` — nếu còn dùng → giữ Linq
+    - **Fix Req 2.3:** Sau vòng lặp foreach, trước `EconomySystem.Instance.AddGold(totalGold)`, thêm guard:
+      ```csharp
+      if (totalGold == 0)
+      {
+          Debug.LogWarning("[Storage] Sell All: no items with sell value > 0.");
+          return;
+      }
+      EconomySystem.Instance.AddGold(totalGold);
+      ```
+    - **GIỮ `using System.Linq;`** — file vẫn dùng `.Any()`, `.FirstOrDefault()`, `.ToList()` để lookup `registry.crops` và snapshot. **KHÔNG xóa.**
     - `assets-refresh` → đợi compile xong
-    - _Requirements: 1.1, 1.3, 2.1, 2.2, 2.4_
+    - _Requirements: 1.1, 1.3, 2.1, 2.2, 2.3, 2.4_
   - [ ] 0.✓ · Quick Test
     - `console-get-logs` filter=Error → 0 compile errors liên quan StoragePanelController
     - Verify: không còn `FindObjectsOfTypeAll` trong file
     - Verify: `OnSellAllClick()` có `if (price <= 0) continue;`
+    - Verify: `OnSellAllClick()` có `if (totalGold == 0)` guard trước `AddGold`
     - Verify: `_registry` field tồn tại với `[SerializeField]`
+    - Verify: `using System.Linq;` vẫn còn trong file
     - Nếu FAIL → fix trong task 0, KHÔNG sang task 1
 
 - [ ] 1. Fix ShopPanelController — Registry + Buy Storage Check (BUG-B2)

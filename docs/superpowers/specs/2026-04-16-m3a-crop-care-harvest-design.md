@@ -48,14 +48,27 @@ public void WaterPlant()  { _needsWater = false;  RefreshVisuals(); }
 
 `HandleTick()` chỉ reset state khi `growthProgress >= 1f` (Ripe) hoặc `HP <= 0` (Dead). Khi player clear hết ailments nhưng cây chưa Ripe, state kẹt ở `NeedsCare` mãi. Ảnh hưởng save/load (state restore sai).
 
-**Fix:** Thêm branch trong HandleTick:
+**Fix:** Thêm branch trong HandleTick, **SAU** branch Ripe, **TRƯỚC** closing brace của else-chain:
 ```csharp
-else if (_currentState == TileState.NeedsCare)
+// Trong HandleTick — đúng thứ tự:
+if (drainRate > 0)
+{
+    // HP drain + NeedsCare state set (code hiện tại)
+}
+else if (_growthProgress >= 1f && _currentState != TileState.Ripe)
+{
+    // Ripe transition (code hiện tại) — ưu tiên TRƯỚC NeedsCare reset
+    _currentState = TileState.Ripe;
+    _currentStage = GrowthStage.Ripe;
+    RefreshVisuals();
+}
+else if (_currentState == TileState.NeedsCare) // ADD BRANCH NÀY
 {
     _currentState = TileState.Growing; // Hết ailments → resume growing
 }
 ```
-Branch này nằm sau kiểm tra drainRate == 0, trước kiểm tra growthProgress >= 1f.
+
+**Lý do đặt SAU Ripe:** Nếu tile vừa hết ailment VÀ `growthProgress >= 1f` → Ripe branch bắt kịp ngay trong cùng 1 tick. Branch NeedsCare chỉ fire khi `growthProgress < 1f` — không có edge case delay.
 
 ---
 
@@ -224,6 +237,8 @@ Player taps harvest
 | 8 | Smoke test: plant → ailment → care → ripe → harvest | Test |
 | 9 | Save/load verify: load tile Ripe → visual đúng, load tile NeedsCare → visuals đúng | Test |
 | 10 | Update HANDOVER.md | Docs |
+
+> **Prerequisite cho Task 8–9:** M2 (`scn-main-world-setup`) phải execute xong để WorldObjectPicker và PlayerInput hoạt động. Nếu M2 chưa execute, test bằng `reflection-method-call` MCP để gọi trực tiếp `CropTileView.Plant()`, `ClearWeeds()`, `Harvest()` thay vì tap tile.
 
 ---
 

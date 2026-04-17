@@ -35,7 +35,24 @@ M3b hoàn thiện **Storage và Shop flow** — fix 3 bugs thực sự và wire 
 
 `TryBuySeed()` gọi `EconomySystem.AddGold(-totalCost)` trước, rồi `StorageSystem.AddItem()`. AddItem() có internal check reject nếu full — nhưng gold đã bị trừ. Kết quả: player mất gold mà không nhận seed.
 
-**Fix:** Check `CanAddItem()` TRƯỚC `CanAfford()`.
+**Fix:** Check `CanAddItem()` TRƯỚC `CanAfford()`. Code fix cụ thể (thay toàn bộ body của `TryBuySeed`):
+```csharp
+if (StorageSystem.Instance == null || !StorageSystem.Instance.CanAddItem(cropId, qty))
+{
+    Debug.LogWarning("[Shop] Storage full! Cannot buy seed.");
+    return;
+}
+if (EconomySystem.Instance == null || !EconomySystem.Instance.CanAfford(totalCost))
+{
+    Debug.LogWarning("[Shop] Not enough gold!");
+    return;
+}
+EconomySystem.Instance.AddGold(-totalCost);
+StorageSystem.Instance.AddItem(cropId, qty);
+NTTV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.BuyItem, cropId, qty);
+Managers.GameManager.Instance?.TriggerSave();
+Debug.Log($"<color=cyan>[Shop]</color> Bought Seed: {cropId} ×{qty} for {totalCost}g");
+```
 
 ---
 
@@ -78,7 +95,7 @@ Assign `GameDataRegistry.asset` vào `ShopPanelController._registry`
 1. Mở Storage → items hiển thị đúng (no FindObjectsOfTypeAll)
 2. Sell individual item → gold tăng đúng
 3. Sell All → item_grass/item_worm VẪN CÒN trong Storage
-4. Mở Shop → mua seed khi Storage đầy → gold KHÔNG bị trừ, warning xuất hiện
+4. Mở Shop → mua seed khi Storage đầy → gold KHÔNG bị trừ, `Debug.LogWarning "[Shop] Storage full! Cannot buy seed."` xuất hiện trong Console
 5. Mua seed thành công → seed xuất hiện trong Storage
 6. Console log: 0 errors liên quan registry null
 

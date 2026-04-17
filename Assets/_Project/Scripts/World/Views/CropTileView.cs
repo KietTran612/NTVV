@@ -103,6 +103,11 @@ namespace NTVV.World.Views
                     }
                 }
                 UpdateStage();
+                // BUG-A9 fix: UpdateStage() không set Ripe stage
+                if (_currentState == TileState.Ripe)
+                    _currentStage = GrowthStage.Ripe;
+                // BUG-A6 fix: cập nhật visuals ngay sau restore
+                RefreshVisuals();
             }
         }
 
@@ -125,6 +130,10 @@ namespace NTVV.World.Views
                 Debug.Log($"<color=cyan>[Harvest]</color> Success! Received {finalYield} {_currentCropData.cropName}.");
                 ResetTile();
             }
+            else if (StorageSystem.Instance != null)
+            {
+                Debug.LogWarning($"[Harvest] Storage full! Cannot add {finalYield}x {_currentCropData.cropName}.");
+            }
         }
 
         public void ClearDead()
@@ -134,9 +143,9 @@ namespace NTVV.World.Views
         }
 
         #region Care Actions
-        public void ClearWeeds() { _hasWeeds = false; StorageSystem.Instance.AddItem("item_grass", 1); }
-        public void ClearPests() { _hasPests = false; StorageSystem.Instance.AddItem("item_worm", 1); }
-        public void WaterPlant() { _needsWater = false; }
+        public void ClearWeeds() { _hasWeeds = false; StorageSystem.Instance?.AddItem("item_grass", 1); RefreshVisuals(); }
+        public void ClearPests() { _hasPests = false; StorageSystem.Instance?.AddItem("item_worm", 1);  RefreshVisuals(); }
+        public void WaterPlant()  { _needsWater = false; RefreshVisuals(); }
         #endregion
 
         #region Factors
@@ -258,7 +267,11 @@ namespace NTVV.World.Views
             if (_currentState == TileState.Ripe)
             {
                 _timeSinceRipe += tickDelta;
-                if (_timeSinceRipe > _currentCropData.LifeAfterRipeInSeconds) _currentState = TileState.Dead;
+                if (_timeSinceRipe > _currentCropData.LifeAfterRipeInSeconds)
+                {
+                    _currentState = TileState.Dead;
+                    RefreshVisuals();
+                }
                 return;
             }
 
@@ -299,6 +312,10 @@ namespace NTVV.World.Views
                 _currentState = TileState.Ripe;
                 _currentStage = GrowthStage.Ripe;
                 RefreshVisuals();
+            }
+            else if (_currentState == TileState.NeedsCare)
+            {
+                _currentState = TileState.Growing;
             }
         }
     }

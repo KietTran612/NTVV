@@ -41,12 +41,23 @@ namespace NTVV.UI.Panels
 
         private void Start()
         {
-            _closeButton?.onClick.AddListener(() => gameObject.SetActive(false));
+            _closeButton?.onClick.AddListener(() => {
+                PopupManager.Instance?.CloseContextAction();
+                if (PopupManager.Instance == null) { gameObject.SetActive(false); Managers.GameManager.Instance?.TriggerSave(); }
+            });
             
             // FIX BUG-01: Plant button now calls TryAutoPlant() instead of Plant(null)
             _plantButton?.onClick.AddListener(() => { TryAutoPlant(); RefreshUI(); });
-            _harvestButton?.onClick.AddListener(() => { _targetTile?.Harvest(); gameObject.SetActive(false); });
-            _resetButton?.onClick.AddListener(() => { _targetTile?.ClearDead(); gameObject.SetActive(false); });
+            _harvestButton?.onClick.AddListener(() => {
+                _targetTile?.Harvest();
+                PopupManager.Instance?.CloseContextAction();
+                if (PopupManager.Instance == null) { gameObject.SetActive(false); Managers.GameManager.Instance?.TriggerSave(); }
+            });
+            _resetButton?.onClick.AddListener(() => {
+                _targetTile?.ClearDead();
+                PopupManager.Instance?.CloseContextAction();
+                if (PopupManager.Instance == null) { gameObject.SetActive(false); Managers.GameManager.Instance?.TriggerSave(); }
+            });
             
             _buyButton?.onClick.AddListener(() => { _targetPen?.PurchaseAnimal(); RefreshUI(); });
             _feedButton?.onClick.AddListener(() => { _targetAnimal?.Feed(); RefreshUI(); });
@@ -99,7 +110,8 @@ namespace NTVV.UI.Panels
 
             if (_targetTile != null)
             {
-                _headerText.text = _targetTile.CurrentState == CropTileView.TileState.Empty ? "Mảnh Đất" : _targetTile.CurrentCropData.cropName;
+                string cropName = _targetTile.CurrentCropData?.cropName ?? "[Unknown]";
+                _headerText.text = _targetTile.CurrentState == CropTileView.TileState.Empty ? "Mảnh Đất" : cropName;
                 _plantButton.gameObject.SetActive(_targetTile.CurrentState == CropTileView.TileState.Empty);
                 _harvestButton.gameObject.SetActive(_targetTile.CurrentState == CropTileView.TileState.Ripe);
                 _resetButton.gameObject.SetActive(_targetTile.CurrentState == CropTileView.TileState.Dead);
