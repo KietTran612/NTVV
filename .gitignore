@@ -64,6 +64,10 @@ Thumbs.db
 # Kiro settings (local secrets)
 .kiro/settings/mcp.json
 
+# Screenshots (local only)
+/.screenshots/
+/Assets/.screenshots/
+
 # External/local packages - not tracked
 Packages/io.realvirtual.mcp/
 c:\1.SOURCE\Unity\Source\NTVV\Packages\io.realvirtual.mcp
