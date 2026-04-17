@@ -2110,6 +2110,7 @@ MonoBehaviour:
   _tabSpecial: {fileID: 3072297941718665729}
   _refreshCostGold: 50
   _shopItemPrefab: {fileID: 3049698413932544100, guid: 550b8636beb7cb0419493ed513159c5a, type: 3}
+  _registry: {fileID: 11400000, guid: 65633044c49c98c4abeb1ae77b4f819b, type: 2}
 --- !u!1 &8260554293821112806
 GameObject:
   m_ObjectHideFlags: 0

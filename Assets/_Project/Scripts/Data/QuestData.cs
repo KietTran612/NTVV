@@ -9,6 +9,7 @@ namespace NTVV.Data
         HarvestCrop,
         CollectProduct, // From animals
         FeedAnimal,
+        SellAnimal,
         BuyItem,
         ReachLevel,
         SpendGold,

@@ -3971,6 +3971,7 @@ MonoBehaviour:
   _btnSellNow: {fileID: 623524422053120074}
   _btnSellAll: {fileID: 3192511933966852511}
   _itemCardPrefab: {fileID: 8624081736426969467, guid: 2c6ffa8eef0b5a64da7e8c65d065119a, type: 3}
+  _registry: {fileID: 11400000, guid: 65633044c49c98c4abeb1ae77b4f819b, type: 2}
 --- !u!1 &6893322480363148773
 GameObject:
   m_ObjectHideFlags: 0

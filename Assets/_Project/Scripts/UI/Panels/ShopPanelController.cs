@@ -4,7 +4,6 @@ namespace NTVV.UI.Panels
     using UnityEngine.UI;
     using TMPro;
     using System.Collections.Generic;
-    using System.Linq;
     using NTVV.Data;
     using NTVV.Data.ScriptableObjects;
     using NTVV.Gameplay.Economy;
@@ -34,7 +33,16 @@ namespace NTVV.UI.Panels
         [Header("Templates")]
         [SerializeField] private GameObject _shopItemPrefab;
 
+        [Header("Data")]
+        [SerializeField] private GameDataRegistrySO _registry;
+
         private string _currentCategory = "Seeds";
+
+        private void Awake()
+        {
+            if (_registry == null)
+                Debug.LogError("[ShopPanelController] _registry is null — assign GameDataRegistry.asset in prefab Inspector.");
+        }
 
         private void OnEnable()
         {
@@ -82,10 +90,10 @@ namespace NTVV.UI.Panels
 
             foreach (Transform child in _shopContentContainer) Destroy(child.gameObject);
 
-            var registry = Resources.FindObjectsOfTypeAll<GameDataRegistrySO>().FirstOrDefault();
+            var registry = _registry;
             if (registry == null)
             {
-                Debug.LogError("[Shop] GameDataRegistrySO not found in Resources!");
+                Debug.LogError("[Shop] GameDataRegistrySO not found — assign _registry in prefab Inspector!");
                 return;
             }
 
@@ -149,6 +157,13 @@ namespace NTVV.UI.Panels
         private void TryBuySeed(string cropId, int unitCost, int qty)
         {
             int totalCost = unitCost * qty;
+
+            // BUG-B2 fix: check storage space BEFORE deducting gold
+            if (StorageSystem.Instance != null && !StorageSystem.Instance.CanAddItem(cropId, qty))
+            {
+                Debug.LogWarning($"[Shop] Storage full! Cannot buy {qty}x {cropId}.");
+                return;
+            }
 
             if (EconomySystem.Instance != null && EconomySystem.Instance.CanAfford(totalCost))
             {

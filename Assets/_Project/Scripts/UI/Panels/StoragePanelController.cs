@@ -44,10 +44,19 @@ namespace NTVV.UI.Panels
         [Header("Templates")]
         [SerializeField] private GameObject _itemCardPrefab;
 
+        [Header("Data")]
+        [SerializeField] private GameDataRegistrySO _registry;
+
         private string _currentCategory = "All";
         private string _selectedItemId;
         private int _sellQuantity = 1;
         private int _currentItemSellPrice = 0;
+
+        private void Awake()
+        {
+            if (_registry == null)
+                Debug.LogError("[StoragePanelController] _registry is null — assign GameDataRegistry.asset in prefab Inspector.");
+        }
 
         private void OnEnable()
         {
@@ -102,7 +111,7 @@ namespace NTVV.UI.Panels
 
             foreach (Transform child in _storageContentContainer) Destroy(child.gameObject);
 
-            var registry = Resources.FindObjectsOfTypeAll<GameDataRegistrySO>().FirstOrDefault();
+            var registry = _registry;
             var items    = StorageSystem.Instance.GetAllItems();
 
             foreach (var item in items)
@@ -193,7 +202,7 @@ namespace NTVV.UI.Panels
         {
             if (StorageSystem.Instance == null || EconomySystem.Instance == null) return;
 
-            var registry  = Resources.FindObjectsOfTypeAll<GameDataRegistrySO>().FirstOrDefault();
+            var registry  = _registry;
             var snapshot  = StorageSystem.Instance.GetAllItems().ToList();
             int totalGold = 0;
 
@@ -210,10 +219,17 @@ namespace NTVV.UI.Panels
                     if (cropSO != null) price = cropSO.data.sellPriceGold;
                 }
 
+                if (price <= 0) continue; // BUG-B1 fix: skip items with no sell value
+
                 totalGold += item.Value * price;
                 StorageSystem.Instance.AddItem(item.Key, -item.Value);
             }
 
+            if (totalGold == 0)
+            {
+                Debug.LogWarning("[Storage] Sell All: no items with sell value > 0.");
+                return;
+            }
             EconomySystem.Instance.AddGold(totalGold);
             Managers.GameManager.Instance?.TriggerSave();
             if (_sellSubPanel != null) _sellSubPanel.SetActive(false);

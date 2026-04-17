@@ -523,7 +523,7 @@ MonoBehaviour:
   _waterButton: {fileID: 7278841514413408570}
   _cureButton: {fileID: 579010401646528640}
   _weedButton: {fileID: 5974289579092499579}
-  _registry: {fileID: 0}
+  _registry: {fileID: 11400000, guid: 65633044c49c98c4abeb1ae77b4f819b, type: 2}
 --- !u!1 &2635343217555382105
 GameObject:
   m_ObjectHideFlags: 0
