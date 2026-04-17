@@ -24,6 +24,8 @@ namespace NTVV.World.Views
         [SerializeField] private float _hungerTimer;
         [SerializeField] private float _timeSinceMature;
         
+        private AnimalPenView _pen;
+        
         [Header("Production State")]
         [SerializeField] private float _productionTimer;
         [SerializeField] private bool _isReadyToProduce;
@@ -39,9 +41,10 @@ namespace NTVV.World.Views
         public bool IsHungry => _isHungry;
         public bool IsReadyToProduce => _isReadyToProduce;
 
-        public void Initialize(AnimalData data)
+        public void Initialize(AnimalData data, AnimalPenView pen = null)
         {
             _data = data;
+            _pen = pen;
             _currentStage = GrowthStage.Baby;
             _isHungry = false;
             _hungerTimer = 0f;
@@ -76,6 +79,8 @@ namespace NTVV.World.Views
                 {
                     _currentStage = GrowthStage.Dead;
                     RefreshVisuals();
+                    _pen?.RemoveAnimal(this); // BUG-02: remove from pen on natural death
+                    return;                   // BUG-01: prevent production block from running
                 }
 
                 // Production Logic: Only if not hungry and mature
@@ -213,7 +218,12 @@ namespace NTVV.World.Views
 
         public void Sell()
         {
-            if (_currentStage == GrowthStage.Dead) { Destroy(gameObject); return; }
+            if (_currentStage == GrowthStage.Dead)
+            {
+                _pen?.RemoveAnimal(this);
+                Destroy(gameObject);
+                return;
+            }
 
             int price = 0;
             int xp = 0;
@@ -237,6 +247,11 @@ namespace NTVV.World.Views
             if (EconomySystem.Instance != null) EconomySystem.Instance.AddGold(price);
             if (LevelSystem.Instance != null) LevelSystem.Instance.AddXP(xp);
 
+            // BUG-07: fire quest event before destroy
+            NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.SellAnimal, _data.animalId, 1);
+            // BUG-02: save + remove from pen before destroy
+            Managers.GameManager.Instance?.TriggerSave();
+            _pen?.RemoveAnimal(this);
             Destroy(gameObject);
         }
     }

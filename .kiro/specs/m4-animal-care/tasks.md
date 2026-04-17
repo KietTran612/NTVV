@@ -13,11 +13,11 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
 
 ## Tasks
 
-- [ ] 0. Fix AnimalView — Sell() (BUG-02 + BUG-07)
-  - [ ] 0.0 · Resource Check
+- [x] 0. Fix AnimalView — Sell() (BUG-02 + BUG-07)
+  - [x] 0.0 · Resource Check
     - Không có sprite asset trong task này — SKIP scan
     - NON-BLOCKING
-  - [ ] 0.4 · Script Agent — Sửa AnimalView.cs Sell()
+  - [x] 0.4 · Script Agent — Sửa AnimalView.cs Sell()
     - `script-read` → `Assets/_Project/Scripts/World/Views/AnimalView.cs`
     - Tìm `Sell()` method (khoảng line 214-241)
     - **Fix BUG-07:** Thêm QuestEvent trước Destroy (trong Sell, sau economy logic):
@@ -33,18 +33,18 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
     - Đảm bảo thứ tự trong Sell(): ... economy/XP logic ... → QuestEvent → TriggerSave → RemoveAnimal → Destroy
     - `assets-refresh` → đợi compile xong
     - _Requirements: 1.1, 1.3, 1.4, 5.2, 7.1, 7.2_
-  - [ ] 0.✓ · Quick Test
+  - [x] 0.✓ · Quick Test
     - `console-get-logs` filter=Error → 0 compile errors liên quan AnimalView
     - Verify: `Sell()` có `_pen?.RemoveAnimal(this)` trước `Destroy(gameObject)`
     - Verify: `Sell()` có `QuestEvents.InvokeActionPerformed(... SellAnimal ...)`
     - Verify: `Sell()` có `Managers.GameManager.Instance?.TriggerSave()`
     - Nếu FAIL → fix trong task 0, KHÔNG sang task 1
 
-- [ ] 1. Fix AnimalView — HandleTick natural death (BUG-01 + BUG-02)
-  - [ ] 1.0 · Resource Check
+- [x] 1. Fix AnimalView — HandleTick natural death (BUG-01 + BUG-02)
+  - [x] 1.0 · Resource Check
     - Không có sprite asset trong task này — SKIP scan
     - NON-BLOCKING
-  - [ ] 1.4 · Script Agent — Sửa HandleTick natural death
+  - [x] 1.4 · Script Agent — Sửa HandleTick natural death
     - `script-read` → `Assets/_Project/Scripts/World/Views/AnimalView.cs`
     - Tìm `HandleTick()` (khoảng line 57-92), section kiểm tra thời gian quá hạn
     - **Fix BUG-01 + BUG-02:** Đảm bảo death path có `RemoveAnimal` và `return` TRƯỚC production block:
@@ -60,7 +60,7 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
     - ⚠️ Kiểm tra `return` phải nằm TRƯỚC production block (lines 82-90)
     - `assets-refresh` → đợi compile xong
     - _Requirements: 1.2, 2.1, 2.2_
-  - [ ] 1.✓ · Quick Test
+  - [x] 1.✓ · Quick Test
     - `console-get-logs` filter=Error → 0 compile errors
     - Verify: HandleTick natural death section có `_pen?.RemoveAnimal(this)` trước `return`
     - Verify: `return` nằm trước production block
