@@ -3,7 +3,23 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
-- **Phiên 17/04/2026 (Hiện tại) — scn-main-world-setup HOÀN THÀNH**:
+- **Phiên 17/04/2026 (Hiện tại) — m3a-crop-care-harvest HOÀN THÀNH**:
+    - **`m3a-crop-care-harvest` spec DONE**: Tất cả 6 tasks đã execute xong qua Pure MCP.
+    - **9 bugs fixed** trong `CropTileView.cs` và `CropActionPanelController.cs`:
+        - BUG-A1: `ClearWeeds()` gọi `RefreshVisuals()` ngay lập tức
+        - BUG-A2: `ClearPests()` gọi `RefreshVisuals()` + null-safe `StorageSystem.Instance?`
+        - BUG-A3: `HandleTick()` reset `NeedsCare → Growing` khi drainRate = 0
+        - BUG-A4: Close/Harvest/Reset buttons gọi `CloseContextAction()` + `TriggerSave()`
+        - BUG-A5: `Harvest()` log warning khi storage đầy, tile không reset
+        - BUG-A6: `RestoreState()` gọi `RefreshVisuals()` ở cuối — visuals đúng ngay khi load
+        - BUG-A7: `RefreshUI()` null-safe `CurrentCropData?.cropName ?? "[Unknown]"`
+        - BUG-A9: `RestoreState()` set `GrowthStage.Ripe` đúng khi tile Ripe
+        - BUG-A10: Ripe→Dead transition gọi `RefreshVisuals()` ngay lập tức
+    - **WIRE-01**: `ContextActionPanel.prefab` — `_registry` wired với `GameDataRegistry.asset` (tại `Assets/_Project/Data/Registry/`)
+    - **Full cycle hoạt động**: plant → grow → ailment → care → ripe → harvest → items vào StorageSystem
+    - **Integration test PASSED**: Play Mode 0 errors, boot confirmed, save/load cycle hoạt động
+    - **Known Issue (non-blocking)**: FarmCameraController (Old Input) + WorldObjectPicker (New Input) input conflict — pre-existing, acceptable ở prototype
+- **Phiên 17/04/2026 — scn-main-world-setup HOÀN THÀNH**:
     - **`scn-main-world-setup` spec DONE**: Tất cả 9 tasks đã execute xong qua Pure MCP.
     - **6 CropTile placed** trong CropArea (2×3 grid): `tile_r0_c0` → `tile_r1_c2`, layer=Interactable, CropTileView wired, `_registry` không null.
     - **WorldObjectPicker + PlayerInput** wired trên cùng GO trong `[SYSTEMS]`. PlayerInputActions.inputactions tạo mới tại `Assets/_Project/Input/`.
@@ -58,13 +74,16 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - Sản xuất 100% Asset bộ khởi động (Carrot, Chicken, UI Backgrounds, Resource Icons).
     - Quy hoạch thư mục Art khoa học.
     - **✅ `scn-main-ui-rebuild` DONE** — SCN_Main có đầy đủ UI: TopHUDBar, BottomNav, 4 popups, PopupManager wired, prefabs extracted.
+    - **✅ `scn-main-world-setup` DONE** — World Setup (M2) hoàn thành
+    - **✅ `m3a-crop-care-harvest` DONE** — 9 bugs fixed, full crop cycle hoạt động
 - **Cần làm ngay**: 
     1. **~~Execute SCN_Main UI Spec~~** ✅ DONE
     2. **~~Execute `scn-main-world-setup`~~** ✅ DONE — World Setup (M2) hoàn thành
-    3. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
-    4. **M3: Crop Care + Storage + Sell Flow** — Tạo spec mới cho M3 milestone
-    5. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
-    6. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md).
+    3. **~~Execute `m3a-crop-care-harvest`~~** ✅ DONE — Crop care + harvest bugs fixed
+    4. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
+    5. **M3b: Storage + Sell Flow** — Tạo spec mới cho storage UI integration và sell flow
+    6. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
+    7. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md).
 
 ## 🗂 Kiro Specs đang active
 
@@ -90,12 +109,21 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - GameDataRegistrySO: 7 crops valid, postRipeLifeMin > 0 trên tất cả
     - Integration test: 0 errors, GameManager boot confirmed
 
-### Spec 3: M3 Crop Care + Storage + Sell Flow ← EXECUTE TIẾP THEO
-- **Path**: `.kiro/specs/m3a-crop-care-harvest/` và `.kiro/specs/m3b-storage-sell-flow/`
-- **Status**: Chưa tạo spec — cần brainstorm và tạo requirements/design/tasks
-- **Scope**: Crop care events (weed/bug/water), harvest flow, storage UI integration, sell flow
+### Spec 3: `m3a-crop-care-harvest` ✅ DONE
+- **Path**: `.kiro/specs/m3a-crop-care-harvest/`
+- **Status**: **TẤT CẢ 6 TASKS HOÀN THÀNH** (17/04/2026)
+- **Kết quả**:
+    - 9 bugs fixed trong `CropTileView.cs` (A1, A2, A3, A5, A6, A9, A10) và `CropActionPanelController.cs` (A4, A7)
+    - `ContextActionPanel.prefab`: `_registry` wired với `GameDataRegistry.asset`
+    - Full cycle: plant → grow → ailment → care → ripe → harvest → StorageSystem
+    - Integration test: 0 errors, save/load cycle hoạt động
+
+### Spec 4: `m3b-storage-sell-flow` ← EXECUTE TIẾP THEO
+- **Path**: `.kiro/specs/m3b-storage-sell-flow/`
+- **Status**: Chưa execute — cần tạo/review requirements/design/tasks
+- **Scope**: Storage UI integration, sell flow, economy feedback
 
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. Bước tiếp theo là M3: crop care + storage + sell flow."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. Bước tiếp theo là M3b: Storage + Sell flow."
