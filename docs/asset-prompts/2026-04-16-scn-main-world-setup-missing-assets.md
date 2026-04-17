@@ -7,7 +7,7 @@ Spec: scn-main-world-setup
 ## soil_empty.png
 Target path: Assets/_Project/Art/Sprites/World/soil_empty.png
 Size: 512x512 | Style: 2.5D isometric, cute cartoon, bright warm colors
-Status: pending
+Status: applied
 
 ### ChatGPT / DALL-E
 Prompt: "Isometric farm soil tile, empty tilled dirt plot, top-down 2.5D view, cute cartoon style, bright warm brown earth tones, rounded edges, soft shadows, white background, stylized farm game asset, production-friendly, clean outline, no text, no humans, square canvas"
@@ -37,7 +37,7 @@ SaveImage   : filename=soil_empty.png
 ## weed_overlay.png
 Target path: Assets/_Project/Art/Sprites/World/weed_overlay.png
 Size: 512x512 | Style: 2.5D isometric, cute cartoon, bright warm colors
-Status: pending
+Status: applied
 
 ### ChatGPT / DALL-E
 Prompt: "Cartoon weed plant overlay sprite for farm game, small green weeds growing on soil, top-down 2.5D view, cute cartoon style, bright green colors, transparent background, stylized farm game asset, production-friendly, clean outline, no text, no humans, square canvas"
@@ -60,7 +60,7 @@ Output filename: weed_overlay.png
 ## bug_overlay.png
 Target path: Assets/_Project/Art/Sprites/World/bug_overlay.png
 Size: 512x512 | Style: 2.5D isometric, cute cartoon, bright warm colors
-Status: pending
+Status: applied
 
 ### ChatGPT / DALL-E
 Prompt: "Cartoon bug pest overlay sprite for farm game, small cute bug/insect on soil, top-down 2.5D view, cute cartoon style, warm brown colors, transparent background, stylized farm game asset, production-friendly, clean outline, no text, no humans, square canvas"
@@ -83,7 +83,7 @@ Output filename: bug_overlay.png
 ## water_needed.png
 Target path: Assets/_Project/Art/Sprites/World/water_needed.png
 Size: 512x512 | Style: 2.5D isometric, cute cartoon, bright warm colors
-Status: pending
+Status: applied
 
 ### ChatGPT / DALL-E
 Prompt: "Cartoon water droplet indicator overlay sprite for farm game, small blue water drop icon on dry soil, top-down 2.5D view, cute cartoon style, light blue colors, transparent background, stylized farm game asset, production-friendly, clean outline, no text, no humans, square canvas"
@@ -106,7 +106,7 @@ Output filename: water_needed.png
 ## crop_carrot_phase1.png
 Target path: Assets/_Project/Art/Sprites/Crops/crop_carrot_phase1.png
 Size: 512x512 | Style: 2.5D isometric, cute cartoon, bright warm colors
-Status: pending
+Status: applied (using icon_Carrot_Stage1_Atomic.png)
 
 ### ChatGPT / DALL-E
 Prompt: "Cartoon carrot seedling phase 1 sprite for farm game, tiny carrot sprout just emerging from soil, top-down 2.5D view, cute cartoon style, bright green and orange colors, transparent background, stylized farm game asset, production-friendly, clean outline, no text, no humans, square canvas"
@@ -129,7 +129,7 @@ Output filename: crop_carrot_phase1.png
 ## crop_carrot_phase2.png
 Target path: Assets/_Project/Art/Sprites/Crops/crop_carrot_phase2.png
 Size: 512x512 | Style: 2.5D isometric, cute cartoon, bright warm colors
-Status: pending
+Status: applied (using icon_Carrot_Stage2_Atomic.png)
 
 ### ChatGPT / DALL-E
 Prompt: "Cartoon carrot growing phase 2 sprite for farm game, medium-sized carrot plant with green leaves, top-down 2.5D view, cute cartoon style, bright green and orange colors, transparent background, stylized farm game asset, production-friendly, clean outline, no text, no humans, square canvas"
@@ -152,7 +152,7 @@ Output filename: crop_carrot_phase2.png
 ## crop_carrot_phase3.png
 Target path: Assets/_Project/Art/Sprites/Crops/crop_carrot_phase3.png
 Size: 512x512 | Style: 2.5D isometric, cute cartoon, bright warm colors
-Status: pending
+Status: applied (using icon_Carrot_Stage3_Atomic.png)
 
 ### ChatGPT / DALL-E
 Prompt: "Cartoon carrot ripe/harvest phase 3 sprite for farm game, fully grown carrot ready to harvest with orange carrot visible, top-down 2.5D view, cute cartoon style, bright orange and green colors, transparent background, stylized farm game asset, production-friendly, clean outline, no text, no humans, square canvas"
@@ -173,13 +173,13 @@ Output filename: crop_carrot_phase3.png
 ---
 
 ## Summary
-- soil_empty: MISSING → using Unity default white sprite placeholder
-- weed_overlay: MISSING → using color placeholder (#7CFC00 green)
-- bug_overlay: MISSING → using color placeholder (#8B4513 brown)
-- water_needed: MISSING → using color placeholder (#87CEEB light blue)
-- crop_carrot_phase1: MISSING → using color placeholder
-- crop_carrot_phase2: MISSING → using color placeholder
-- crop_carrot_phase3: MISSING → using color placeholder
+- soil_empty: ✅ APPLIED → Assets/_Project/Art/Sprites/World/soil_empty.png
+- weed_overlay: ✅ APPLIED → Assets/_Project/Art/Sprites/World/weed_overlay.png
+- bug_overlay: ✅ APPLIED → Assets/_Project/Art/Sprites/World/bug_overlay.png
+- water_needed: ✅ APPLIED → Assets/_Project/Art/Sprites/World/water_needed.png
+- crop_carrot_phase1: ✅ APPLIED → icon_Carrot_Stage1_Atomic.png
+- crop_carrot_phase2: ✅ APPLIED → icon_Carrot_Stage2_Atomic.png
+- crop_carrot_phase3: ✅ APPLIED → icon_Carrot_Stage3_Atomic.png
 
 ---
 
