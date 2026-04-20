@@ -54,6 +54,14 @@ namespace NTVV.Gameplay.Quests
                 return;
             }
 
+            // Check prerequisite quest (BUG-Q2 fix)
+            if (!string.IsNullOrEmpty(quest.prerequisiteQuestId) &&
+                !_completedQuestIds.Contains(quest.prerequisiteQuestId))
+            {
+                Debug.LogWarning($"[Quest] Prerequisite not completed: {quest.prerequisiteQuestId}");
+                return;
+            }
+
             _activeQuests.Add(quest);
 
             // Initialize runtime progress (all zeros) — never touch the SO
@@ -143,9 +151,18 @@ namespace NTVV.Gameplay.Quests
 
         private void HandleUnlock(QuestUnlockType unlockType, string unlockId)
         {
-            if (unlockType == QuestUnlockType.None) return;
-            
-            Debug.Log($"<color=magenta>[Feature Unlocked]</color>: {unlockType} ({unlockId})");
+            switch (unlockType)
+            {
+                case QuestUnlockType.None:
+                    return;
+
+                case QuestUnlockType.ShopTab_Animals:
+                case QuestUnlockType.Building_NewNPC:
+                case QuestUnlockType.System_Crafting:
+                default:
+                    Debug.LogWarning($"[Quest] HandleUnlock: unlockType {unlockType} not supported in v1. Skipping.");
+                    break;
+            }
         }
 
         #region Persistence

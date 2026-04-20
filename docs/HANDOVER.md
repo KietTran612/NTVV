@@ -3,6 +3,26 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
+- **Phiên 20/04/2026 (Hiện tại) — m5-quest-flow HOÀN THÀNH**:
+    - **`m5-quest-flow` spec DONE**: Tất cả 5 tasks đã execute xong qua Pure MCP.
+    - **4 bugs fixed**:
+        - BUG-Q1: `QuestPanelController` refresh — verified đúng, `OnEnable()` subscribe + `RefreshUI("")` đã có sẵn
+        - BUG-Q2: `QuestManager.AcceptQuest()` — thêm prerequisite guard sau level check, trước `_activeQuests.Add()`
+        - BUG-Q3: `QuestManager.HandleUnlock()` — implement switch statement: `case None: return`, `default: LogWarning` cho unsupported types
+        - BUG-Q4: Feedback clarity — verified đủ logs tại accept/progress/claim/unlock
+    - **`QuestManager.AcceptQuest()` prerequisite guard hoạt động**:
+        - `prerequisiteQuestId` rỗng → accept bình thường
+        - `prerequisiteQuestId` có giá trị + chưa completed → `Debug.LogWarning` + return
+    - **`HandleUnlock()` switch statement**:
+        - `case None: return` — không làm gì
+        - `default: LogWarning` — không crash với bất kỳ unlockType nào
+        - Audit v1: tất cả 3 quest assets dùng `unlockType=None` → không cần implement ShopTab_Animals/Building_NewNPC
+    - **`QuestPanelController` event-driven refresh verified**:
+        - `OnEnable()` subscribe + `RefreshUI("")` — initial state load khi panel mở
+        - `OnDisable()` unsubscribe — không duplicate listeners
+        - `QuestListItem.Setup()` đọc progress từ `QuestManager.GetQuestTotalProgress()`, không từ SO
+    - **Integration test PASSED**: Play Mode 0 errors, boot sequence complete, 0 NullReferenceException
+
 - **Phiên 20/04/2026 (Hiện tại) — m4-animal-care HOÀN THÀNH**:
     - **`m4-animal-care` spec DONE**: Tất cả 9 tasks đã execute xong qua Pure MCP.
     - **7 bugs fixed**:
@@ -132,17 +152,16 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - **✅ `m3a-crop-care-harvest` DONE** — 9 bugs fixed, full crop cycle hoạt động
     - **✅ `m3b-storage-sell-flow` DONE** — 3 bugs fixed (BUG-B1, BUG-B2), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired
     - **✅ `m4-animal-care` DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal, auto-collect, AnimalPen.prefab created & wired
-    - **✍️ `m5-quest-flow` SPEC WRITTEN** — design, requirements, tasks completed (4 quest bugs identified)
+    - **✅ `m5-quest-flow` DONE** — 4 bugs fixed (BUG-Q1..Q4), prerequisite enforcement, HandleUnlock switch, QuestPanelController verified
     - **📋 Asset Inventory Completed** — full sprite list and prompt docs for missing sprites (priority: Duck/animal, items/nav, crops)
 - **Cần làm ngay**: 
     1. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
     2. **Manual UI test**: Verify Storage sell flow + Shop buy flow trong Play Mode (button interaction cần manual)
-    3. **M5: Quest Flow** — milestone tiếp theo (`m5-quest-flow` spec đã sẵn sàng)
+    3. **M6: Next milestone** — xác định milestone tiếp theo sau khi M5 hoàn thành
     4. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
-    5. **Execute `m5-quest-flow`** — fix 4 quest bugs (BUG-Q1..Q4)
-    6. **Generate missing sprites** — sử dụng bộ rework tại `docs/asset-prompts/2026-04-17-rework/` (bắt đầu với `entities-animals.md`)
-    7. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md)
-    8. **Camera fix**: Game view toàn màu xanh — cần điều chỉnh Main Camera position/orthographic size để nhìn thấy scene
+    5. **Generate missing sprites** — sử dụng bộ rework tại `docs/asset-prompts/2026-04-17-rework/` (bắt đầu với `entities-animals.md`)
+    6. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md)
+    7. **Camera fix**: Game view toàn màu xanh — cần điều chỉnh Main Camera position/orthographic size để nhìn thấy scene
 
 ## 🗂 Kiro Specs đang active
 
@@ -177,14 +196,7 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - Full cycle: plant → grow → ailment → care → ripe → harvest → StorageSystem
     - Integration test: 0 errors, save/load cycle hoạt động
 
-### Spec 7: `m5-quest-flow` ✍️ SPEC WRITTEN (Chưa execute)
-- **Path**: `.kiro/specs/m5-quest-flow/`
-- **Status**: **Design, Requirements, Tasks completed** (17/04/2026) — **Chưa execute** ← EXECUTE TIẾP THEO
-- **Kết quả**:
-    - 4 quest bugs identified: BUG-Q1 (UI refresh), BUG-Q2 (prerequisite enforcement), BUG-Q3 (HandleUnlock runtime), BUG-Q4 (feedback clarity)
-    - Chuẩn bị sẵn để implement khi cần
-
-### Spec 5: `m3b-storage-sell-flow` ✅ DONE
+### Spec 4: `m3b-storage-sell-flow` ✅ DONE
 - **Path**: `.kiro/specs/m3b-storage-sell-flow/`
 - **Status**: **TẤT CẢ 5 TASKS HOÀN THÀNH** (17/04/2026)
 - **Kết quả**:
@@ -195,8 +207,7 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - `ShopPopup.prefab`: `_registry` → `GameDataRegistry.asset` wired
     - Integration test: 0 errors, systems running
 
-### Spec 6: `m4-animal-care` ✅ DONE
-- **Path**: `.kiro/specs/m4-animal-care/`
+### Spec 5: `m4-animal-care` ✅ DONE
 - **Status**: **TẤT CẢ 9 TASKS HOÀN THÀNH** (20/04/2026)
 - **Kết quả**:
     - 7 bugs fixed: BUG-01 (production guard), BUG-02 (RemoveAnimal), BUG-03 (Feed null-safe), BUG-04 (Feed warning), BUG-05 (sell CloseContextAction), BUG-06 (buy autosave), BUG-07 (QuestEvent)
@@ -206,9 +217,18 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - Auto-collect: `HandleTick()` tự gọi `CollectProduct()`, `_collectButton` ẩn
     - Integration test: 0 errors, Buy→Sell cycle verified, TriggerSave confirmed
 
-### Spec 7: `m5-quest-flow` ✍️ SPEC WRITTEN (Chưa execute)
+### Spec 6: `m5-quest-flow` ✅ DONE
+- **Path**: `.kiro/specs/m5-quest-flow/`
+- **Status**: **TẤT CẢ 5 TASKS HOÀN THÀNH** (20/04/2026)
+- **Kết quả**:
+    - BUG-Q1 fixed: `QuestPanelController` refresh — verified đúng, event-driven architecture intact
+    - BUG-Q2 fixed: `QuestManager.AcceptQuest()` — prerequisite guard thêm sau level check, trước `_activeQuests.Add()`
+    - BUG-Q3 fixed: `QuestManager.HandleUnlock()` — switch statement với `case None: return` + `default: LogWarning`
+    - BUG-Q4 fixed: Feedback clarity — logs đầy đủ tại accept/progress/claim/unlock
+    - Audit v1: 3 quest assets (q_harvest_wheat, q_buy_chicken, q_reach_level_2), tất cả dùng `unlockType=None`
+    - Integration test: 0 errors, boot sequence complete
 
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M4 Animal Care đã DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal hoạt động, auto-collect product, AnimalPen.prefab tạo mới và wired đầy đủ. **M5 Quest Flow spec đã WRITTEN** — 4 bugs identified, sẵn sàng để implement. Bước tiếp theo là M5: Quest Flow."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M4 Animal Care đã DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal hoạt động, auto-collect product, AnimalPen.prefab tạo mới và wired đầy đủ. **M5 Quest Flow đã DONE** — 4 bugs fixed (BUG-Q1..Q4): prerequisite enforcement, HandleUnlock switch, QuestPanelController event-driven refresh verified. Bước tiếp theo là M6 hoặc milestone tiếp theo."
