@@ -59,9 +59,18 @@ namespace NTVV.UI.Panels
                 if (PopupManager.Instance == null) { gameObject.SetActive(false); Managers.GameManager.Instance?.TriggerSave(); }
             });
             
-            _buyButton?.onClick.AddListener(() => { _targetPen?.PurchaseAnimal(); RefreshUI(); });
+            _buyButton?.onClick.AddListener(() =>
+            {
+                _targetPen?.PurchaseAnimal();
+                Managers.GameManager.Instance?.TriggerSave(); // BUG-06
+                RefreshUI();
+            });
             _feedButton?.onClick.AddListener(() => { _targetAnimal?.Feed(); RefreshUI(); });
-            _sellButton?.onClick.AddListener(() => { _targetAnimal?.Sell(); gameObject.SetActive(false); });
+            _sellButton?.onClick.AddListener(() =>
+            {
+                _targetAnimal?.Sell();
+                PopupManager.Instance?.CloseContextAction(); // BUG-05
+            });
             _collectButton?.onClick.AddListener(() => { _targetAnimal?.CollectProduct(); RefreshUI(); });
 
             _waterButton?.onClick.AddListener(() => { _targetTile?.WaterPlant(); RefreshUI(); });
@@ -129,7 +138,7 @@ namespace NTVV.UI.Panels
             {
                 _headerText.text = _targetAnimal.CurrentData.animalName;
                 _feedButton.gameObject.SetActive(_targetAnimal.IsHungry);
-                _collectButton.gameObject.SetActive(_targetAnimal.IsReadyToProduce);
+                if (_collectButton != null) _collectButton.gameObject.SetActive(false); // auto-collect: hide from player
                 _sellButton.gameObject.SetActive(true);
             }
         }

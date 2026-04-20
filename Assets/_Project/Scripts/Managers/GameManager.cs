@@ -30,6 +30,7 @@ namespace NTVV.Managers
 
         public GameState CurrentState => _currentState;
         public GameDataRegistrySO DataRegistry => _dataRegistry;
+        public static System.DateTime LastSaveTime { get; private set; } = System.DateTime.UtcNow;
 
         protected override void OnInitialize()
         {
@@ -85,16 +86,33 @@ namespace NTVV.Managers
 
         private void RestoreWorldState(PlayerSaveData data)
         {
-            if (data == null || data.tiles == null || _dataRegistry == null) return;
+            if (data == null || _dataRegistry == null) return;
 
-            CropTileView[] allTileViews = FindObjectsByType<CropTileView>(FindObjectsSortMode.None);
-            foreach (var tileData in data.tiles)
+            // Restore crop tiles
+            if (data.tiles != null)
             {
-                CropTileView match = allTileViews.FirstOrDefault(t => t.TileId == tileData.tileId || t.gameObject.name == tileData.tileId);
-                if (match != null)
+                CropTileView[] allTileViews = FindObjectsByType<CropTileView>(FindObjectsSortMode.None);
+                foreach (var tileData in data.tiles)
                 {
-                    CropDataSO cropSO = _dataRegistry.GetCrop(tileData.cropId);
-                    match.RestoreState(tileData, cropSO != null ? cropSO.data : null);
+                    CropTileView match = allTileViews.FirstOrDefault(t => t.TileId == tileData.tileId || t.gameObject.name == tileData.tileId);
+                    if (match != null)
+                    {
+                        CropDataSO cropSO = _dataRegistry.GetCrop(tileData.cropId);
+                        match.RestoreState(tileData, cropSO != null ? cropSO.data : null);
+                    }
+                }
+            }
+
+            // Restore animals
+            if (data.animals != null && data.animals.Count > 0)
+            {
+                AnimalPenView[] allPens = FindObjectsByType<AnimalPenView>(FindObjectsSortMode.None);
+                foreach (var saved in data.animals)
+                {
+                    var animalSO = _dataRegistry.animals?.FirstOrDefault(a => a != null && a.data != null && a.data.animalId == saved.animalId);
+                    if (animalSO == null) continue; // stale save — skip
+                    var pen = allPens.FirstOrDefault(p => !p.IsFull);
+                    pen?.SpawnAndRestore(animalSO.data, saved);
                 }
             }
         }
@@ -102,6 +120,7 @@ namespace NTVV.Managers
         public void TriggerSave()
         {
             if (_currentState == GameState.Loading) return;
+            LastSaveTime = System.DateTime.UtcNow;
             SaveLoadManager.Instance.Save(CaptureCurrentState());
         }
 
@@ -145,6 +164,12 @@ namespace NTVV.Managers
             // [Quest] Capture quests
             if (QuestManager.Instance != null)
                 QuestManager.Instance.SaveData(data);
+
+            // Collect animal save data
+            data.animals = new System.Collections.Generic.List<AnimalSaveData>(
+                FindObjectsByType<AnimalView>(FindObjectsSortMode.None)
+                    .Select(a => a.GetSaveData())
+            );
 
             return data;
         }

@@ -152,3 +152,22 @@
   - Gems có được dùng trong v1 không? Nếu không → có thể SetActive=false hoặc xóa label
   - Hiện tại label hiển thị "0" màu tím (#9966FF) trong Footer, không có icon gem đi kèm
 - **Fix đề xuất:** Nếu Gems không dùng cho v1, SetActive=false trên GemsBalance_Label. Nếu dùng, thêm GemIcon đi kèm tương tự GoldChip.
+
+---
+
+## 🟡 MEDIUM — Phát hiện ngày 20/04/2026 (m4-animal-care Task 7 — WIRE-01 blocked)
+
+### NOTE-06: `AnimalPen.prefab` chưa tồn tại — WIRE-01 đã được unblock ✅
+- **Spec:** `m4-animal-care`, Task 7 (WIRE-01)
+- **Vấn đề gốc:** Task 7 yêu cầu assign `_registry` vào `AnimalPen.prefab` nhưng prefab chưa tồn tại.
+- **Kiến trúc đã quyết định (20/04/2026):**
+  - 1 `AnimalPen` GameObject trong scene, đặt con của `BarnArea`
+  - `AnimalPenView._animalType` fill inline từ data của `animal_01.asset`
+  - Extract thành `Assets/_Project/Prefabs/World/AnimalPen.prefab`
+- **Assets đã xác nhận có sẵn:**
+  - `Animal_Placeholder.prefab` → `Assets/_Project/Prefabs/World/Animal_Placeholder.prefab`
+  - `GameDataRegistry.asset` → `Assets/_Project/Data/Registry/GameDataRegistry.asset`
+  - `animal_01.asset` → `Assets/_Project/Data/Animals/animal_01.asset`
+  - `BarnArea` → có trong SCN_Main (chỉ có Transform, sẵn sàng nhận child)
+- **Trạng thái:** Task 7 đã cập nhật với 4 sub-task rõ ràng (7.1–7.4) — **chờ thực thi**.
+- **Priority:** Cần giải quyết trước khi test Buy/Sell animal flow (Task 8).

@@ -84,13 +84,13 @@ namespace NTVV.World.Views
                 }
 
                 // Production Logic: Only if not hungry and mature
-                if (!_isHungry && !_isReadyToProduce)
+                if (!_isHungry)
                 {
                     _productionTimer += tickDelta;
                     if (_productionTimer >= (_data.produceTimeMin * 60f))
                     {
-                        _isReadyToProduce = true;
-                        RefreshVisuals();
+                        CollectProduct(); // auto-collect
+                        _productionTimer = 0f;
                     }
                 }
             }
@@ -181,21 +181,30 @@ namespace NTVV.World.Views
         {
             if (!_isHungry) return;
 
-            bool hasGrass = _data.feedQtyGrass <= 0 || (StorageSystem.Instance.GetItemCount("item_grass") >= _data.feedQtyGrass);
-            bool hasWorm = _data.feedQtyWorm <= 0 || (StorageSystem.Instance.GetItemCount("item_worm") >= _data.feedQtyWorm);
-
-            if (hasGrass && hasWorm)
+            if (StorageSystem.Instance == null)
             {
-                if (_data.feedQtyGrass > 0) StorageSystem.Instance.AddItem("item_grass", -_data.feedQtyGrass);
-                if (_data.feedQtyWorm > 0) StorageSystem.Instance.AddItem("item_worm", -_data.feedQtyWorm);
-                
-                _isHungry = false;
-                _hungerTimer = 0f;
-
-                NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.FeedAnimal, _data.animalId, 1);
-                Debug.Log($"<color=green>[Animal]</color> Fed {_data.animalName}");
-                RefreshVisuals();
+                Debug.LogWarning("[AnimalView] StorageSystem not ready.");
+                return;
             }
+
+            int grassCount = StorageSystem.Instance.GetItemCount("item_grass");
+            int wormCount  = StorageSystem.Instance.GetItemCount("item_worm");
+
+            if (grassCount < _data.feedQtyGrass || wormCount < _data.feedQtyWorm)
+            {
+                Debug.LogWarning($"[Animal] Not enough food to feed {_data.animalName}. Need {_data.feedQtyGrass}x grass + {_data.feedQtyWorm}x worm.");
+                return;
+            }
+
+            if (_data.feedQtyGrass > 0) StorageSystem.Instance.AddItem("item_grass", -_data.feedQtyGrass);
+            if (_data.feedQtyWorm > 0) StorageSystem.Instance.AddItem("item_worm", -_data.feedQtyWorm);
+            
+            _isHungry = false;
+            _hungerTimer = 0f;
+
+            NTVV.Gameplay.Quests.QuestEvents.InvokeActionPerformed(Data.QuestActionType.FeedAnimal, _data.animalId, 1);
+            Debug.Log($"<color=green>[Animal]</color> Fed {_data.animalName}");
+            RefreshVisuals();
         }
 
         public void CollectProduct()
@@ -253,6 +262,29 @@ namespace NTVV.World.Views
             Managers.GameManager.Instance?.TriggerSave();
             _pen?.RemoveAnimal(this);
             Destroy(gameObject);
+        }
+
+        public AnimalSaveData GetSaveData() => new AnimalSaveData
+        {
+            animalId                = _data.animalId,
+            stage                   = (int)_currentStage,
+            hp                      = _hungerTimer,
+            timeInCurrentStage      = _growthProgress,
+            timeSinceLastProduction = _productionTimer,
+        };
+
+        public void RestoreState(AnimalSaveData data)
+        {
+            _currentStage    = (GrowthStage)data.stage;
+            _hungerTimer     = data.hp;
+            _growthProgress  = data.timeInCurrentStage;
+            _productionTimer = data.timeSinceLastProduction;
+
+            float offline = (float)(System.DateTime.UtcNow - Managers.GameManager.LastSaveTime).TotalSeconds;
+            _growthProgress  += offline;
+            _productionTimer += offline;
+
+            RefreshVisuals();
         }
     }
 }

@@ -66,11 +66,11 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
     - Verify: `return` nằm trước production block
     - Nếu FAIL → fix trong task 1, KHÔNG sang task 2
 
-- [ ] 2. Fix AnimalView — Feed() (BUG-03 + BUG-04)
-  - [ ] 2.0 · Resource Check
+- [x] 2. Fix AnimalView — Feed() (BUG-03 + BUG-04)
+  - [x] 2.0 · Resource Check
     - Không có sprite asset trong task này — SKIP scan
     - NON-BLOCKING
-  - [ ] 2.4 · Script Agent — Sửa Feed()
+  - [x] 2.4 · Script Agent — Sửa Feed()
     - `script-read` → `Assets/_Project/Scripts/World/Views/AnimalView.cs`
     - Tìm `Feed()` method (khoảng line 175-194)
     - **Fix BUG-03:** Thêm null check cho StorageSystem ở đầu Feed():
@@ -91,17 +91,17 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
       ```
     - `assets-refresh` → đợi compile xong
     - _Requirements: 3.1, 3.2, 4.1, 4.2_
-  - [ ] 2.✓ · Quick Test
+  - [x] 2.✓ · Quick Test
     - `console-get-logs` filter=Error → 0 compile errors
     - Verify: `Feed()` có `if (StorageSystem.Instance == null)` ở đầu method
     - Verify: `Feed()` có `Debug.LogWarning` khi grassCount hoặc wormCount không đủ
     - Nếu FAIL → fix trong task 2, KHÔNG sang task 3
 
-- [ ] 3. Fix CropActionPanelController (BUG-05 + BUG-06)
-  - [ ] 3.0 · Resource Check
+- [x] 3. Fix CropActionPanelController (BUG-05 + BUG-06)
+  - [x] 3.0 · Resource Check
     - Không có sprite asset trong task này — SKIP scan
     - NON-BLOCKING
-  - [ ] 3.4 · Script Agent — Sửa CropActionPanelController.cs
+  - [x] 3.4 · Script Agent — Sửa CropActionPanelController.cs
     - `script-read` → `Assets/_Project/Scripts/UI/Panels/CropActionPanelController.cs`
     - **Fix BUG-05:** Tìm `_sellButton` listener, thay `gameObject.SetActive(false)` bằng:
       ```csharp
@@ -122,18 +122,18 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
       ```
     - `assets-refresh` → đợi compile xong
     - _Requirements: 5.1, 5.2, 6.1, 6.2_
-  - [ ] 3.✓ · Quick Test
+  - [x] 3.✓ · Quick Test
     - `console-get-logs` filter=Error → 0 compile errors
     - Verify: `_sellButton` listener gọi `CloseContextAction()`, không có `SetActive(false)` cho sell flow
     - Verify: `_buyButton` listener có `GameManager.Instance?.TriggerSave()`
     - Nếu FAIL → fix trong task 3, KHÔNG sang task 4
 
-- [ ] 4. Fix AnimalPenView — PERF-PEN (_registry SerializeField)
-  - [ ] 4.0 · Resource Check
+- [x] 4. Fix AnimalPenView — PERF-PEN (_registry SerializeField)
+  - [x] 4.0 · Resource Check
     - Verify `GameDataRegistry.asset` tồn tại tại `Assets/_Project/Data/GameDataRegistry.asset`
     - Nếu không tìm thấy → `assets-find` với pattern `GameDataRegistry` → report path
     - NON-BLOCKING
-  - [ ] 4.4 · Script Agent — Sửa AnimalPenView.cs
+  - [x] 4.4 · Script Agent — Sửa AnimalPenView.cs
     - `script-read` → `Assets/_Project/Scripts/World/Views/AnimalPenView.cs`
     - **Thêm `_registry` field** (sau các fields hiện có, trước Awake):
       ```csharp
@@ -149,17 +149,17 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
     - **Thay bằng** `_registry` ở những chỗ có dùng registry
     - `assets-refresh` → đợi compile xong
     - _Requirements: 8.1, 8.2_
-  - [ ] 4.✓ · Quick Test
+  - [x] 4.✓ · Quick Test
     - `console-get-logs` filter=Error → 0 compile errors
     - Verify: không còn `FindObjectsOfTypeAll` trong AnimalPenView.cs
     - Verify: `_registry` field tồn tại với `[SerializeField]`
     - Nếu FAIL → fix trong task 4, KHÔNG sang task 5
 
-- [ ] 5. Save/Load — AnimalSaveData + GetSaveData + RestoreState + GameManager + SpawnAndRestore
-  - [ ] 5.0 · Resource Check
+- [x] 5. Save/Load — AnimalSaveData + GetSaveData + RestoreState + GameManager + SpawnAndRestore
+  - [x] 5.0 · Resource Check
     - Không có sprite asset trong task này — SKIP scan
     - NON-BLOCKING
-  - [ ] 5.4 · Script Agent — Step 1: PlayerSaveData.cs
+  - [x] 5.4 · Script Agent — Step 1: PlayerSaveData.cs
     - `script-read` → `Assets/_Project/Data/PlayerSaveData.cs`
     - **Thêm `AnimalSaveData` class** (sau class `CropTileSaveData` hoặc ở cuối file, trong namespace cũ):
       ```csharp
@@ -178,7 +178,7 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
       public List<AnimalSaveData> animals = new();
       ```
     - `assets-refresh` → đợi compile xong
-  - [ ] 5.4b · Script Agent — Step 2: AnimalView.cs GetSaveData + RestoreState
+  - [x] 5.4b · Script Agent — Step 2: AnimalView.cs GetSaveData + RestoreState
     - `script-read` → `Assets/_Project/Scripts/World/Views/AnimalView.cs`
     - **Thêm `GetSaveData()`** method:
       ```csharp
@@ -208,7 +208,7 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
       }
       ```
     - `assets-refresh` → đợi compile xong
-  - [ ] 5.4c · Script Agent — Step 3: AnimalPenView.cs SpawnAndRestore
+  - [x] 5.4c · Script Agent — Step 3: AnimalPenView.cs SpawnAndRestore
     - `script-read` → `Assets/_Project/Scripts/World/Views/AnimalPenView.cs`
     - **Thêm `SpawnAndRestore(AnimalDataSO animalSO, AnimalSaveData data)`** method:
       ```csharp
@@ -223,7 +223,7 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
       }
       ```
     - `assets-refresh` → đợi compile xong
-  - [ ] 5.4d · Script Agent — Step 4: GameManager.cs
+  - [x] 5.4d · Script Agent — Step 4: GameManager.cs
     - `script-read` → `Assets/_Project/Scripts/Managers/GameManager.cs`
     - **Cập nhật `CollectSaveData()`** — thêm sau crop collect:
       ```csharp
@@ -248,7 +248,7 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
       ```
     - `assets-refresh` → đợi compile xong
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8_
-  - [ ] 5.✓ · Quick Test
+  - [x] 5.✓ · Quick Test
     - `console-get-logs` filter=Error → 0 compile errors
     - Verify: `PlayerSaveData` có class `AnimalSaveData` và field `animals`
     - Verify: `AnimalView` có `GetSaveData()` và `RestoreState()`
@@ -256,11 +256,11 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
     - Verify: `GameManager` có animals collect và restore
     - Nếu FAIL → fix trong task 5, KHÔNG sang task 6
 
-- [ ] 6. Auto-collect + Hide _collectButton
-  - [ ] 6.0 · Resource Check
+- [x] 6. Auto-collect + Hide _collectButton
+  - [x] 6.0 · Resource Check
     - Không có sprite asset trong task này — SKIP scan
     - NON-BLOCKING
-  - [ ] 6.4 · Script Agent — Sửa HandleTick + CropActionPanelController
+  - [x] 6.4 · Script Agent — Sửa HandleTick + CropActionPanelController
     - `script-read` → `Assets/_Project/Scripts/World/Views/AnimalView.cs`
     - Tìm `HandleTick()`, phần production timer (khoảng line 82-90)
     - **Thêm auto-collect logic** vào production section:
@@ -283,37 +283,67 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
       ```
     - `assets-refresh` → đợi compile xong
     - _Requirements: 10.1, 10.2, 10.3_
-  - [ ] 6.✓ · Quick Test
+  - [x] 6.✓ · Quick Test
     - `console-get-logs` filter=Error → 0 compile errors
     - Verify: `HandleTick()` có `CollectProduct()` trong production timer section
     - Verify: `RefreshUI()` có `_collectButton.gameObject.SetActive(false)`
     - Nếu FAIL → fix trong task 6, KHÔNG sang task 7
 
-- [ ] 7. Wire AnimalPen Prefab (WIRE-01)
-  - [ ] 7.0 · Resource Check
-    - Verify `AnimalPen.prefab` tồn tại trong `Assets/_Project/Resources/`
-    - Nếu không tìm thấy → `assets-find` với pattern `AnimalPen` → report path
-    - Verify `GameDataRegistry.asset` tồn tại tại `Assets/_Project/Data/`
+- [x] 7. Create + Wire AnimalPen Prefab (WIRE-01)
+  - [] 7.0 · Resource Check _(DONE — prefab chưa tồn tại, các sub-task bên dưới tạo mới)_
+    - ✅ `Animal_Placeholder.prefab` → `Assets/_Project/Prefabs/World/Animal_Placeholder.prefab`
+    - ✅ `GameDataRegistry.asset` → `Assets/_Project/Data/Registry/GameDataRegistry.asset`
+    - ✅ `animal_01.asset` → `Assets/_Project/Data/Animals/animal_01.asset`
+    - ✅ `BarnArea` → có trong SCN_Main nhưng chỉ có Transform (chưa có AnimalPenView)
+    - ❌ `AnimalPen.prefab` → **chưa tồn tại** — tạo mới trong task này
     - NON-BLOCKING
-  - [ ] 7.1 · Unity Agent — Assign _registry trong AnimalPen prefab
-    - `assets-prefab-open` → path tìm được từ Resource Check
-    - `gameobject-component-get` AnimalPenView → kiểm tra `_registry` field
-    - Nếu `_registry` null → `gameobject-component-modify`:
-      - Component: `AnimalPenView`
-      - Field: `_registry`
-      - Value: reference đến `GameDataRegistry.asset`
-    - `assets-prefab-save`
-    - `assets-prefab-close`
+  - [x] 7.1 · Unity Agent — Tạo AnimalPen GameObject trong scene
+    - `scene-open` → `Assets/_Project/Scenes/SCN_Main.unity` (nếu chưa mở)
+    - `gameobject-find` → tìm GameObject tên `"BarnArea"` trong scene
+    - `gameobject-create` → tạo GameObject mới:
+      - Name: `"AnimalPen"`
+      - Parent: `BarnArea`
+      - Position: `(0, 0, 0)` local
+    - `gameobject-component-add` → thêm component `AnimalPenView` vào `AnimalPen`
+    - _Verify: GameObject tồn tại trong hierarchy, AnimalPenView đã gắn_
+  - [x] 7.2 · Unity Agent — Đọc animal_01.asset để lấy AnimalData
+    - `assets-get-data` → `Assets/_Project/Data/Animals/animal_01.asset`
+    - Ghi lại các fields trong block `data`: `animalId`, `animalName`, `unlockLevel`,
+      `penType`, `buyCostGold`, `feedQtyGrass`, `feedQtyWorm`, `produceItemId`, `produceTimeMin`
+    - _(Bước đọc — không thay đổi scene)_
+  - [x] 7.3 · Unity Agent — Configure AnimalPenView fields
+    - `gameobject-component-modify` → AnimalPen / AnimalPenView:
+      - `_animalPrefab`: reference đến `Assets/_Project/Prefabs/World/Animal_Placeholder.prefab`
+      - `_registry`: reference đến `Assets/_Project/Data/Registry/GameDataRegistry.asset`
+      - `_capacity`: `4`
+      - `_currentTier`: `0`
+      - `_animalType.animalId`: giá trị `animalId` từ 7.2
+      - `_animalType.animalName`: giá trị `animalName` từ 7.2
+      - `_animalType.unlockLevel`: giá trị `unlockLevel` từ 7.2
+      - `_animalType.buyCostGold`: giá trị `buyCostGold` từ 7.2
+      - `_animalType.feedQtyGrass`: giá trị `feedQtyGrass` từ 7.2
+      - `_animalType.feedQtyWorm`: giá trị `feedQtyWorm` từ 7.2
+      - `_animalType.produceItemId`: giá trị `produceItemId` từ 7.2
+      - `_animalType.produceTimeMin`: giá trị `produceTimeMin` từ 7.2
+    - `scene-save` → lưu scene
+  - [x] 7.4 · Unity Agent — Extract prefab
+    - `assets-prefab-create` → từ GameObject `AnimalPen` trong scene:
+      - Output path: `Assets/_Project/Prefabs/World/AnimalPen.prefab`
+    - Verify: file `AnimalPen.prefab` tồn tại tại path trên
+    - _(Instance trong scene vẫn giữ nguyên — linked tới prefab vừa tạo)_
     - _Requirements: 8.3_
-  - [ ] 7.✓ · Quick Test
-    - `assets-prefab-open` AnimalPen → `gameobject-component-get` AnimalPenView
-    - Verify: `_registry` không null, reference đến `GameDataRegistry.asset`
-    - `assets-prefab-close`
+  - [x] 7.✓ · Quick Test
+    - `gameobject-find` → `AnimalPen` trong scene
+    - `gameobject-component-get` → AnimalPenView
+    - Verify: `_registry` không null → trỏ đến `GameDataRegistry.asset`
+    - Verify: `_animalPrefab` không null → trỏ đến `Animal_Placeholder.prefab`
+    - Verify: `_animalType.animalId` không empty
+    - `assets-find` → filter `AnimalPen t:Prefab` → Verify prefab tồn tại tại `Assets/_Project/Prefabs/World/`
     - Nếu FAIL → fix trong task 7, KHÔNG sang task 8
 
-- [ ] 8. Integration Smoke Test
+- [x] 8. Integration Smoke Test
   - ⚠️ **Prerequisite:** `m3b-storage-sell-flow` hoàn thành (item_grass và item_worm có thể vào Storage qua ClearWeeds/ClearPests)
-  - [ ] 8.1 Buy + Save/Load cycle
+  - [x] 8.1 Buy + Save/Load cycle
     - `editor-application-set-state` → Play mode
     - Verify: `console-get-logs` filter=Error → 0 errors
     - Mở pen → tap Buy → verify animal spawn trong pen
@@ -321,24 +351,24 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
     - `editor-application-set-state` → Stop → Play (simulate reload)
     - Verify: animal vẫn tồn tại sau reload ở đúng stage
     - _Requirements: 9.6, 9.7, 11.1_
-  - [ ] 8.2 Feed cycle
+  - [x] 8.2 Feed cycle
     - Tap animal → Feed button visible
     - Tap Feed khi đủ food → verify HP tăng, food bị trừ khỏi Storage
     - Tap Feed khi thiếu food → verify `console-get-logs` → `"[Animal] Not enough food"`
     - _Requirements: 3.1, 4.1, 11.3_
-  - [ ] 8.3 Sell + IsFull cycle
+  - [x] 8.3 Sell + IsFull cycle
     - Tap animal → Sell button visible
     - Tap Sell → verify animal biến mất
     - Verify: console có TriggerSave log
     - Verify: có thể mua animal mới ngay (pen không stuck full)
     - _Requirements: 1.3, 1.4, 5.2, 11.2_
-  - [ ] 8.4 Auto-collect verify
+  - [x] 8.4 Auto-collect verify
     - Đặt `_data.produceTimeMin` nhỏ tạm (0.01f) để test nhanh
     - Chờ timer đủ → verify item xuất hiện trong StorageSystem tự động
     - Verify: collect button không hiển thị trong CropActionPanel
     - Revert `produceTimeMin`
     - _Requirements: 10.1, 10.2, 10.3, 11.4_
-  - [ ] 8.✓ · Integration Test Report
+  - [x] 8.✓ · Integration Test Report
     - `screenshot-game-view` → lưu `docs/screenshots/2026-04-17-m4-animal-care-integration.png`
     - Output:
       ```
@@ -353,7 +383,7 @@ Fix 7 bugs trong Animal care flow + thêm Save/Load + auto-collect. Không viế
       ```
     - Nếu FAIL critical → fix, KHÔNG chuyển sang task 9
 
-- [ ] 9. Update HANDOVER.md
+- [x] 9. Update HANDOVER.md
   - Mở `docs/HANDOVER.md`
   - Cập nhật section "Phiên 17/04/2026":
     - Spec `m4-animal-care` execute xong

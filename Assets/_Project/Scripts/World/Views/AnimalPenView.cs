@@ -2,11 +2,11 @@ namespace NTVV.World.Views
 {
     using UnityEngine;
     using System.Collections.Generic;
+    using NTVV.Core;
     using NTVV.Data;
     using NTVV.Gameplay.Economy;
     using NTVV.Gameplay.Progression;
     using NTVV.Data.ScriptableObjects;
-    using System.Linq;
 
     /// <summary>
     /// Quản lý chuồng gia súc gia cầm.
@@ -23,8 +23,8 @@ namespace NTVV.World.Views
         [SerializeField] private int _currentTier = 0;
         [SerializeField] private List<AnimalView> _currentAnimals = new List<AnimalView>();
 
-        // Cached registry — FindObjectsOfTypeAll is too expensive to call per-frame
-        private GameDataRegistrySO _registry;
+        [Header("Data")]
+        [SerializeField] private GameDataRegistrySO _registry;
         
         public AnimalData AnimalType => _animalType;
         public int Capacity => GetCurrentCapacity();
@@ -33,8 +33,8 @@ namespace NTVV.World.Views
 
         private void Awake()
         {
-            // Cache once on startup instead of FindObjectsOfTypeAll every frame
-            _registry = Resources.FindObjectsOfTypeAll<GameDataRegistrySO>().FirstOrDefault();
+            if (_registry == null)
+                Debug.LogError("[AnimalPenView] _registry is null — assign GameDataRegistry.asset in prefab Inspector.");
         }
 
         private int GetCurrentCapacity()
@@ -125,6 +125,22 @@ namespace NTVV.World.Views
             if (_currentAnimals.Contains(entity))
             {
                 _currentAnimals.Remove(entity);
+            }
+        }
+
+        public void SpawnAndRestore(AnimalData animalData, AnimalSaveData data)
+        {
+            if (IsFull || _animalPrefab == null) return;
+
+            GameObject go = Instantiate(_animalPrefab, transform);
+            go.transform.localPosition = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+
+            AnimalView view = go.GetComponent<AnimalView>();
+            if (view != null)
+            {
+                view.Initialize(animalData, this);
+                view.RestoreState(data);
+                _currentAnimals.Add(view);
             }
         }
     }

@@ -19,6 +19,7 @@ namespace NTVV.Core
         public List<TileSaveData> tiles = new List<TileSaveData>();
         public List<QuestSaveData> activeQuests = new List<QuestSaveData>();
         public List<string> completedQuestIds = new List<string>();
+        public List<AnimalSaveData> animals = new List<AnimalSaveData>();
         
         public PlayerSaveData()
         {
@@ -26,6 +27,7 @@ namespace NTVV.Core
             tiles = new List<TileSaveData>();
             activeQuests = new List<QuestSaveData>();
             completedQuestIds = new List<string>();
+            animals = new List<AnimalSaveData>();
             lastSaveTimestamp = DateTime.Now.Ticks;
         }
     }
@@ -64,5 +66,18 @@ namespace NTVV.Core
     {
         public string questId;
         public List<int> objectiveProgress = new List<int>();
+    }
+
+    /// <summary>
+    /// Persistence data for a single animal.
+    /// </summary>
+    [Serializable]
+    public class AnimalSaveData
+    {
+        public string animalId;
+        public int    stage;
+        public float  hp;
+        public float  timeInCurrentStage;
+        public float  timeSinceLastProduction;
     }
 }

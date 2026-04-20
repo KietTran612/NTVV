@@ -3,6 +3,33 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
+- **Phiên 20/04/2026 (Hiện tại) — m4-animal-care HOÀN THÀNH**:
+    - **`m4-animal-care` spec DONE**: Tất cả 9 tasks đã execute xong qua Pure MCP.
+    - **7 bugs fixed**:
+        - BUG-01: `HandleTick()` natural death — thêm `return` trước production block
+        - BUG-02: `RemoveAnimal()` được gọi trong tất cả exit paths (Sell + natural death)
+        - BUG-03: `Feed()` null-safe — check `StorageSystem.Instance != null` trước `GetItemCount()`
+        - BUG-04: `Feed()` warning khi thiếu food — `Debug.LogWarning` với số lượng cần thiết
+        - BUG-05: `_sellButton` listener dùng `PopupManager.Instance?.CloseContextAction()` thay `SetActive(false)`
+        - BUG-06: `_buyButton` listener thêm `GameManager.Instance?.TriggerSave()` sau `PurchaseAnimal()`
+        - BUG-07: `Sell()` gọi `QuestEvents.InvokeActionPerformed(SellAnimal)` trước Destroy
+    - **`FindObjectsOfTypeAll<GameDataRegistrySO>()` đã xóa** khỏi `AnimalPenView` — thay bằng `[SerializeField] private GameDataRegistrySO _registry`
+    - **Save/Load per-animal hoạt động**:
+        - `AnimalSaveData` class thêm vào `SaveData.cs` + `animals` list trong `PlayerSaveData`
+        - `AnimalView.GetSaveData()` + `RestoreState()` implemented
+        - `AnimalPenView.SpawnAndRestore()` implemented
+        - `GameManager.CaptureCurrentState()` + `RestoreWorldState()` cập nhật để collect/restore animals
+        - `GameManager.LastSaveTime` property thêm mới, cập nhật trong `TriggerSave()`
+    - **Auto-collect product**: `HandleTick()` tự gọi `CollectProduct()` khi timer đủ; `_collectButton` ẩn trong `RefreshUI()`
+    - **WIRE-01**: `AnimalPen.prefab` tạo mới tại `Assets/_Project/Prefabs/World/AnimalPen.prefab`:
+        - `_registry` → `GameDataRegistry.asset` wired
+        - `_animalPrefab` → `Animal_Placeholder.prefab` wired
+        - `_animalType` → data từ `animal_01.asset` (Gà, buyCostGold=220, feedQtyWorm=1)
+        - Instance trong scene: `[WORLD_ROOT]/BarnArea/AnimalPen`
+    - **Integration test PASSED**: Play Mode 0 errors, Buy→Sell cycle verified, TriggerSave confirmed, RemoveAnimal confirmed
+    - **Known Issue (non-blocking)**: Camera không nhìn thấy scene trong game view — camera position issue, không liên quan logic
+    - **NOTE-06 added to backlog**: AnimalPen prefab creation context documented
+
 - **Phiên 17/04/2026 (Hiện tại) — m3b-storage-sell-flow HOÀN THÀNH**:
     - **`m3b-storage-sell-flow` spec DONE**: Tất cả 5 tasks đã execute xong qua Pure MCP.
     - **3 bugs fixed**:
@@ -104,16 +131,18 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - **✅ `scn-main-world-setup` DONE** — World Setup (M2) hoàn thành
     - **✅ `m3a-crop-care-harvest` DONE** — 9 bugs fixed, full crop cycle hoạt động
     - **✅ `m3b-storage-sell-flow` DONE** — 3 bugs fixed (BUG-B1, BUG-B2), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired
+    - **✅ `m4-animal-care` DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal, auto-collect, AnimalPen.prefab created & wired
     - **✍️ `m5-quest-flow` SPEC WRITTEN** — design, requirements, tasks completed (4 quest bugs identified)
     - **📋 Asset Inventory Completed** — full sprite list and prompt docs for missing sprites (priority: Duck/animal, items/nav, crops)
 - **Cần làm ngay**: 
     1. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
     2. **Manual UI test**: Verify Storage sell flow + Shop buy flow trong Play Mode (button interaction cần manual)
-    3. **M4: Animal Care** — milestone tiếp theo
+    3. **M5: Quest Flow** — milestone tiếp theo (`m5-quest-flow` spec đã sẵn sàng)
     4. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
-    5. **Execute `m5-quest-flow`** — khi cần sửa quest bugs (BUG-Q1..Q4)
-    6. **Generate missing sprites** — sử dụng bộ rework tại `docs/asset-prompts/2026-04-17-rework/` (bắt đầu với `entities-animals.md` để hỗ trợ M4 integration test)
-    7. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md).
+    5. **Execute `m5-quest-flow`** — fix 4 quest bugs (BUG-Q1..Q4)
+    6. **Generate missing sprites** — sử dụng bộ rework tại `docs/asset-prompts/2026-04-17-rework/` (bắt đầu với `entities-animals.md`)
+    7. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md)
+    8. **Camera fix**: Game view toàn màu xanh — cần điều chỉnh Main Camera position/orthographic size để nhìn thấy scene
 
 ## 🗂 Kiro Specs đang active
 
@@ -148,9 +177,9 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - Full cycle: plant → grow → ailment → care → ripe → harvest → StorageSystem
     - Integration test: 0 errors, save/load cycle hoạt động
 
-### Spec 4: `m5-quest-flow` ✍️ SPEC WRITTEN (Chưa execute)
+### Spec 7: `m5-quest-flow` ✍️ SPEC WRITTEN (Chưa execute)
 - **Path**: `.kiro/specs/m5-quest-flow/`
-- **Status**: **Design, Requirements, Tasks completed** (17/04/2026) — **Chưa execute**
+- **Status**: **Design, Requirements, Tasks completed** (17/04/2026) — **Chưa execute** ← EXECUTE TIẾP THEO
 - **Kết quả**:
     - 4 quest bugs identified: BUG-Q1 (UI refresh), BUG-Q2 (prerequisite enforcement), BUG-Q3 (HandleUnlock runtime), BUG-Q4 (feedback clarity)
     - Chuẩn bị sẵn để implement khi cần
@@ -166,9 +195,20 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - `ShopPopup.prefab`: `_registry` → `GameDataRegistry.asset` wired
     - Integration test: 0 errors, systems running
 
-### Spec 6: `m4-animal-care` ← EXECUTE TIẾP THEO
+### Spec 6: `m4-animal-care` ✅ DONE
+- **Path**: `.kiro/specs/m4-animal-care/`
+- **Status**: **TẤT CẢ 9 TASKS HOÀN THÀNH** (20/04/2026)
+- **Kết quả**:
+    - 7 bugs fixed: BUG-01 (production guard), BUG-02 (RemoveAnimal), BUG-03 (Feed null-safe), BUG-04 (Feed warning), BUG-05 (sell CloseContextAction), BUG-06 (buy autosave), BUG-07 (QuestEvent)
+    - `FindObjectsOfTypeAll<GameDataRegistrySO>()` xóa khỏi `AnimalPenView`
+    - `AnimalPen.prefab` tạo mới: `_registry` + `_animalPrefab` + `_animalType` (Gà/animal_01) wired
+    - Save/Load per-animal: `AnimalSaveData`, `GetSaveData()`, `RestoreState()`, `SpawnAndRestore()`, `GameManager` collect/restore
+    - Auto-collect: `HandleTick()` tự gọi `CollectProduct()`, `_collectButton` ẩn
+    - Integration test: 0 errors, Buy→Sell cycle verified, TriggerSave confirmed
+
+### Spec 7: `m5-quest-flow` ✍️ SPEC WRITTEN (Chưa execute)
 
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M5 Quest Flow spec đã WRITTEN** — 4 bugs identified, sẵn sàng để implement. Bước tiếp theo là M4: Animal Care."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M4 Animal Care đã DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal hoạt động, auto-collect product, AnimalPen.prefab tạo mới và wired đầy đủ. **M5 Quest Flow spec đã WRITTEN** — 4 bugs identified, sẵn sàng để implement. Bước tiếp theo là M5: Quest Flow."
