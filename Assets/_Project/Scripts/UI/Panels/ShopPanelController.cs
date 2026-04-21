@@ -28,7 +28,7 @@ namespace NTVV.UI.Panels
         [SerializeField] private Button _tabSpecial;
 
         [Header("Settings")]
-        [SerializeField] private int _refreshCostGold = 50;
+        [SerializeField] private int _refreshCostGems = 50;
 
         [Header("Templates")]
         [SerializeField] private GameObject _shopItemPrefab;
@@ -137,18 +137,18 @@ namespace NTVV.UI.Panels
 
         private void TryRefreshItems()
         {
-            if (EconomySystem.Instance != null && EconomySystem.Instance.CanAfford(_refreshCostGold))
+            if (EconomySystem.Instance != null && EconomySystem.Instance.CanAffordGems(_refreshCostGems))
             {
-                EconomySystem.Instance.AddGold(-_refreshCostGold);
+                EconomySystem.Instance.AddGems(-_refreshCostGems);
                 // Implementation note: v1 uses static list from registry,
                 // Shuffle logic would go here if registry supported filtering.
                 PopulateShop(_currentCategory);
                 Managers.GameManager.Instance?.TriggerSave();
-                Debug.Log($"<color=green>[Shop]</color> Refreshed list for {_refreshCostGold}g");
+                Debug.Log($"<color=green>[Shop]</color> Refreshed list for {_refreshCostGems} gems");
             }
             else
             {
-                Debug.LogWarning("[Shop] Not enough gold to refresh!");
+                Debug.LogWarning("[Shop] Not enough gems to refresh!");
             }
         }
 

@@ -14,6 +14,7 @@ namespace NTVV.Core
         public int currentLevel;
         public int storageCapacity;
         public int storageTier;
+        public int gems;
         public long lastSaveTimestamp; // Ticks of the last save time for offline calculations
         public List<InventoryItemData> inventory = new List<InventoryItemData>();
         public List<TileSaveData> tiles = new List<TileSaveData>();
@@ -28,6 +29,7 @@ namespace NTVV.Core
             activeQuests = new List<QuestSaveData>();
             completedQuestIds = new List<string>();
             animals = new List<AnimalSaveData>();
+            gems = 25;
             lastSaveTimestamp = DateTime.Now.Ticks;
         }
     }

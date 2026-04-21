@@ -69,6 +69,7 @@ namespace NTVV.Managers
             }
 
             EconomySystem.Instance.SetGold(data.gold);
+            EconomySystem.Instance.SetGems(data.gems);
             LevelSystem.Instance.LoadData(data.currentLevel, data.currentXP);
             
             Dictionary<string, int> inventoryDict = new Dictionary<string, int>();
@@ -129,6 +130,7 @@ namespace NTVV.Managers
             PlayerSaveData data = new PlayerSaveData
             {
                 gold = EconomySystem.Instance.CurrentGold,
+                gems = EconomySystem.Instance.CurrentGems,
                 currentXP = LevelSystem.Instance.CurrentXP,
                 currentLevel = LevelSystem.Instance.CurrentLevel,
                 storageCapacity = StorageSystem.Instance.MaxCapacity,

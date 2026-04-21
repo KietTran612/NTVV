@@ -3,6 +3,29 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
+- **Phiên 21/04/2026 (Hiện tại) — m6a-player-feedback HOÀN THÀNH**:
+    - **`m6a-player-feedback` spec DONE**: Tất cả 8 tasks đã execute xong qua Pure MCP.
+    - **FEAT-01 — LevelUpToastController**:
+        - Tạo mới `Assets/_Project/Scripts/UI/HUD/LevelUpToastController.cs`
+        - Subscribe `LevelSystem.OnLevelUp` trong `OnEnable`, unsubscribe trong `OnDisable`
+        - Fade out sau 2s dùng `CanvasGroup.alpha` trực tiếp (không qua `UIAnimationHelper`)
+        - `ShowMessage(string msg)` public API để tái sử dụng cho welcome toast (m6b)
+        - Re-trigger safe: `StopCoroutine` trước khi start coroutine mới
+        - GO `LevelUpToast` tại `[HUD_CANVAS]/LevelUpToast` (SetActive=false), child `Toast_Text` (TMP, size 24, trắng)
+        - **Fix hierarchy**: Lần đầu tạo bị đặt ở root — đã fix về đúng `[HUD_CANVAS]` trong Task 7
+    - **FEAT-07 — Gems Save/Load**:
+        - `PlayerSaveData.gems` field thêm vào `SaveData.cs` (sau `storageTier`), default `gems = 25` trong constructor
+        - `GameManager.InitializeCoreSystems()`: thêm `EconomySystem.Instance.SetGems(data.gems)`
+        - `GameManager.CaptureCurrentState()`: thêm `gems = EconomySystem.Instance.CurrentGems`
+        - Integration test verified: set 15 gems → TriggerSave → restart → `_currentGems = 15` ✅
+    - **FEAT-07 — Shop Refresh dùng Gems**:
+        - `ShopPanelController`: đổi `_refreshCostGold` → `_refreshCostGems = 50`
+        - `TryRefreshItems()`: dùng `CanAffordGems` + `AddGems` thay vì `CanAfford` + `AddGold`
+        - Log: "Refreshed list for {N} gems" / Warning: "Not enough gems to refresh!"
+        - `ShopPopup.prefab`: `GemsBalance_Label` active=true, `Refresh_Button` có child `Refresh_Label` text "Làm mới (50💎)"
+    - **Integration test PASSED**: 0 errors, gems persist sau save/load, hierarchy đúng
+    - **Known Issue (non-blocking)**: Game view render xanh đơn sắc — camera background issue, pre-existing, không liên quan logic
+
 - **Phiên 20/04/2026 (Hiện tại) — m5-quest-flow HOÀN THÀNH**:
     - **`m5-quest-flow` spec DONE**: Tất cả 5 tasks đã execute xong qua Pure MCP.
     - **4 bugs fixed**:
@@ -153,6 +176,7 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - **✅ `m3b-storage-sell-flow` DONE** — 3 bugs fixed (BUG-B1, BUG-B2), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired
     - **✅ `m4-animal-care` DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal, auto-collect, AnimalPen.prefab created & wired
     - **✅ `m5-quest-flow` DONE** — 4 bugs fixed (BUG-Q1..Q4), prerequisite enforcement, HandleUnlock switch, QuestPanelController verified
+    - **✅ `m6a-player-feedback` DONE** — LevelUpToastController tạo mới, Gems save/load fix, Shop Refresh dùng gems (50💎)
     - **📋 Asset Inventory Completed** — full sprite list and prompt docs for missing sprites (priority: Duck/animal, items/nav, crops)
 - **Cần làm ngay**: 
     1. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
@@ -228,7 +252,19 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - Audit v1: 3 quest assets (q_harvest_wheat, q_buy_chicken, q_reach_level_2), tất cả dùng `unlockType=None`
     - Integration test: 0 errors, boot sequence complete
 
+### Spec 7: `m6a-player-feedback` ✅ DONE
+- **Path**: `.kiro/specs/m6a-player-feedback/`
+- **Status**: **TẤT CẢ 8 TASKS HOÀN THÀNH** (21/04/2026)
+- **Kết quả**:
+    - FEAT-01: `LevelUpToastController.cs` tạo mới — subscribe `LevelSystem.OnLevelUp`, fade 2s qua `CanvasGroup.alpha`, `ShowMessage(string)` public API
+    - FEAT-01: GO `LevelUpToast` tại `[HUD_CANVAS]/LevelUpToast` (SetActive=false), child `Toast_Text` (TMP, size 24, trắng)
+    - FEAT-07: `PlayerSaveData.gems` field + `gems = 25` default trong constructor
+    - FEAT-07: `GameManager` — `SetGems(data.gems)` trong `InitializeCoreSystems`, `data.gems = CurrentGems` trong `CaptureCurrentState`
+    - FEAT-07: `ShopPanelController` — `_refreshCostGems = 50`, `TryRefreshItems()` dùng `CanAffordGems` + `AddGems`
+    - FEAT-07: `ShopPopup.prefab` — `GemsBalance_Label` active, `Refresh_Label` text "Làm mới (50💎)"
+    - Integration test: 0 errors, gems persist sau save/load verified
+
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M4 Animal Care đã DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal hoạt động, auto-collect product, AnimalPen.prefab tạo mới và wired đầy đủ. **M5 Quest Flow đã DONE** — 4 bugs fixed (BUG-Q1..Q4): prerequisite enforcement, HandleUnlock switch, QuestPanelController event-driven refresh verified. Bước tiếp theo là M6 hoặc milestone tiếp theo."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M4 Animal Care đã DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal hoạt động, auto-collect product, AnimalPen.prefab tạo mới và wired đầy đủ. **M5 Quest Flow đã DONE** — 4 bugs fixed (BUG-Q1..Q4): prerequisite enforcement, HandleUnlock switch, QuestPanelController event-driven refresh verified. **M6a Player Feedback đã DONE** — LevelUpToastController tạo mới (subscribe OnLevelUp, fade 2s, ShowMessage API), Gems save/load fix (PlayerSaveData.gems, SetGems/CaptureGems trong GameManager), Shop Refresh dùng gems 50💎 thay gold. Bước tiếp theo là m6b-world-progression hoặc milestone tiếp theo."
