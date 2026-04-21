@@ -13,8 +13,8 @@ Mass rename + reorganize ~75 sprite file về 1 naming convention duy nhất. D�
 
 ## Tasks
 
-- [ ] 0. Prerequisite — commit working tree clean
-  - [ ] 0.1 · Git Check
+- [-] 0. Prerequisite — commit working tree clean
+  - [-] 0.1 · Git Check
     - `Bash git status --short` → kiểm tra file uncommitted
     - Nếu có file chưa commit: hỏi user commit/stash trước khi execute m7a (git rename tracking chính xác khi working tree clean)
     - BLOCKING nếu có file uncommitted không liên quan m7
