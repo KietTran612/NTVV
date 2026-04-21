@@ -3,6 +3,18 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
+- **Phiên 21/04/2026 (Hiện tại) — m7a-sprite-reorg HOÀN THÀNH**:
+    - **`m7a-sprite-reorg` spec DONE**: Tất cả 11 tasks đã execute xong.
+    - **Mass rename ~82 sprite files** sang naming convention `[Domain]_[Category]_[Entity]_[Variant]_[State].png`
+    - **Folder structure mới**: `World/` (Crops, Animals, Products, Overlays, Tiles) + `UI/` (Backgrounds, Icons/Common/Seed/Nav/Tab/Header/Action, Buttons)
+    - **GUID preserved**: `.meta` files di chuyển cùng → references trong SO/Prefab/Scene không vỡ
+    - **Notes**:
+        - Potato seed icon không tồn tại trong project (chưa có asset)
+        - `crop_01.asset` có 9 null sprite refs — expected, m7b sẽ wire SO
+        - `icon_Feed_Worm_Atomic_1.png` (duplicate) còn trong `UI/Icons/Animals/Chicken/` — m7b delete
+        - Lowercase legacy files (`soil_empty.png`, `weed_overlay.png`, v.v.) còn trong `World/` root — m7b xóa sau khi CropTile prefab repoint
+    - **Prerequisite cho m7b-sprite-wireup**: wire SO/Prefab/Scene sang new sprite paths
+
 - **Phiên 21/04/2026 (Hiện tại) — m6b-world-progression HOÀN THÀNH**:
     - **`m6b-world-progression` spec DONE**: Tất cả 9 tasks đã execute xong qua Pure MCP.
     - **FEAT-05 — Offline Animal Growth Fix**:
