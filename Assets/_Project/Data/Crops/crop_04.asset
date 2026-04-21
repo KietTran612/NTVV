@@ -29,7 +29,7 @@ MonoBehaviour:
     baseYieldUnits: 3
     sellPriceGold: 3
     xpReward: 3
-    seedIcon: {fileID: 0}
+    seedIcon: {fileID: 21300000, guid: 8d65198db7c2bbc47a143010112b2f81, type: 3}
     weedChancePct: 0.1
     bugChancePct: 0.08
     waterChancePct: 0.1
@@ -37,9 +37,13 @@ MonoBehaviour:
     perfectWindowMin: 1
     postRipeLifeMin: 3
     notes: "Lua mi placeholder - fixed baseYieldUnits and postRipeLifeMin"
-  growthStageSprites: []
-  deadSprite: {fileID: 0}
-  seedIcon: {fileID: 0}
-  cropIcon: {fileID: 0}
+  growthStageSprites:
+  - {fileID: 21300000, guid: fbb8ae113ee271a449315718f60da0be, type: 3}
+  - {fileID: 21300000, guid: 9a641bec4f3a11140b0b25b8b019dc60, type: 3}
+  - {fileID: 21300000, guid: 3bb41747a51ea804c9d82727ea986381, type: 3}
+  - {fileID: 21300000, guid: ba957eaa91158014284f7c10fbc792d0, type: 3}
+  deadSprite: {fileID: 21300000, guid: aea3b98395341c64bb9a68d7a64520b8, type: 3}
+  seedIcon: {fileID: 21300000, guid: 8d65198db7c2bbc47a143010112b2f81, type: 3}
+  cropIcon: {fileID: 21300000, guid: ba957eaa91158014284f7c10fbc792d0, type: 3}
   plantSfx: {fileID: 0}
   harvestSfx: {fileID: 0}

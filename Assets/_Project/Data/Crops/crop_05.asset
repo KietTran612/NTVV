@@ -29,7 +29,7 @@ MonoBehaviour:
     baseYieldUnits: 4
     sellPriceGold: 6
     xpReward: 6
-    seedIcon: {fileID: 0}
+    seedIcon: {fileID: 21300000, guid: f11b0c35986a3e94e9e485efab4ebf23, type: 3}
     weedChancePct: 0.12
     bugChancePct: 0.1
     waterChancePct: 0.12
@@ -37,9 +37,13 @@ MonoBehaviour:
     perfectWindowMin: 1
     postRipeLifeMin: 4
     notes: "Ca chua placeholder - fixed baseYieldUnits and postRipeLifeMin"
-  growthStageSprites: []
-  deadSprite: {fileID: 0}
-  seedIcon: {fileID: 0}
-  cropIcon: {fileID: 0}
+  growthStageSprites:
+  - {fileID: 21300000, guid: d4457c7bec92eea4f8284c50016c66d2, type: 3}
+  - {fileID: 21300000, guid: 67d1a818a1f054a4f8aa4549e9854604, type: 3}
+  - {fileID: 21300000, guid: 17dc2fa3630272847a586469ff1f089b, type: 3}
+  - {fileID: 21300000, guid: cdeaa4799b1b998419ddda70216f29bb, type: 3}
+  deadSprite: {fileID: 21300000, guid: f5422abee96cbd74ca3931b756259d51, type: 3}
+  seedIcon: {fileID: 21300000, guid: f11b0c35986a3e94e9e485efab4ebf23, type: 3}
+  cropIcon: {fileID: 21300000, guid: cdeaa4799b1b998419ddda70216f29bb, type: 3}
   plantSfx: {fileID: 0}
   harvestSfx: {fileID: 0}

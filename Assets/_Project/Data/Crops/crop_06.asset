@@ -29,7 +29,7 @@ MonoBehaviour:
     baseYieldUnits: 5
     sellPriceGold: 10
     xpReward: 10
-    seedIcon: {fileID: 0}
+    seedIcon: {fileID: 21300000, guid: da6b7138eaca112478cf117f327192bd, type: 3}
     weedChancePct: 0.15
     bugChancePct: 0.12
     waterChancePct: 0.15
@@ -37,9 +37,13 @@ MonoBehaviour:
     perfectWindowMin: 2
     postRipeLifeMin: 5
     notes: "Dau tay placeholder - fixed baseYieldUnits and postRipeLifeMin"
-  growthStageSprites: []
-  deadSprite: {fileID: 0}
-  seedIcon: {fileID: 0}
-  cropIcon: {fileID: 0}
+  growthStageSprites:
+  - {fileID: 21300000, guid: 1d0238768be738d4a8c3ecfe55b3b2ba, type: 3}
+  - {fileID: 21300000, guid: dc495571923146844a86f90ae0dd0c7d, type: 3}
+  - {fileID: 21300000, guid: 1e27d46291d04a84fae0c03238074a3c, type: 3}
+  - {fileID: 21300000, guid: d4fb7bce7596b5240b0f9c033de4b4a4, type: 3}
+  deadSprite: {fileID: 21300000, guid: 910f800f995013b4697e9be2edd54dbd, type: 3}
+  seedIcon: {fileID: 21300000, guid: da6b7138eaca112478cf117f327192bd, type: 3}
+  cropIcon: {fileID: 21300000, guid: d4fb7bce7596b5240b0f9c033de4b4a4, type: 3}
   plantSfx: {fileID: 0}
   harvestSfx: {fileID: 0}

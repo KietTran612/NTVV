@@ -38,11 +38,11 @@ MonoBehaviour:
     postRipeLifeMin: 3
     notes: "C\xE2y m\u1EDF \u0111\u1EA7u, quay v\xF2ng v\u1ED1n nhanh."
   growthStageSprites:
+  - {fileID: 21300000, guid: 100f7f54713db1a4e8030a060855eef6, type: 3}
   - {fileID: 21300000, guid: dc785afee7cb7d948b8f813fd14cdd35, type: 3}
   - {fileID: 21300000, guid: f0925b63b7215034aba2ff8bcc78a211, type: 3}
   - {fileID: 21300000, guid: 69140e7a16500bc4a87ce8802620eb82, type: 3}
-  - {fileID: 0}
-  deadSprite: {fileID: 0}
+  deadSprite: {fileID: 21300000, guid: 3b9b1128b1d17f54da00d14c5ad794c9, type: 3}
   seedIcon: {fileID: 21300000, guid: a2c36e1c67dce6346b1bc22686883ff6, type: 3}
   cropIcon: {fileID: 21300000, guid: 69140e7a16500bc4a87ce8802620eb82, type: 3}
   plantSfx: {fileID: 0}

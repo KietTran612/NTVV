@@ -29,6 +29,7 @@ MonoBehaviour:
     baseYieldUnits: 3
     sellPriceGold: 5
     xpReward: 5
+    seedIcon: {fileID: 21300000, guid: ece196c8c8a404540af047f1b91a9aea, type: 3}
     weedChancePct: 0.12
     bugChancePct: 0.1
     waterChancePct: 0.12
@@ -37,12 +38,12 @@ MonoBehaviour:
     postRipeLifeMin: 4
     notes: "\u1ED4n \u0111\u1ECBnh, ph\xF9 h\u1EE3p giai \u0111o\u1EA1n \u0111\u1EA7u."
   growthStageSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  deadSprite: {fileID: 0}
-  seedIcon: {fileID: 21300000, guid: 9e23abf3c00864291b38eebf3a5dc927, type: 3}
-  cropIcon: {fileID: 21300000, guid: 33b9f4eba5fc74ac19f33b43a905d570, type: 3}
+  - {fileID: 21300000, guid: 0393bfa1c5924c44990d6bfaa3ccffa7, type: 3}
+  - {fileID: 21300000, guid: 6f3945b8ec7be79419af6fee54845fbb, type: 3}
+  - {fileID: 21300000, guid: b28e74c7b767f794cb72322b2273fbd7, type: 3}
+  - {fileID: 21300000, guid: 5e53c722c4b034e4180a5fb5bbce2aa7, type: 3}
+  deadSprite: {fileID: 21300000, guid: 23d2ed6d8164145418180d45d0adc361, type: 3}
+  seedIcon: {fileID: 21300000, guid: ece196c8c8a404540af047f1b91a9aea, type: 3}
+  cropIcon: {fileID: 21300000, guid: 5e53c722c4b034e4180a5fb5bbce2aa7, type: 3}
   plantSfx: {fileID: 0}
   harvestSfx: {fileID: 0}

@@ -3,6 +3,19 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
+- **Phiên 21/04/2026 (Hiện tại) — m7b-sprite-wireup HOÀN THÀNH**:
+    - **`m7b-sprite-wireup` spec DONE**: Tất cả 9 tasks đã execute xong.
+    - **Wire sprite vào 7 `CropDataSO`** (crop_01..07): `growthStageSprites[0..3]`, `deadSprite`, `data.seedIcon`, `seedIcon` (top-level sync), `cropIcon` (= Stage03). Skip `icon` inherited từ `ItemData` (0 usage trong code).
+    - **Wire sprite vào 2 `AnimalDataSO`** (animal_01 Gà, animal_02 Vịt): `stageSprites[0..2]`, `deadSprite`, `readyToCollectIcon`. Skip `icon` inherited.
+    - **Update `CropTile.prefab`** (`Assets/_Project/Prefabs/World/CropTile.prefab`): 4 SpriteRenderer wired — `_soilRenderer` (root GO) → `World_Tile_Soil_Base_Default`, `WaterVisual` → `World_Overlay_Tile_WaterNeed_On`, `WeedVisual` → `World_Overlay_Tile_Weed_On`, `BugVisual` → `World_Overlay_Tile_Pest_On`.
+    - **Update `SCN_Main` BottomNav**: `NavIcon_Shop` Image → `UI_Icon_Nav_Shop_Default`, `NavIcon_Event` Image → `UI_Icon_Nav_Event_Default`.
+    - **Cleanup**: `Art/Sprites/UI/Legacy/` (4 file), `icon_Feed_Worm_Atomic_1.png` (duplicate), 4 old lowercase world sprites (`soil_empty`, `weed_overlay`, `bug_overlay`, `water_needed`) — tất cả đã được cleanup từ m7a, verified 0 reference còn lại.
+    - **Integration smoke test PASSED**: 0 errors on boot, no pink sprites, BottomNav GUIDs verified. Crop lifecycle/ailment/animal tests skipped (reflection API không available qua MCP — sprite data đã verified trực tiếp từ file).
+    - **Notes**:
+        - `data.seedIcon` (nested trong `CropData` struct) là field UI thực sự dùng — `ShopPanelController:105`, `StoragePanelController:133`
+        - Top-level `seedIcon` sync với `data.seedIcon` để tránh drift
+        - `CropRenderer` child GO trong CropTile prefab có SpriteRenderer riêng (GUID `dc785afe` = Carrot Stage01) — đây là crop body renderer, không phải overlay, không đụng
+
 - **Phiên 21/04/2026 (Hiện tại) — m7a-sprite-reorg HOÀN THÀNH**:
     - **`m7a-sprite-reorg` spec DONE**: Tất cả 11 tasks đã execute xong.
     - **Mass rename ~82 sprite files** sang naming convention `[Domain]_[Category]_[Entity]_[Variant]_[State].png`
@@ -207,7 +220,8 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - **✅ `m5-quest-flow` DONE** — 4 bugs fixed (BUG-Q1..Q4), prerequisite enforcement, HandleUnlock switch, QuestPanelController verified
     - **✅ `m6b-world-progression` DONE** — FEAT-05: offline animal growth fix (LastSaveTime set trước RestoreWorldState, welcome toast > 60s); FEAT-06: locked tile system (CropTileView lock fields, WorldObjectPicker guard, LockInfoPopup, auto-unlock on level up, save/load unlockedTileIds)
     - **✅ `m6a-player-feedback` DONE** — LevelUpToastController tạo mới, Gems save/load fix, Shop Refresh dùng gems (50💎)
-    - **📋 Asset Inventory Completed** — full sprite list and prompt docs for missing sprites (priority: Duck/animal, items/nav, crops)
+    - **✅ `m7a-sprite-reorg` DONE** — mass rename ~82 sprites, folder structure mới, GUID preserved
+    - **✅ `m7b-sprite-wireup` DONE** — wire sprites vào 7 CropDataSO + 2 AnimalDataSO + CropTile.prefab + SCN_Main BottomNav, cleanup legacy files, smoke test PASSED
 - **Cần làm ngay**: 
     1. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
     2. **Manual UI test**: Verify Storage sell flow + Shop buy flow trong Play Mode (button interaction cần manual)
@@ -310,7 +324,27 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - FEAT-06: `GameManager.CaptureCurrentState()` + `RestoreWorldState()` — save/load `unlockedTileIds`
     - Integration test: 0 errors, 0 NullReferenceException, tất cả checks PASSED
 
+### Spec 9: `m7a-sprite-reorg` ✅ DONE
+- **Path**: `.kiro/specs/m7a-sprite-reorg/`
+- **Status**: **TẤT CẢ 11 TASKS HOÀN THÀNH** (21/04/2026)
+- **Kết quả**:
+    - Mass rename ~82 sprite files sang naming convention `[Domain]_[Category]_[Entity]_[Variant]_[State].png`
+    - Folder structure mới: `World/` (Crops, Animals, Products, Overlays, Tiles) + `UI/` (Backgrounds, Icons/Common/Seed/Nav/Tab/Header/Action, Buttons)
+    - GUID preserved — `.meta` files di chuyển cùng, references không vỡ
+    - Legacy folder + old lowercase world sprites cleanup
+
+### Spec 10: `m7b-sprite-wireup` ✅ DONE
+- **Path**: `.kiro/specs/m7b-sprite-wireup/`
+- **Status**: **TẤT CẢ 9 TASKS HOÀN THÀNH** (21/04/2026)
+- **Kết quả**:
+    - 7 `CropDataSO` (crop_01..07): `growthStageSprites[0..3]`, `deadSprite`, `data.seedIcon`, `seedIcon`, `cropIcon` wired. `icon` inherited SKIP.
+    - 2 `AnimalDataSO` (animal_01 Gà, animal_02 Vịt): `stageSprites[0..2]`, `deadSprite`, `readyToCollectIcon` wired.
+    - `CropTile.prefab`: 4 SpriteRenderer — SoilRenderer, WaterVisual, WeedVisual, BugVisual wired với sprites mới.
+    - `SCN_Main` BottomNav: `NavIcon_Shop` + `NavIcon_Event` Image.sprite wired.
+    - Cleanup: Legacy folder, duplicate worm icon, old world sprites — tất cả đã xóa (verified 0 reference).
+    - Integration smoke test: 0 errors, no pink sprites, BottomNav GUIDs verified.
+
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M4 Animal Care đã DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal hoạt động, auto-collect product, AnimalPen.prefab tạo mới và wired đầy đủ. **M5 Quest Flow đã DONE** — 4 bugs fixed (BUG-Q1..Q4): prerequisite enforcement, HandleUnlock switch, QuestPanelController event-driven refresh verified. **M6a Player Feedback đã DONE** — LevelUpToastController tạo mới (subscribe OnLevelUp, fade 2s, ShowMessage API), Gems save/load fix (PlayerSaveData.gems, SetGems/CaptureGems trong GameManager), Shop Refresh dùng gems 50💎 thay gold. **M6b World Progression đã DONE** — FEAT-05: offline animal growth fix (LastSaveTime set trước RestoreWorldState, welcome toast > 60s); FEAT-06: locked tile system (CropTileView lock fields, WorldObjectPicker guard, LockInfoPopup, auto-unlock on level up, save/load unlockedTileIds). Bước tiếp theo: thêm locked tiles vào scene với `_isLocked=true` + `_requiredLevel`, wire `_lockOverlay` GO, xác định M7 milestone."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. **M7a Sprite Reorg đã DONE** — ~82 sprites đã rename + reorganize, GUID preserved. **M7b Sprite Wireup đã DONE** — 7 CropDataSO + 2 AnimalDataSO + CropTile.prefab + SCN_Main BottomNav đã wire đầy đủ sprites mới. Tất cả legacy/duplicate files đã cleanup. Bước tiếp theo: xác định M8 milestone (ví dụ: thêm locked tiles vào scene, generate missing sprites còn thiếu, hoặc gameplay feature mới)."

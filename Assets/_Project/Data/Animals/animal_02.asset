@@ -44,11 +44,11 @@ MonoBehaviour:
     notes: "\u0102n h\u1ED7n h\u1EE3p, g\u1EAFn ch\u1EB7t v\u1EDBi loop ch\u0103m
       c\xE2y."
   stageSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  deadSprite: {fileID: 0}
-  readyToCollectIcon: {fileID: 0}
+  - {fileID: 21300000, guid: ac7741fb205d8b946804e850d655f24d, type: 3}
+  - {fileID: 21300000, guid: 8436f2ee75eef4548a9cc1be6a62dbe0, type: 3}
+  - {fileID: 21300000, guid: af1d809761bd3824d9dcec49892f572b, type: 3}
+  deadSprite: {fileID: 21300000, guid: ba2c5083e9083a84787dd62a847f6cda, type: 3}
+  readyToCollectIcon: {fileID: 21300000, guid: 51adb14041408ce4aa21a9ba42c085c9, type: 3}
   sfxHappy: {fileID: 0}
   sfxHungry: {fileID: 0}
   sfxMature: {fileID: 0}

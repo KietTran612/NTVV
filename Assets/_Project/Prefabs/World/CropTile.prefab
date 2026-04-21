@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &2062734968614277067
 GameObject:
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: b73d372af6cd515499d753df7754f2ec, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 67d7b58f08e7bde4bac0ddc32dfbc881, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!1 &3157849684580916715
 GameObject:
@@ -180,7 +180,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!1 &3502410527285339670
 GameObject:
@@ -290,7 +290,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: f5c75128c5a39f84486133d4f85645c4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c84132387eacc0747b1ba510768ec24c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -348,6 +348,9 @@ MonoBehaviour:
   _bugVisual: {fileID: 9163041158075154433}
   _waterVisual: {fileID: 2062734968614277067}
   _registry: {fileID: 11400000, guid: 65633044c49c98c4abeb1ae77b4f819b, type: 2}
+  _isLocked: 0
+  _requiredLevel: 0
+  _lockOverlay: {fileID: 0}
 --- !u!1 &5962034038658714736
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,7 +432,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: b730247c53966764cb4dce35e89fbadc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0b64e8c907d8bc84982be6994e0e53b0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -520,7 +523,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 4a780f59f4a24a8429c9d16764ba94ae, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ecaaf30e0ce665f478dcf10049a83969, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -528,5 +531,5 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0

@@ -43,11 +43,11 @@ MonoBehaviour:
     xpStage3: 42
     notes: "Th\xFA m\u1EDF \u0111\u1EA7u; th\u1EE9c \u0103n ch\xEDnh l\xE0 s\xE2u."
   stageSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  deadSprite: {fileID: 0}
-  readyToCollectIcon: {fileID: 0}
+  - {fileID: 21300000, guid: 292a23d63a9b4ee448b0b5b239bb8437, type: 3}
+  - {fileID: 21300000, guid: 2cd2a28e928ef5c43b6c8787567b6d72, type: 3}
+  - {fileID: 21300000, guid: 77b85e851e999cf44ba33523698738af, type: 3}
+  deadSprite: {fileID: 21300000, guid: c3d77d2ee20defc498086578b943074b, type: 3}
+  readyToCollectIcon: {fileID: 21300000, guid: a8ac68b553937c04f958ffa720f8cf6b, type: 3}
   sfxHappy: {fileID: 0}
   sfxHungry: {fileID: 0}
   sfxMature: {fileID: 0}
