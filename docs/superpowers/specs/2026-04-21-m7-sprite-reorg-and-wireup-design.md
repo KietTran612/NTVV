@@ -106,38 +106,44 @@ Assets/_Project/Art/Sprites/
 
 **Bước 1: CropDataSO (7 file `crop_01..07.asset`)**
 
-Mỗi SO cần wire:
-- `growthStageSprites[0..3]` → 4 sprite Stage00-03
-- `deadSprite` → 1 sprite Dead
-- `seedIcon` → icon seed riêng
-- `cropIcon` → reuse Stage03 (assign cùng GUID)
+CropDataSO kế thừa `ItemData` → **4 sprite field cần xem xét** (grep Scripts/ xác nhận):
 
-Dùng `assets-modify` với cấu trúc:
-```yaml
-growthStageSprites:
-  - {fileID: 21300000, guid: <Stage00_GUID>, type: 3}
-  - {fileID: 21300000, guid: <Stage01_GUID>, type: 3}
-  - {fileID: 21300000, guid: <Stage02_GUID>, type: 3}
-  - {fileID: 21300000, guid: <Stage03_GUID>, type: 3}
-deadSprite: {fileID: 21300000, guid: <Dead_GUID>, type: 3}
-```
+| Field | Location | Usage | Action |
+|-------|----------|-------|--------|
+| `icon` | top-level (`ItemData`) | **0 usage** trong Scripts/ | **SKIP** — giữ GUID hiện tại |
+| `data.seedIcon` | nested (`CropData` struct) | `ShopPanelController:105`, `StoragePanelController:133` | **WIRE** (UI dùng field này) |
+| `seedIcon` | top-level (`CropDataSO`) | 0 usage found — duplicate | **WIRE** sync cùng GUID với `data.seedIcon` |
+| `cropIcon` | top-level | Storage/Inventory (theo comment) | **WIRE** = Stage03 GUID (reuse) |
+| `growthStageSprites[0..3]` | top-level | `CropTileView` render | **WIRE** 4 stage |
+| `deadSprite` | top-level | Dead render | **WIRE** |
+
+Dùng `assets-modify` patch từng field. Lấy GUID qua `assets-find`.
 
 **Bước 2: AnimalDataSO (2 file `animal_01..02.asset`)**
 
-Mỗi SO cần wire:
-- `stageSprites[0..2]` → 3 sprite Stage00-02
-- `deadSprite` → 1 sprite Dead
-- `readyToCollectIcon` → product sprite (Egg / DuckEgg)
+AnimalDataSO cũng kế thừa `ItemData` → có `icon` top-level. `AnimalData` struct không có sprite field (verified). Wire:
+- `stageSprites[0..2]` — 3 stage (Stage00-02)
+- `deadSprite`
+- `readyToCollectIcon` — Egg/DuckEgg
+- SKIP: `icon` top-level (0 usage, giữ nguyên)
 
 **Bước 3: CropTile prefab — overlay sprite references**
 
-Prefab `CropTile` có 4 SpriteRenderer children cần swap old → new:
-- `_soilRenderer.sprite` → `World_Tile_Soil_Base_Default.png`
-- `_weedVisual.sprite` → `World_Overlay_Tile_Weed_On.png`
-- `_bugVisual.sprite` → `World_Overlay_Tile_Pest_On.png`
-- `_waterVisual.sprite` → `World_Overlay_Tile_WaterNeed_On.png`
+**Path chính xác:** `Assets/_Project/Prefabs/World/CropTile.prefab` (trong subfolder `World/`)
 
-Dùng `gameobject-component-modify` sau khi `assets-prefab-open`.
+**Cấu trúc** (verified từ prefab YAML):
+- `_soilRenderer` kiểu `SpriteRenderer` trực tiếp (field chứa component reference)
+- `_weedVisual`, `_bugVisual`, `_waterVisual` kiểu `GameObject` — mỗi GameObject có `SpriteRenderer` component **trên chính nó** (không phải child). Code dùng `GameObject.SetActive()` để show/hide, SpriteRenderer render sprite đính kèm.
+
+4 SpriteRenderer cần swap:
+- SoilRenderer's sprite → `World_Tile_Soil_Base_Default.png`
+- WeedVisual's SpriteRenderer.sprite → `World_Overlay_Tile_Weed_On.png`
+- BugVisual's SpriteRenderer.sprite → `World_Overlay_Tile_Pest_On.png`
+- WaterVisual's SpriteRenderer.sprite → `World_Overlay_Tile_WaterNeed_On.png`
+
+Dùng `gameobject-find` tìm từng Visual GameObject theo tên (`WaterVisual`, `WeedVisual`, `BugVisual`), rồi `gameobject-component-modify` SpriteRenderer.m_Sprite sau khi `assets-prefab-open`.
+
+**Ref:** WaterVisual hiện trỏ GUID `b73d372af6cd515499d753df7754f2ec` (= `water_needed.png` OLD) — task 4 phải repoint TRƯỚC khi task 7 xóa file đó.
 
 **Bước 4: BottomNav button sprites**
 
@@ -150,12 +156,16 @@ Trong `SCN_Main.unity`, 2 nút Nav đang placeholder — wire sprite mới:
 - Delete old lowercase World sprites sau khi CropTile prefab đã repoint
 - Delete duplicate `icon_Feed_Worm_Atomic_1.png`
 
-**Bước 6: Smoke test**
-- Play mode → tap 7 crop tile khác nhau → verify growth sprite hiện đúng
-- Plant seed → verify seedling sprite hiện trên tile
-- Force weed/pest/water → verify overlay hiện đúng
-- AnimalPen: verify 3 stage + dead sprite render đúng
-- Console: 0 "missing sprite" warning
+**Bước 6: Smoke test (API-accurate)**
+
+**Không dùng fictional API** (`TimeManager.AddTime`, `SetStage`, `ApplyAilment` — không tồn tại trong code). Thay bằng:
+
+- **Speed up tick:** reflection set private SerializeField `TimeManager.Instance._tickRate = 0.01f` (100× faster); restore cuối test
+- **Plant crop:** tap tile (hoặc `CropActionPanelController.OnPlantButton`) → chờ ~10-30s với tick speedup
+- **Force ailment:** reflection set private bool `_hasWeeds`/`_hasPests`/`_needsWater` = true trên tile, gọi private `RefreshVisuals()` qua reflection
+- **Animal stage:** reflection set private `_currentStage` (nếu có), hoặc spawn từ SO pattern m4
+- **Verify visuals:** `screenshot-game-view` + `gameobject-component-get` SpriteRenderer.m_Sprite match GUID expected
+- **Console:** 0 "missing sprite", 0 pink sprite
 
 ---
 

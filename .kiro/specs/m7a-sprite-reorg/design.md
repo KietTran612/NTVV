@@ -157,13 +157,15 @@ Pattern: 5 stage/dead files đã đúng naming, chỉ move folder. Seed icon ren
 
 ## Execution Order (dependency-aware)
 
-1. Tạo folder structure mới (empty) — Task 1
+0. **Prerequisite**: git working tree clean (commit uncommitted files trước) — Task 0
+1. Tạo folder structure mới (empty, 19 folder creation call, theo thứ tự parent → child vì tool `assets-create-folder` KHÔNG đệ quy) — Task 1
 2. Rename Carrot (4 stage + dead + seed) — Task 2
-3. Rename/move 6 crop khác (stage/dead move folder, seed rename) — Task 3
+3. Rename/move 6 crop khác (thứ tự ID crop_02..07 = Potato, Corn, Wheat, Tomato, Strawberry, Pumpkin — match m7b) — Task 3
 4. Rename Chicken (3 stage + dead) + move Egg → Products + move Worm → Common — Task 4
 5. Move Duck (4 stage/dead) + move DuckEgg → Products — Task 5
 6. Move World overlays + tiles — Task 6
 7. Rename UI backgrounds (8) — Task 7
-8. Rename UI Icons Common (5) + Nav (2) + Tab (2) + Header (1) + Action (2) — Task 8
+8. Rename UI Icons: 8a (Common + Nav + Action, 9 ops) → 8b (Tab + Header, 3 ops)
 9. Rename UI Buttons (1) — Task 9
 10. Post-check: Unity console 0 warning, git status check — Task 10
+11. HANDOVER + commit — Task 11
