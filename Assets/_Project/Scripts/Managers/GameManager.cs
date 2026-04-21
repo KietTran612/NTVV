@@ -36,6 +36,7 @@ namespace NTVV.Managers
         {
             _isPersistent = true;
             if (_dataRegistry != null) _dataRegistry.Initialize();
+            LevelSystem.OnLevelUp += OnPlayerLevelUp;
             StartCoroutine(BootSequence());
         }
 
@@ -45,8 +46,27 @@ namespace NTVV.Managers
             Debug.Log("<color=cyan>[GameManager]</color> Boot sequence started...");
 
             PlayerSaveData saveData = SaveLoadManager.Instance.Load();
+
+            // Fix FEAT-05: set LastSaveTime trước RestoreWorldState để AnimalView.RestoreState() dùng đúng
+            if (saveData != null && saveData.lastSaveTimestamp != 0)
+                LastSaveTime = new System.DateTime(saveData.lastSaveTimestamp);
+
             InitializeCoreSystems(saveData);
             RestoreWorldState(saveData);
+
+            // Welcome toast nếu offline > 60s
+            double offlineSeconds = (System.DateTime.UtcNow - LastSaveTime).TotalSeconds;
+            if (offlineSeconds > 60)
+            {
+                var toast = FindFirstObjectByType<NTVV.UI.HUD.LevelUpToastController>();
+                if (toast != null)
+                {
+                    int hours = (int)(offlineSeconds / 3600);
+                    int minutes = (int)((offlineSeconds % 3600) / 60);
+                    string timeStr = hours > 0 ? $"{hours}g {minutes}ph" : $"{minutes} phút";
+                    toast.ShowMessage($"Chào mừng trở lại! Farm đã tiến triển trong {timeStr}");
+                }
+            }
 
             _currentState = GameState.Playing;
             Debug.Log("<color=cyan>[GameManager]</color> Boot sequence complete.");
@@ -116,6 +136,19 @@ namespace NTVV.Managers
                     pen?.SpawnAndRestore(animalSO.data, saved);
                 }
             }
+
+            // FEAT-06: Restore tile lock state
+            if (data.unlockedTileIds != null && data.unlockedTileIds.Count > 0)
+            {
+                CropTileView[] allTileViews = FindObjectsByType<CropTileView>(FindObjectsSortMode.None);
+                foreach (var tile in allTileViews)
+                {
+                    if (!tile.IsLocked) continue; // already unlocked by default, skip
+                    string id = string.IsNullOrEmpty(tile.TileId) ? tile.gameObject.name : tile.TileId;
+                    if (data.unlockedTileIds.Contains(id))
+                        tile.Unlock();
+                }
+            }
         }
 
         public void TriggerSave()
@@ -163,6 +196,17 @@ namespace NTVV.Managers
             data.tiles.Add(tData);
             }
 
+            // FEAT-06: Save unlocked tile IDs
+            data.unlockedTileIds = new System.Collections.Generic.List<string>();
+            foreach (var tile in allTiles)
+            {
+                if (!tile.IsLocked)
+                {
+                    string id = string.IsNullOrEmpty(tile.TileId) ? tile.gameObject.name : tile.TileId;
+                    data.unlockedTileIds.Add(id);
+                }
+            }
+
             // [Quest] Capture quests
             if (QuestManager.Instance != null)
                 QuestManager.Instance.SaveData(data);
@@ -174,6 +218,26 @@ namespace NTVV.Managers
             );
 
             return data;
+        }
+
+        private void OnPlayerLevelUp(int newLevel)
+        {
+            CropTileView[] tiles = FindObjectsByType<CropTileView>(FindObjectsSortMode.None);
+            bool anyUnlocked = false;
+            foreach (var tile in tiles)
+            {
+                if (tile.IsLocked && newLevel >= tile.RequiredLevel)
+                {
+                    tile.Unlock();
+                    anyUnlocked = true;
+                }
+            }
+            if (anyUnlocked) TriggerSave();
+        }
+
+        private void OnDestroy()
+        {
+            LevelSystem.OnLevelUp -= OnPlayerLevelUp;
         }
     }
 }

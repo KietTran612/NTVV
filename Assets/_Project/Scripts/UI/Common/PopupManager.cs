@@ -140,6 +140,22 @@ namespace NTVV.UI.Common
             }
         }
 
+        public void ShowLockInfo(int requiredLevel)
+        {
+            if (_activeModal != null) Destroy(_activeModal);
+            GameObject prefab = _provider?.LoadPrefab("LockInfoPopup");
+            if (prefab != null && _modalParent != null)
+            {
+                _activeModal = Instantiate(prefab, _modalParent);
+                var ctrl = _activeModal.GetComponent<LockInfoPopupController>();
+                ctrl?.Setup(requiredLevel);
+            }
+            else
+            {
+                Debug.LogWarning($"[PopupManager] LockInfoPopup prefab not found for level {requiredLevel}");
+            }
+        }
+
         #endregion
     }
 }

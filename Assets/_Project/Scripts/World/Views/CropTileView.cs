@@ -43,6 +43,21 @@ namespace NTVV.World.Views
         [SerializeField] private GameObject _waterVisual;
         [SerializeField] private GameDataRegistrySO _registry; // Required for sprites
 
+        [Header("Lock")]
+        [SerializeField] private bool _isLocked;
+        [SerializeField] private int _requiredLevel;
+        [SerializeField] private GameObject _lockOverlay;
+
+        public bool IsLocked => _isLocked;
+        public int RequiredLevel => _requiredLevel;
+
+        public void Unlock()
+        {
+            _isLocked = false;
+            _lockOverlay?.SetActive(false);
+            RefreshVisuals();
+        }
+
         public string TileId => _tileId;
         public float ElapsedTime => _elapsedTime;
         public CropData CurrentCropData => _currentCropData;
@@ -184,6 +199,7 @@ namespace NTVV.World.Views
         private void RefreshVisuals()
         {
             UpdateAilmentVisuals();
+            _lockOverlay?.SetActive(_isLocked);
             UpdateGrowthVisuals();
         }
 
@@ -261,6 +277,7 @@ namespace NTVV.World.Views
 
         private void HandleTick(float tickDelta)
         {
+            if (_isLocked) return;
             if (_currentState == TileState.Empty || _currentState == TileState.Dead) return;
             if (_currentCropData == null) return;
 

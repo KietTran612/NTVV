@@ -90,6 +90,11 @@ namespace NTVV.World
 
         private void OnTileSelected(CropTileView tile)
         {
+            if (tile.IsLocked)
+            {
+                PopupManager.Instance?.ShowLockInfo(tile.RequiredLevel);
+                return;
+            }
             Debug.Log($"<color=yellow>Tile Selected: </color> {tile.name}");
             if (PopupManager.Instance != null)
             {

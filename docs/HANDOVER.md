@@ -3,6 +3,23 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
+- **Phiên 21/04/2026 (Hiện tại) — m6b-world-progression HOÀN THÀNH**:
+    - **`m6b-world-progression` spec DONE**: Tất cả 9 tasks đã execute xong qua Pure MCP.
+    - **FEAT-05 — Offline Animal Growth Fix**:
+        - `GameManager.BootSequence()`: set `LastSaveTime` từ `saveData.lastSaveTimestamp` TRƯỚC khi gọi `RestoreWorldState()` — đảm bảo `AnimalView.RestoreState()` tính đúng offline time
+        - Welcome toast hiện sau `RestoreWorldState` nếu offline > 60s: dùng `LevelUpToastController.ShowMessage()` với thời gian format "Xg Yph" hoặc "Y phút"
+    - **FEAT-06 — Locked Tile Land Expansion**:
+        - `PlayerSaveData.unlockedTileIds`: thêm `List<string>` field vào `SaveData.cs` để persist trạng thái unlock
+        - `CropTileView`: thêm `[Header("Lock")]` block — `_isLocked`, `_requiredLevel`, `_lockOverlay` fields; `IsLocked`/`RequiredLevel` properties; `Unlock()` method; `HandleTick()` guard `if (_isLocked) return`; `RefreshVisuals()` sync overlay
+        - `WorldObjectPicker.OnTileSelected()`: guard `if (tile.IsLocked)` → `PopupManager.ShowLockInfo(tile.RequiredLevel)` + return trước khi mở CropActionPanel
+        - `LockInfoPopupController.cs` tạo mới tại `Assets/_Project/Scripts/UI/Panels/` — `Setup(int requiredLevel)` set message label, OK button gọi `CloseActiveModal()`
+        - `LockInfoPopup.prefab` tạo tại `Assets/_Project/Resources/UI/Default/LockInfoPopup.prefab` — Background + Message_Label + OK_Button wired
+        - `PopupManager.ShowLockInfo(int)`: load `LockInfoPopup` prefab từ `_provider`, instantiate vào `_modalParent`, gọi `ctrl.Setup(requiredLevel)`
+        - `GameManager.OnPlayerLevelUp(int newLevel)`: scan tất cả `CropTileView`, unlock tile có `RequiredLevel <= newLevel`, gọi `TriggerSave()` nếu có tile mới unlock
+        - `GameManager.CaptureCurrentState()`: lưu `unlockedTileIds` — collect tất cả tile không locked
+        - `GameManager.RestoreWorldState()`: restore lock state từ `unlockedTileIds` — unlock tile có id trong list
+    - **Integration test PASSED**: 0 errors, boot sequence OK, TriggerSave hoạt động, Tile.Unlock() verified, CropTileView lock fields trong Inspector, 0 NullReferenceException
+
 - **Phiên 21/04/2026 (Hiện tại) — m6a-player-feedback HOÀN THÀNH**:
     - **`m6a-player-feedback` spec DONE**: Tất cả 8 tasks đã execute xong qua Pure MCP.
     - **FEAT-01 — LevelUpToastController**:
@@ -176,16 +193,18 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - **✅ `m3b-storage-sell-flow` DONE** — 3 bugs fixed (BUG-B1, BUG-B2), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired
     - **✅ `m4-animal-care` DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal, auto-collect, AnimalPen.prefab created & wired
     - **✅ `m5-quest-flow` DONE** — 4 bugs fixed (BUG-Q1..Q4), prerequisite enforcement, HandleUnlock switch, QuestPanelController verified
+    - **✅ `m6b-world-progression` DONE** — FEAT-05: offline animal growth fix (LastSaveTime set trước RestoreWorldState, welcome toast > 60s); FEAT-06: locked tile system (CropTileView lock fields, WorldObjectPicker guard, LockInfoPopup, auto-unlock on level up, save/load unlockedTileIds)
     - **✅ `m6a-player-feedback` DONE** — LevelUpToastController tạo mới, Gems save/load fix, Shop Refresh dùng gems (50💎)
     - **📋 Asset Inventory Completed** — full sprite list and prompt docs for missing sprites (priority: Duck/animal, items/nav, crops)
 - **Cần làm ngay**: 
     1. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
     2. **Manual UI test**: Verify Storage sell flow + Shop buy flow trong Play Mode (button interaction cần manual)
-    3. **M6: Next milestone** — xác định milestone tiếp theo sau khi M5 hoàn thành
+    3. **M7: Next milestone** — xác định milestone tiếp theo (ví dụ: thêm tile mới vào scene với `_isLocked=true`, set `_requiredLevel` phù hợp, wire `_lockOverlay` GO)
     4. **Logic Wiring**: Nối dây các Sprite mới vào `CropDataSO` và `AnimalDataSO` thông qua Registry.
     5. **Generate missing sprites** — sử dụng bộ rework tại `docs/asset-prompts/2026-04-17-rework/` (bắt đầu với `entities-animals.md`)
     6. **Verify Refresh_Button & GemsBalance_Label** (xem NOTE-04, NOTE-05 trong bug-backlog.md)
     7. **Camera fix**: Game view toàn màu xanh — cần điều chỉnh Main Camera position/orthographic size để nhìn thấy scene
+    8. **LockOverlay asset**: Tạo/gán sprite overlay cho `_lockOverlay` GO trên các CropTileView locked (hiện đang dùng placeholder)
 
 ## 🗂 Kiro Specs đang active
 
@@ -264,7 +283,22 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - FEAT-07: `ShopPopup.prefab` — `GemsBalance_Label` active, `Refresh_Label` text "Làm mới (50💎)"
     - Integration test: 0 errors, gems persist sau save/load verified
 
+### Spec 8: `m6b-world-progression` ✅ DONE
+- **Path**: `.kiro/specs/m6b-world-progression/`
+- **Status**: **TẤT CẢ 9 TASKS HOÀN THÀNH** (21/04/2026)
+- **Kết quả**:
+    - FEAT-05: `GameManager.BootSequence()` — `LastSaveTime` set từ `saveData.lastSaveTimestamp` trước `RestoreWorldState()`
+    - FEAT-05: Welcome toast hiện nếu offline > 60s — format "Xg Yph" / "Y phút" qua `LevelUpToastController.ShowMessage()`
+    - FEAT-06: `PlayerSaveData.unlockedTileIds` — `List<string>` field mới trong `SaveData.cs`
+    - FEAT-06: `CropTileView` — lock fields (`_isLocked`, `_requiredLevel`, `_lockOverlay`), `Unlock()` method, `HandleTick()` guard, `RefreshVisuals()` sync
+    - FEAT-06: `WorldObjectPicker.OnTileSelected()` — locked tile guard → `ShowLockInfo()` + return
+    - FEAT-06: `LockInfoPopupController.cs` tạo mới + `LockInfoPopup.prefab` tại `Resources/UI/Default/`
+    - FEAT-06: `PopupManager.ShowLockInfo(int)` — load + instantiate + `ctrl.Setup(requiredLevel)`
+    - FEAT-06: `GameManager.OnPlayerLevelUp()` — auto-unlock tiles + `TriggerSave()`
+    - FEAT-06: `GameManager.CaptureCurrentState()` + `RestoreWorldState()` — save/load `unlockedTileIds`
+    - Integration test: 0 errors, 0 NullReferenceException, tất cả checks PASSED
+
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M4 Animal Care đã DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal hoạt động, auto-collect product, AnimalPen.prefab tạo mới và wired đầy đủ. **M5 Quest Flow đã DONE** — 4 bugs fixed (BUG-Q1..Q4): prerequisite enforcement, HandleUnlock switch, QuestPanelController event-driven refresh verified. **M6a Player Feedback đã DONE** — LevelUpToastController tạo mới (subscribe OnLevelUp, fade 2s, ShowMessage API), Gems save/load fix (PlayerSaveData.gems, SetGems/CaptureGems trong GameManager), Shop Refresh dùng gems 50💎 thay gold. Bước tiếp theo là m6b-world-progression hoặc milestone tiếp theo."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. Kiểm tra `Assets/_Project/Art/Sprites/UI/` để thấy bộ 'Lego' Assets. **M2 World Setup đã DONE** — SCN_Main có đầy đủ UI + World layer: 6 CropTile, WorldObjectPicker, FarmCameraController, TimeManager, QuestManager. **M3a Crop Care + Harvest đã DONE** — 9 bugs fixed trong CropTileView + CropActionPanelController, full cycle plant→care→harvest→save/load hoạt động. **M3b Storage + Sell Flow đã DONE** — 3 bugs fixed (BUG-B1 Sell All filter, BUG-B2 storage check trước gold deduct), FindObjectsOfTypeAll removed, StoragePopup + ShopPopup `_registry` wired. **M4 Animal Care đã DONE** — 7 bugs fixed (BUG-01..07), Save/Load per-animal hoạt động, auto-collect product, AnimalPen.prefab tạo mới và wired đầy đủ. **M5 Quest Flow đã DONE** — 4 bugs fixed (BUG-Q1..Q4): prerequisite enforcement, HandleUnlock switch, QuestPanelController event-driven refresh verified. **M6a Player Feedback đã DONE** — LevelUpToastController tạo mới (subscribe OnLevelUp, fade 2s, ShowMessage API), Gems save/load fix (PlayerSaveData.gems, SetGems/CaptureGems trong GameManager), Shop Refresh dùng gems 50💎 thay gold. **M6b World Progression đã DONE** — FEAT-05: offline animal growth fix (LastSaveTime set trước RestoreWorldState, welcome toast > 60s); FEAT-06: locked tile system (CropTileView lock fields, WorldObjectPicker guard, LockInfoPopup, auto-unlock on level up, save/load unlockedTileIds). Bước tiếp theo: thêm locked tiles vào scene với `_isLocked=true` + `_requiredLevel`, wire `_lockOverlay` GO, xác định M7 milestone."

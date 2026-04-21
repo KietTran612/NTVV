@@ -21,6 +21,7 @@ namespace NTVV.Core
         public List<QuestSaveData> activeQuests = new List<QuestSaveData>();
         public List<string> completedQuestIds = new List<string>();
         public List<AnimalSaveData> animals = new List<AnimalSaveData>();
+        public List<string> unlockedTileIds = new List<string>(); // FEAT-06: tile IDs đã được unlock
         
         public PlayerSaveData()
         {
@@ -29,6 +30,7 @@ namespace NTVV.Core
             activeQuests = new List<QuestSaveData>();
             completedQuestIds = new List<string>();
             animals = new List<AnimalSaveData>();
+            unlockedTileIds = new List<string>();
             gems = 25;
             lastSaveTimestamp = DateTime.Now.Ticks;
         }
