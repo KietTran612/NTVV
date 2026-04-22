@@ -14,7 +14,7 @@ namespace NTVV.Data
         public string cropName;
         public int unlockLevel;
         public int seedCostGold;
-        public float growTimeMin;
+        [Min(0.1f)] public float growTimeMin;
         
         [Header("Growth Phases (%)")]
         public float phase1Pct = 0.25f;
@@ -36,8 +36,8 @@ namespace NTVV.Data
         public int maxCareEvents;
 
         [Header("Timing Rules")]
-        public float perfectWindowMin;
-        public float postRipeLifeMin;
+        [Min(0.1f)] public float perfectWindowMin;
+        [Min(0.1f)] public float postRipeLifeMin;
 
         // Helper Properties for Gameplay Logic
         public float GrowthTimeInSeconds => growTimeMin * 60f;

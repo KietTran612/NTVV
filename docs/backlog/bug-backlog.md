@@ -24,11 +24,13 @@
 - **Priority:** 🔴 HIGH — Blocker cho mọi visual test và demo
 
 ### BUG-01: `CropActionPanelController._registry` không được gán
+- ✅ Fixed in m3a-crop-care-harvest (WIRE-01)
 - **File:** `Assets/_Project/Scripts/UI/Panels/CropActionPanelController.cs`
 - **Vấn đề:** `TryAutoPlant()` return nếu `_registry == null` → player không thể trồng cây
 - **Fix:** Auto-assign qua `Resources.FindObjectsOfTypeAll<GameDataRegistrySO>()` hoặc require inspector
 
 ### BUG-02: Animal chết không bị xóa khỏi `AnimalPenView`
+- ✅ Fixed in m4-animal-care (BUG-02)
 - **File:** `Assets/_Project/Scripts/World/Views/AnimalView.cs`
 - **Vấn đề:** Khi `lifeTimer >= lifeAfterMature`, animal đánh dấu Dead nhưng không bị Destroy → chiếm slot pen
 - **Fix:**
@@ -43,6 +45,7 @@
 ## 🟡 MEDIUM — Logic không chính xác
 
 ### BUG-03: `StoragePanelController.OnSellAllClick()` thiếu null check registry
+- ✅ Fixed in m3b-storage-sell-flow (BUG-B1)
 - **File:** `Assets/_Project/Scripts/UI/Panels/StoragePanelController.cs`
 - **Vấn đề:** Nếu registry null, category filter bị skip → bán nhầm item
 - **Fix:** Add null check + fallback hoặc guard early return
@@ -58,19 +61,23 @@
 ## 🟢 LOW — Features chưa implement (làm sau)
 
 ### FEAT-01: `LevelSystem.OnLevelUp` không có subscriber
+- ✅ Fixed in m6a-player-feedback + m6b-world-progression
 - Event fire nhưng không có UI nào lắng nghe → không có level-up feedback
 - **Fix:** HUDTopBarController hoặc popup level-up subscribe và hiện animation/toast
 
 ### FEAT-02: `QuestEvents.OnQuestStateChanged` không có subscriber ngoài QuestManager
+- ✅ Fixed in m5-quest-flow (BUG-Q1)
 - Quest UI không tự refresh khi quest state thay đổi
 - **Fix:** QuestPanelController subscribe và refresh list
 
 ### FEAT-03: Quest unlock system (`HandleUnlock()`) chỉ log
+- ✅ Fixed in m5-quest-flow (BUG-Q3)
 - **File:** `Assets/_Project/Scripts/Gameplay/Quests/QuestManager.cs`
 - Rewards có `unlockType` nhưng không làm gì
 - **Fix:** Implement thực tế (mở tab shop, unlock NPC, v.v.)
 
 ### FEAT-04: Prerequisite quests không được enforce
+- ✅ Fixed in m5-quest-flow (BUG-Q2)
 - `QuestDataSO.prerequisiteQuestId` có nhưng `QuestManager.AcceptQuest()` không check
 - **Fix:** Add check `IsQuestCompleted(prerequisiteId)` trước khi accept
 
@@ -83,6 +90,7 @@
 - **Fix:** Implement tile unlocking dựa theo level milestone
 
 ### FEAT-07: Gems system là dead code
+- ✅ Fixed in m6a-player-feedback
 - `EconomySystem` có `OnGemsChanged` nhưng không có gì dùng gems
 - **Fix:** Implement hoặc remove for v1
 
@@ -93,7 +101,7 @@
 | Event | Trạng thái |
 |-------|-----------|
 | `LevelSystem.OnLevelUp` | ✅ 2 subscribers: LevelUpToastController (m6a), GameManager.OnPlayerLevelUp (m6b) |
-| `QuestEvents.OnQuestStateChanged` | ⚠️ Không ai subscribe |
+| `QuestEvents.OnQuestStateChanged` | ✅ QuestPanelController subscribe (m5-quest-flow) |
 | `TimeManager.OnTick` | ✅ OK |
 | `EconomySystem.OnGoldChanged` | ✅ OK |
 | `StorageSystem.OnStorageChanged` | ✅ OK |
@@ -175,6 +183,7 @@
 ## 🟡 MEDIUM — Phát hiện ngày 20/04/2026 (m4-animal-care Task 7 — WIRE-01 blocked)
 
 ### NOTE-06: `AnimalPen.prefab` chưa tồn tại — WIRE-01 đã được unblock ✅
+- ✅ Fixed in m4-animal-care Task 7
 - **Spec:** `m4-animal-care`, Task 7 (WIRE-01)
 - **Vấn đề gốc:** Task 7 yêu cầu assign `_registry` vào `AnimalPen.prefab` nhưng prefab chưa tồn tại.
 - **Kiến trúc đã quyết định (20/04/2026):**
@@ -235,13 +244,13 @@
 
 ## 🟡 MEDIUM — Phát hiện ngày 21/04/2026 (m6b-world-progression review)
 
-### NOTE-07: `DontDestroyOnLoad` warning trên `TimeManager`
+### NOTE-12: `DontDestroyOnLoad` warning trên `TimeManager`
 - **File:** `Assets/_Project/Scripts/Core/TimeManager.cs` line ~30
 - **Vấn đề:** `DontDestroyOnLoad` được gọi trên một GameObject không phải root (có parent trong hierarchy). Unity log warning: "DontDestroyOnLoad only works for root GameObjects or components on root GameObjects."
 - **Impact:** Warning không ảnh hưởng chức năng hiện tại (TimeManager vẫn hoạt động), nhưng có thể gây vấn đề khi load scene mới.
 - **Fix đề xuất:** Trong `TimeManager.Awake()`, gọi `transform.SetParent(null)` trước `DontDestroyOnLoad(gameObject)`, tương tự pattern đã có trong `Singleton<T>.Awake()`.
 
-### NOTE-08: `CropTileView._lockOverlay` chưa được assign trong scene tiles
+### NOTE-13: `CropTileView._lockOverlay` chưa được assign trong scene tiles
 - **File:** `Assets/_Project/Scripts/World/Views/CropTileView.cs`
 - **Vấn đề:** Lock system (FEAT-06) đã implement `_lockOverlay` field nhưng các tile hiện có trong scene (`tile_r0_c0` đến `tile_r1_c2`) chưa có `_lockOverlay` GameObject được assign. Khi `Unlock()` được gọi, `_lockOverlay?.SetActive(false)` skip (null-safe) — không crash nhưng không có visual feedback.
 - **Impact:** Tile locked không hiển thị overlay sprite → player không biết tile đang locked.
@@ -251,7 +260,7 @@
   3. Cần asset: `lock_overlay.png` hoặc dùng placeholder màu đỏ bán trong suốt
 - **Priority:** Cần trước khi test locked tile flow với player thực.
 
-### NOTE-09: `LevelSystem.OnLevelUp` event table cần cập nhật
+### NOTE-14: `LevelSystem.OnLevelUp` event table cần cập nhật
 - **File:** `docs/backlog/bug-backlog.md` — Event hookup table (FEAT-01)
 - **Vấn đề:** FEAT-01 ghi "Không ai subscribe" nhưng sau m6b đã có 2 subscribers:
   1. `LevelUpToastController` (từ m6a)
@@ -259,13 +268,13 @@
 - **Trạng thái:** FEAT-01 có thể đóng lại — event đã có subscriber.
 - **Fix:** Cập nhật event table, đánh dấu FEAT-01 = DONE.
 
-### NOTE-10: `GameManager.OnDestroy()` có thể conflict với Singleton pattern
+### NOTE-15: `GameManager.OnDestroy()` có thể conflict với Singleton pattern
 - **File:** `Assets/_Project/Scripts/Managers/GameManager.cs`
 - **Vấn đề:** `Singleton<T>` base class không có virtual `OnDestroy()`. `GameManager` thêm `private void OnDestroy()` để unsubscribe `LevelSystem.OnLevelUp`. Nếu `Singleton<T>` sau này thêm `OnDestroy` logic (ví dụ clear `_instance`), sẽ không được gọi vì `private` không override.
 - **Impact:** Hiện tại không có vấn đề. Risk khi refactor Singleton.
 - **Fix đề xuất:** Thêm `protected virtual void OnDestroy() {}` vào `Singleton<T>` base class, rồi `GameManager` dùng `protected override void OnDestroy()`.
 
-### NOTE-11: Game view trống khi play — Main Camera không nhìn vào world
+### NOTE-16: Game view trống khi play — Main Camera không nhìn vào world
 - **File:** Scene `SCN_Main`, GameObject `Main Camera`
 - **Vấn đề:** Khi play mode, game view render màu xanh đơn sắc (background color). Scene view cho thấy HUD render đúng nhưng world (farm tiles, animals) không hiển thị trong game view.
 - **Nguyên nhân có thể:** Camera position/rotation không hướng vào `[WORLD_ROOT]`, hoặc camera culling mask không include world layer.
@@ -288,3 +297,19 @@
 - `PopupManager.ShowLockInfo(int)` thêm mới
 - `PlayerSaveData.unlockedTileIds` thêm mới
 - `GameManager`: `OnPlayerLevelUp` auto-unlock, `CaptureCurrentState` lưu, `RestoreWorldState` restore
+
+## ✅ RESOLVED — m8-scene-polish (2026-04-22)
+
+### BUG-08: postRipeLifeMin = 0 cây chết ngay — DONE ✅
+- `CropData.cs`: `[Min(0.1f)]` cho `growTimeMin`, `perfectWindowMin`, `postRipeLifeMin`
+
+### BUG-10: Main Camera không nhìn vào world — DONE ✅
+- Main Camera transform reset: `position = (1.2, 0.35, -10)`, rotation/scale identity
+- Game view render đúng world sau fix
+
+### NOTE-13 (renumbered từ NOTE-08 m6b): `_lockOverlay` chưa assign — DONE ✅
+- 6 tiles có child `LockOverlay` + SpriteRenderer với `World_Overlay_Tile_Lock_On` sprite
+- `CropTileView._lockOverlay` field wired trên cả 6 instance
+
+### NOTE-14 (renumbered từ NOTE-09 m6b): Event table outdated — DONE ✅
+- Event hookup table updated: `QuestEvents.OnQuestStateChanged` ✅ QuestPanelController subscribe

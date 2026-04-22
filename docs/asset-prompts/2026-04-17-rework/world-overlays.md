@@ -110,3 +110,29 @@ Date: 2026-04-17
 - Layer thiếu nước, chỉ hiện trạng thái chăm sóc.
 
 </details>
+
+<details>
+<summary>World_Overlay_Tile_Lock_On — locked tile overlay</summary>
+
+### File
+- Name: `World_Overlay_Tile_Lock_On.png`
+- Target: `Assets/_Project/Art/Sprites/World/Overlays/`
+
+### ChatGPT / DALL-E (EN)
+- Prompt: "Isometric 2.5D overlay for a locked farm tile, semi-transparent dark gradient with a centered golden padlock icon, cute cartoon style, clean outline, transparent background, centered composition, no text, no humans, game-ready sprite"
+- Setup: DALL-E 3 | 1024x1024 | vivid | hd
+
+### ComfyUI (EN)
+- Positive: "isometric 2.5d locked tile overlay, semi-transparent dark tint, centered golden padlock, cute cartoon, clean outline, transparent background, game sprite"
+- Negative: "realistic, photo, 3d render, gritty, pixel art, text, watermark, blurry, opaque"
+- Checkpoint: dreamshaper_8 / anything-v5
+- Sampler: DPM++ 2M Karras
+- Steps: 28
+- CFG: 7
+- Size: 512x512
+
+### VN note
+- Overlay cho tile đang locked. Khi `CropTileView._isLocked = true` → SetActive(true). Khi player đạt level → auto-unlock → SetActive(false).
+- **Placeholder hiện tại (m8-scene-polish)**: texture 512×512 đen alpha 150, không có icon padlock. Swap asset khi có sprite thật — GUID preserved trong `.meta`, không cần sửa scene.
+
+</details>
