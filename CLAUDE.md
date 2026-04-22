@@ -45,6 +45,35 @@ Mỗi spec ở `.kiro/specs/<spec-name>/` chỉ có 3 file:
 - **Rule tasks.md**: xem `.kiro/steering/task-format.md`
 - **Resource check pattern**: xem `.kiro/steering/resource-checker.md`
 
+### Quality principles (BẮT BUỘC đọc trước khi viết spec mới)
+
+Chi tiết đầy đủ: `.kiro/steering/spec-format.md` section `🎯 Quality Rules`. Tóm tắt 5 nguyên lý cốt lõi:
+
+1. **Verification-first** — Inspect code/scene/assets **TRƯỚC** khi viết. Không đoán. Dùng `Grep`, `Read`, `assets-find` để confirm state rồi mới spec values. Ghi findings vào Verification section.
+2. **Every claim is testable** — Mỗi Req/step có MCP verify command + expected output. "Works correctly" → rephrase thành `verify <tool> → <specific result>`.
+3. **Atomic steps** — Mỗi sub-task = 1 MCP tool call hoặc sequence ngắn. Không có step cần human judgment giữa chừng.
+4. **Evidence over assumption** — "Verified 22/04: position = (7.37, 8.93, 0) from SCN_Main.unity:L5751" tốt hơn "position có vẻ sai".
+5. **Specify failure modes** — Mỗi fragile operation (prefab modify, reflection, texture create) phải có fallback `X.⚠️` explicit. Không để agent tự quyết khi error.
+
+### Red flags khi viết spec — grep tìm và fix
+
+- ❌ `ensure|make sure|handle properly|appropriately` → vague, không testable
+- ❌ File path thiếu root (`CropData.cs` thay vì `Assets/_Project/Scripts/Data/CropData.cs`)
+- ❌ Code snippet không có line number / insert location
+- ❌ Magic number không giải thích (e.g. `sortingOrder = 10` cần note "vì body ở 0-5")
+- ❌ Task thiếu Quick Test block (`X.✓`)
+- ❌ "Similar to previous spec" → viết đầy đủ inline, đừng force follow-link
+- ❌ Optional mixed với required mà không mark `(Optional)`
+
+### Pre-flight trước khi gõ chữ đầu vào spec
+
+1. Đọc `docs/HANDOVER.md` — session context
+2. Đọc `docs/backlog/bug-backlog.md` — confirm bug/feat IDs
+3. `git log --oneline -20` + `git status` — không spec stale state
+4. `Grep` + `Read` files trong scope — inspect actual code
+5. Inspect scene file nếu có scene changes — đọc actual transform/values
+6. Verify prerequisite specs DONE (check HANDOVER table)
+
 ### Override skill defaults khi brainstorm
 
 Nếu invoke `superpowers:brainstorming` skill → đến bước "Write design doc":
