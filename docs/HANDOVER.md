@@ -3,6 +3,15 @@
 Tài liệu này dùng để đồng bộ nhanh "suy nghĩ" của AI Agent khi bạn chuyển sang máy tính mới hoặc bắt đầu một phiên làm việc mới.
 
 ## 🧠 Bối cảnh Phiên làm việc (Session Context)
+- **Phiên 22/04/2026 (Hiện tại) — m7c-font-wireup HOÀN THÀNH**:
+    - **`m7c-font-wireup` spec DONE**: Tất cả 6 tasks đã execute xong.
+    - **Fix 13 TextMeshPro component** đang dùng LiberationSans SDF (TMP default) → Dosis-Bold SDF (font chuẩn dự án).
+    - **Đồng bộ `m_fontAsset` (guid) + `m_sharedMaterial` (fileID + guid)** cho 13 TMP — nếu chỉ đổi 1 field → render sai.
+    - **Files modified**: 1 scene (`SCN_Main.unity`) + 7 prefab (`InventorySlot`, `QuestListItem`, `UI_Nav_Button`, `UI_XP_ProgressBar`, `LockInfoPopup`, `QuestPopup`, `ShopPopup`).
+    - **Không touch** 2 TMP Dosis-ExtraBold ở `ShopEntry_Seed.prefab` (intentional).
+    - **Post-verify**: LiberationSans GUID = 0 match, Dosis-Bold total = 58 (49 prefabs + 9 scene), 0 missing font warnings.
+    - **Integration smoke test**: HUD (XP bar, Nav buttons) visual confirmed Dosis-Bold trong scene view.
+
 - **Phiên 21/04/2026 (Hiện tại) — m7b-sprite-wireup HOÀN THÀNH**:
     - **`m7b-sprite-wireup` spec DONE**: Tất cả 9 tasks đã execute xong.
     - **Wire sprite vào 7 `CropDataSO`** (crop_01..07): `growthStageSprites[0..3]`, `deadSprite`, `data.seedIcon`, `seedIcon` (top-level sync), `cropIcon` (= Stage03). Skip `icon` inherited từ `ItemData` (0 usage trong code).
@@ -222,6 +231,7 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - **✅ `m6a-player-feedback` DONE** — LevelUpToastController tạo mới, Gems save/load fix, Shop Refresh dùng gems (50💎)
     - **✅ `m7a-sprite-reorg` DONE** — mass rename ~82 sprites, folder structure mới, GUID preserved
     - **✅ `m7b-sprite-wireup` DONE** — wire sprites vào 7 CropDataSO + 2 AnimalDataSO + CropTile.prefab + SCN_Main BottomNav, cleanup legacy files, smoke test PASSED
+    - **✅ `m7c-font-wireup` DONE** — fix 13 TMP LiberationSans → Dosis-Bold SDF, 0 LiberationSans remaining, 58 Dosis-Bold total
 - **Cần làm ngay**: 
     1. **Cleanup thủ công**: Xóa stray `CropTile` GO ở root scene trong Unity Editor
     2. **Manual UI test**: Verify Storage sell flow + Shop buy flow trong Play Mode (button interaction cần manual)
@@ -344,7 +354,17 @@ Nếu bạn mở dự án ở máy tính khác, AI hãy chú ý các file "đầ
     - Cleanup: Legacy folder, duplicate worm icon, old world sprites — tất cả đã xóa (verified 0 reference).
     - Integration smoke test: 0 errors, no pink sprites, BottomNav GUIDs verified.
 
+### Spec 11: `m7c-font-wireup` ✅ DONE
+- **Path**: `.kiro/specs/m7c-font-wireup/`
+- **Status**: **TẤT CẢ 6 TASKS HOÀN THÀNH** (22/04/2026)
+- **Kết quả**:
+    - 13 TMP component đổi từ LiberationSans SDF → Dosis-Bold SDF
+    - `SCN_Main.unity` (1 TMP), `InventorySlot.prefab` (1), `QuestListItem.prefab` (4), `UI_Nav_Button.prefab` (1), `UI_XP_ProgressBar.prefab` (1), `LockInfoPopup.prefab` (2), `QuestPopup.prefab` (1), `ShopPopup.prefab` (2)
+    - Đồng bộ cả `m_fontAsset` (guid: 452c63e0) + `m_sharedMaterial` (fileID: -3612796072522039072)
+    - Post-verify: LiberationSans = 0 match, Dosis-Bold = 58 total, 0 missing font warnings
+    - Integration smoke test: HUD visual confirmed Dosis-Bold
+
 ---
 
 > [!TIP]
-> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. **M7a Sprite Reorg đã DONE** — ~82 sprites đã rename + reorganize, GUID preserved. **M7b Sprite Wireup đã DONE** — 7 CropDataSO + 2 AnimalDataSO + CropTile.prefab + SCN_Main BottomNav đã wire đầy đủ sprites mới. Tất cả legacy/duplicate files đã cleanup. Bước tiếp theo: xác định M8 milestone (ví dụ: thêm locked tiles vào scene, generate missing sprites còn thiếu, hoặc gameplay feature mới)."
+> **Dành cho AI**: "Chào người bạn AI mới! Hệ thống UIStyleApplier/UIStyleDataSO đã bị XÓA hoàn toàn. Styling hiện tại làm **thủ công qua MCP** — gán Sprite/Color trực tiếp vào component. **M7a Sprite Reorg đã DONE** — ~82 sprites đã rename + reorganize, GUID preserved. **M7b Sprite Wireup đã DONE** — 7 CropDataSO + 2 AnimalDataSO + CropTile.prefab + SCN_Main BottomNav đã wire đầy đủ sprites mới. **M7c Font Wireup đã DONE** — 13 TMP component đã đổi sang Dosis-Bold SDF, 0 LiberationSans còn lại. Bước tiếp theo: xác định M8 milestone (ví dụ: thêm locked tiles vào scene, generate missing sprites còn thiếu, hoặc gameplay feature mới)."
